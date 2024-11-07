@@ -2,7 +2,8 @@ package cc.atomtech.rfi_timetable
 
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
-import com.fleeksoft.ksoup.nodes.Document
+import java.util.Locale
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 object HtmlTagsIdNames {
     const val STATION_NAME = "nomeStazioneId"
@@ -28,7 +29,16 @@ object RfiScraper {
 
     }
 
-    suspend fun getStationTimetable(stationId: Int): List<TrainData> {
+    private fun String.stationName(): String {
+        this.lowercase(Locale.getDefault())
+        return this.lowercase().split(" ").joinToString(" ") { word ->
+            word.replaceFirstChar { it.uppercaseChar() }
+        }
+    }
+
+
+    @OptIn(ExperimentalEncodingApi::class)
+    suspend fun getStationTimetable(stationId: Int): Timetable {
         val departures = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryDepartures}${stationId}")
 
         val title = departures.body().getElementById(HtmlTagsIdNames.STATION_NAME)?.html() ?: "Error"
@@ -43,13 +53,7 @@ object RfiScraper {
                 if(tr.id().isNotEmpty()) {
                     println(tr.id())
 
-                    val tmpTrain = tr.id()
-                    var trainNumber: Int
-                    try {
-                        trainNumber = tmpTrain.toInt()
-                    } catch (e: Exception) {
-                        trainNumber = 0
-                    }
+                    val trainNumber = tr.id()
 
                     val operator =
                         tr.getElementById(HtmlTagsIdNames.OPERATOR_FIELD)!!.children()[0].attribute(
@@ -68,15 +72,22 @@ object RfiScraper {
                     val delay =
                         tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
 
+                    var delayMinutes = 0
+                    if(delay == "RITARDO") {
+                        delayMinutes = Int.MAX_VALUE
+                    } else if (delay.isNotEmpty()) {
+                        delayMinutes = delay.toInt()
+                    }
+
                     trains.add(
                         TrainData(
                             number = trainNumber,
                             operatorName = operator,
                             category = category,
-                            platform = platform.toInt(),
-                            station = station,
+                            platform = platform,
+                            station = station.stationName(),
                             time = time,
-                            delay = if(delay.isNotEmpty()) delay.toInt() else 0
+                            delay = delayMinutes
                         )
                     )
                 }
@@ -86,6 +97,8 @@ object RfiScraper {
 
 //        println("Recieved data:\nSTATION $title\n${tableBody?.html()}\n${stationInfo?.html()}")
 
-        return trains.toList()
+        return Timetable(stationName = title.stationName(),
+                         departures = trains.toList(),
+                         arrivals = trains.toList())
     }
 }

@@ -26,6 +26,9 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(compose.ui) {
+                exclude (group = "androidx.compose.ui", module = "ui-unit-desktop")
+            }
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -41,6 +44,7 @@ kotlin {
             implementation(libs.material.icons.extended)
             implementation(libs.ksoup)
             implementation(libs.ksoup.network)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -78,8 +82,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.ui.unit.android)
-    implementation(libs.androidx.ui.unit.desktop)
     debugImplementation(compose.uiTooling)
 }
 

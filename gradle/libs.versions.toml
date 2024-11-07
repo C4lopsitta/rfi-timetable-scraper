@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.2"
+agp = "8.5.0"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -21,7 +21,7 @@ ktorClientCore = "3.0.1"
 ktorClientCio = "3.0.1"
 material3 = "1.7.0"
 composeMaterial3 = "1.0.0-alpha28"
-uiUnitAndroid = "1.7.5"
+uiUnitAndroid = "1.7.0"
 uiUnitDesktop = "1.7.0"
 
 [libraries]
