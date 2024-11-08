@@ -38,13 +38,15 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.ktor.client.core)
             implementation(libs.material3)
             implementation(libs.material.icons.extended)
             implementation(libs.ksoup)
             implementation(libs.ksoup.network)
-
+            implementation(libs.navigation.compose)
+            implementation(libs.lifecycle.viewmodel.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -79,6 +81,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    buildToolsVersion = "34.0.0"
 }
 
 dependencies {

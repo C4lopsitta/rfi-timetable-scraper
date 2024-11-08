@@ -1,5 +1,7 @@
 package cc.atomtech.rfi_timetable
 
+import cc.atomtech.rfi_timetable.models.TimetableState
+import cc.atomtech.rfi_timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import java.util.Locale
@@ -38,67 +40,72 @@ object RfiScraper {
 
 
     @OptIn(ExperimentalEncodingApi::class)
-    suspend fun getStationTimetable(stationId: Int): Timetable {
+    suspend fun getStationTimetable(stationId: Int): TimetableState {
         val departures = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryDepartures}${stationId}")
 
         val title = departures.body().getElementById(HtmlTagsIdNames.STATION_NAME)?.html() ?: "Error"
-        val tableBody = departures.body().getElementById(HtmlTagsIdNames.TABLE)
-            ?: throw Exception("No station data")
+        val departuresTableBody = departures.body().getElementById(HtmlTagsIdNames.TABLE)
         val stationInfo = departures.body().getElementById(HtmlTagsIdNames.STATION_INFO)
 
-        val trains: ArrayList<TrainData> = arrayListOf()
+        val departingTrains: ArrayList<TrainData> = arrayListOf()
+        val arrivingTrains: ArrayList<TrainData> = arrayListOf()
 
-        tableBody.getElementsByTag("tr").forEach { tr ->
-            if(tr.children()[0].tagName() != "th") {
-                if(tr.id().isNotEmpty()) {
-                    println(tr.id())
+        if(departuresTableBody != null) {
+            departuresTableBody.getElementsByTag("tr").forEach { tr ->
+                if (tr.children()[0].tagName() != "th") {
+                    if (tr.id().isNotEmpty()) {
+                        println(tr.id())
 
-                    val trainNumber = tr.id()
+                        val trainNumber = tr.id()
 
-                    val operator =
-                        tr.getElementById(HtmlTagsIdNames.OPERATOR_FIELD)!!.children()[0].attribute(
-                            "alt"
-                        )?.value ?: "UNDEFINED"
-                    val category =
-                        tr.getElementById(HtmlTagsIdNames.CATEGORY_FIELD)!!.children()[0].attribute(
-                            "alt"
-                        )?.value ?: "UNDEFINED"
-                    val platform =
-                        tr.getElementById(HtmlTagsIdNames.PLATFORM_FIELD)!!.children()[0].html()
-                    val station =
-                        tr.getElementById(HtmlTagsIdNames.STATION_FIELD)!!.children()[0].html()
-                    val time =
-                        tr.getElementById(HtmlTagsIdNames.TIME_FIELD)!!.html()
-                    val delay =
-                        tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
+                        val operator =
+                            tr.getElementById(HtmlTagsIdNames.OPERATOR_FIELD)!!
+                                .children()[0].attribute(
+                                "alt"
+                            )?.value ?: "UNDEFINED"
+                        val category =
+                            tr.getElementById(HtmlTagsIdNames.CATEGORY_FIELD)!!
+                                .children()[0].attribute(
+                                "alt"
+                            )?.value ?: "UNDEFINED"
+                        val platform =
+                            tr.getElementById(HtmlTagsIdNames.PLATFORM_FIELD)!!.children()[0].html()
+                        val station =
+                            tr.getElementById(HtmlTagsIdNames.STATION_FIELD)!!.children()[0].html()
+                        val time =
+                            tr.getElementById(HtmlTagsIdNames.TIME_FIELD)!!.html()
+                        val delay =
+                            tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
 
-                    var delayMinutes = 0
-                    if(delay == "RITARDO") {
-                        delayMinutes = Int.MAX_VALUE
-                    } else if (delay.isNotEmpty()) {
-                        delayMinutes = delay.toInt()
-                    }
+                        var delayMinutes = 0
+                        if (delay == "RITARDO") {
+                            delayMinutes = Int.MAX_VALUE
+                        } else if (delay == "Cancellato") {
+                            delayMinutes = Int.MIN_VALUE
+                        } else if (delay.isNotEmpty()) {
+                            delayMinutes = delay.toInt()
+                        }
 
-                    trains.add(
-                        TrainData(
-                            number = trainNumber,
-                            operatorName = operator,
-                            category = category,
-                            platform = platform,
-                            station = station.stationName(),
-                            time = time,
-                            delay = delayMinutes
+                        departingTrains.add(
+                            TrainData(
+                                number = trainNumber,
+                                operatorName = operator,
+                                category = category,
+                                platform = platform,
+                                station = station.stationName(),
+                                time = time,
+                                delay = delayMinutes
+                            )
                         )
-                    )
+                    }
                 }
             }
-
         }
 
 //        println("Recieved data:\nSTATION $title\n${tableBody?.html()}\n${stationInfo?.html()}")
 
-        return Timetable(stationName = title.stationName(),
-                         departures = trains.toList(),
-                         arrivals = trains.toList())
+        return TimetableState(stationName = title.stationName(),
+                         departures = departingTrains.toList(),
+                         arrivals = arrivingTrains.toList())
     }
 }

@@ -1,5 +1,8 @@
-package cc.atomtech.rfi_timetable
+package cc.atomtech.rfi_timetable.models
 
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,20 +11,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.Locale
 
 class TrainData(
     private val operatorName: String?,
@@ -33,12 +35,52 @@ class TrainData(
     private val time: String? = null,
     private val details: String? = null) {
 
+    fun getTrainCategoryRowString(): String? {
+        if(category == null) return null
+        if(category.contains("VELOCE"))
+            return "RV"
+        if(category.contains("REGIONALE"))
+            return "REG"
+        if(category.contains("Servizio Ferroviario Metropolitano")) {
+            val lineNumber = category.last()
+            return "SFM$lineNumber"
+        }
+        if(category.contains("INTERCITY")) {
+            if (category.contains("NOTTE"))
+                return "ICN"
+            return "IC"
+        }
+        if(category.contains("Trenord"))
+            return "TN"
+        if(category.contains("SUBURBANO"))
+            return category.substringAfter("SUBURBANO ")
+        if(category.contains("AUTOCORSA"))
+            return "BUS"
+        if(category.contains("REGIO EXPRESS"))
+            return "RE"
+        if(operatorName == "FRECCIAROSSA")
+            return "FR"
+        if(operatorName == "ITALO")
+            return "ITA"
+        return null
+    }
+
     @Composable
     fun mobileRow()  {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(PaddingValues(vertical = 10.dp))
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(PaddingValues(vertical = 10.dp))
+                .clickable(interactionSource = remember { MutableInteractionSource() },
+                    indication = LocalIndication.current,
+                    role  = Role.Button,
+                    onClickLabel = "Click to open details",
+                    onClick = {
+
+                    }
+                )
         ) {
             // TODO)) Add icons
             Row (
@@ -51,7 +93,14 @@ class TrainData(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.width(52.dp)
                     ) {
-                        Icon(Icons.Rounded.Train, contentDescription = operatorName)
+                        val trainCategory = getTrainCategoryRowString()
+                        if(trainCategory != null) {
+                            Text(trainCategory,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold)
+                        } else {
+                            Icon(Icons.Rounded.Train, contentDescription = operatorName)
+                        }
                         Text("$number")
                     }
                 }
@@ -63,10 +112,15 @@ class TrainData(
                     var timeString: String? = null
                     if (time != null) {
                         timeString = "$time"
-                        if(delay > 0) {
-                            if(delay == Int.MAX_VALUE) {
+                        when (delay) {
+                            Int.MAX_VALUE -> {
                                 timeString += " DELAYED"
-                            } else {
+                            }
+                            Int.MIN_VALUE -> {
+                                timeString = "CANCELLED"
+                            }
+                            0 -> {  }
+                            else -> {
                                 timeString += "\t+$delay minutes"
                             }
                         }
@@ -88,11 +142,6 @@ class TrainData(
                         fontSize = 16.sp,
                         textAlign = TextAlign.End,
                         modifier = Modifier.fillMaxWidth())
-                }
-                IconButton(
-                    onClick = {},
-                ) {
-                    Icon(Icons.Rounded.Info, contentDescription = "Details for train $number")
                 }
             }
         }
