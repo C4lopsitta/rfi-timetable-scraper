@@ -1,11 +1,15 @@
 package cc.atomtech.rfi_timetable
 
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.toUpperCase
 import cc.atomtech.rfi_timetable.enumerations.Category
 import cc.atomtech.rfi_timetable.enumerations.Operator
+import cc.atomtech.rfi_timetable.models.Station
 import cc.atomtech.rfi_timetable.models.TimetableState
 import cc.atomtech.rfi_timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
+import com.fleeksoft.ksoup.network.parsePostRequest
 import com.fleeksoft.ksoup.select.Elements
 import java.util.Locale
 
@@ -22,15 +26,27 @@ object HtmlTagsIdNames {
     const val DELAY_FIELD = "RRitardo"
     const val PLATFORM_FIELD = "RBinario"
     const val DETAILS_FILED_BUTTON = "RDettagli"
+    const val STAITONS_LIST = "ElencoLocalita"
 }
 
 object RfiScraper {
+    private const val stationsUrl = "https://www.rfi.it/en/stations/station-page/quality-services/Public-information/Live-departures-Arrivals-Monitor.html"
     private const val baseUrl = "https://iechub.rfi.it/ArriviPartenze/ArrivalsDepartures/Monitor"
     private const val baseQueryDepartures = "?Arrivals=False&PlaceId="
     private const val baseQueryArrivals = "?Arrivals=True&PlaceId="
 
-    suspend fun getSuggestedStations(query: String) {
+    suspend fun getStations(): List<Station> {
+        val stations = Ksoup.parseGetRequest(url = stationsUrl)
 
+        val stationList = stations.body().getElementById(HtmlTagsIdNames.STAITONS_LIST)
+
+        val stationsList: ArrayList<Station> = arrayListOf()
+
+        stationList?.getElementsByTag("option")?.forEach { option ->
+            stationsList.add(Station(option.html(), option.value().toInt()))
+        }
+
+        return stationsList.toList()
     }
 
     private fun String.stationName(): String {

@@ -1,35 +1,22 @@
 package cc.atomtech.rfi_timetable
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.Divider
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowDownward
-import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Train
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,6 +30,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import androidx.navigation.compose.NavHost
 import cc.atomtech.rfi_timetable.components.NavBar
+import cc.atomtech.rfi_timetable.models.Stations
 import cc.atomtech.rfi_timetable.models.TimetableState
 import cc.atomtech.rfi_timetable.models.TrainData
 import cc.atomtech.rfi_timetable.views.Timetable
@@ -57,10 +45,19 @@ fun Main(navController: NavHostController) {
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
     var isSearching by remember { mutableStateOf(false) }
-    var stationId by remember { mutableStateOf(1728) }
+    val stations by remember { mutableStateOf(Stations(listOf())) }
+    var stationId by remember { mutableStateOf(685) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
     var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
 
+    LaunchedEffect(Unit) {
+        try {
+            stations.stations = RfiScraper.getStations()
+        } catch (e: Exception) {
+            println(e.printStackTrace())
+            error = e.toString()
+        }
+    }
 
     @Composable
     fun loadData() {
