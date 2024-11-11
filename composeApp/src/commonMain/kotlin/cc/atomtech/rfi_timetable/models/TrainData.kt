@@ -24,108 +24,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cc.atomtech.rfi_timetable.enumerations.Category
+import cc.atomtech.rfi_timetable.enumerations.Operator
 
 class TrainData(
+    val operator: Operator,
     private val operatorName: String?,
     val number: String?,
-    private val category: String?,
+    val category: Category,
     var platform: String?,
     val delay: Int,
     val station: String? = null,
     val time: String? = null,
     val details: String? = null) {
-
-    fun getTrainOperatorString(): String? {
-        if(operatorName == null) return null
-        if(operatorName.contains("TPER"))
-            return "Trenitalia TPER"
-        if(operatorName.contains("TRENITALIA") ||
-            operatorName.contains("FRECCIAROSSA") ||
-            operatorName.contains("FRECCIARGENTO") ||
-            operatorName.contains("FRECCIABIANCA"))
-            return "Trenitalia"
-        if(operatorName.contains("Trenord"))
-            return "Trenord"
-        if(operatorName.contains("ITALO"))
-            return "NTV Italo"
-        return null
-    }
-
-    fun getTrainCategoryString(): String? {
-        if(category == null) return null
-        if(category.contains("VELOCE"))
-            return "Regionale Veloce"
-        if(category.contains("REGIONALE"))
-            return "Regionale"
-        if(category.contains("Servizio Ferroviario Metropolitano")) {
-            val lineNumber = category.last()
-            return "SFM Linea $lineNumber"
-        }
-        if(category.contains("INTERCITY")) {
-            if (category.contains("NOTTE"))
-                return "Intercity Notte"
-            return "Intercity"
-        }
-        if(category.contains("Trenord"))
-            return "Trenord"
-        if(category.contains("SUBURBANO"))
-            return "Suburbano ${category.substringAfter("SUBURBANO ")}"
-        if(category.contains("AUTOCORSA"))
-            return "Bus"
-        if(category.contains("REGIO EXPRESS"))
-            return "Regio Express"
-        if(category.contains("MALPENSA EXPRESS"))
-            return "Malpensa Express"
-        if(category.contains("EUROCITY"))
-            return "Eurocity"
-        if(operatorName == "FRECCIAROSSA")
-            return "Frecciarossa"
-        if(operatorName == "FRECCIARGENTO")
-            return "Frecciargento"
-        if(operatorName == "FRECCIABIANCA")
-            return "Frecciabianca"
-        if(operatorName == "ITALO")
-            return "Italo"
-        return null
-    }
-
-    fun getTrainCategoryRowString(): String? {
-        if(category == null) return null
-        if(category.contains("VELOCE"))
-            return "RV"
-        if(category.contains("REGIONALE"))
-            return "REG"
-        if(category.contains("Servizio Ferroviario Metropolitano")) {
-            val lineNumber = category.last()
-            return "SFM$lineNumber"
-        }
-        if(category.contains("INTERCITY")) {
-            if (category.contains("NOTTE"))
-                return "ICN"
-            return "IC"
-        }
-        if(category.contains("Trenord"))
-            return "TN"
-        if(category.contains("SUBURBANO"))
-            return category.substringAfter("SUBURBANO ")
-        if(category.contains("AUTOCORSA"))
-            return "BUS"
-        if(category.contains("REGIO EXPRESS"))
-            return "RE"
-        if(category.contains("MALPENSA EXPRESS"))
-            return "MPX"
-        if(category.contains("EUROCITY"))
-            return "EC"
-        if(operatorName == "FRECCIAROSSA")
-            return "FR"
-        if(operatorName == "FRECCIARGENTO")
-            return "FAg"
-        if(operatorName == "FRECCIABIANCA")
-            return "FB"
-        if(operatorName == "ITALO")
-            return "ITA"
-        return null
-    }
 
     fun getDelayString(addSpace: Boolean = true): String? {
         if (time != null) {
@@ -171,13 +82,13 @@ class TrainData(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.width(52.dp)
                     ) {
-                        val trainCategory = getTrainCategoryRowString()
-                        if(trainCategory != null) {
+                        val trainCategory = category.toShortString()
+                        if(category != Category.UNDEFINED) {
                             Text(trainCategory,
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold)
                         } else {
-                            Icon(Icons.Rounded.Train, contentDescription = operatorName)
+                            Icon(Icons.Rounded.Train, contentDescription = operator.toString())
                         }
                         Text("$number")
                     }
@@ -214,7 +125,7 @@ class TrainData(
     }
 
     override fun toString(): String {
-        return "$category@$operatorName #$number@$platform"
+        return "$category@$operator #$number@$platform"
     }
 
 }

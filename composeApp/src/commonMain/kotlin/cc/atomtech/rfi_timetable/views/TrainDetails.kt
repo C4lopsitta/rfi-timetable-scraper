@@ -58,7 +58,7 @@ fun TrainDetails(trainData: TrainData?,
         ) {
             Column {
                 Text("Operator")
-                Text(trainData?.getTrainOperatorString() ?: "Unknown",
+                Text(trainData?.operator.toString(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold)
             }
@@ -66,7 +66,7 @@ fun TrainDetails(trainData: TrainData?,
                 horizontalAlignment = Alignment.End
             ) {
                 Text( "Service" )
-                Text( trainData?.getTrainCategoryString() ?: "Unknown",
+                Text( trainData?.category.toString(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold )
             }

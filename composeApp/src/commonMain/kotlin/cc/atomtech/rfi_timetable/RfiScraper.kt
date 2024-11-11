@@ -1,13 +1,13 @@
 package cc.atomtech.rfi_timetable
 
-import cc.atomtech.rfi_timetable.models.TimetableData
+import cc.atomtech.rfi_timetable.enumerations.Category
+import cc.atomtech.rfi_timetable.enumerations.Operator
 import cc.atomtech.rfi_timetable.models.TimetableState
 import cc.atomtech.rfi_timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.select.Elements
 import java.util.Locale
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 object HtmlTagsIdNames {
     const val STATION_NAME = "nomeStazioneId"
@@ -80,8 +80,9 @@ object RfiScraper {
                     trains.add(
                         TrainData(
                             number = trainNumber,
+                            operator = Operator.fromString(operator),
                             operatorName = operator,
-                            category = category,
+                            category = Category.fromString(category, operator),
                             platform = platform,
                             station = station.stationName(),
                             time = time,
