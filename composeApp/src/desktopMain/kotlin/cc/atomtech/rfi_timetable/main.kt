@@ -10,6 +10,6 @@ fun main() = application {
         title = "Timetables",
     ) {
         val navController = rememberNavController()
-        AppNavHost(navController)
+        Main(navController)
     }
 }

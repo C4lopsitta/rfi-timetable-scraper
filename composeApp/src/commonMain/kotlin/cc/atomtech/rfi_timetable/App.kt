@@ -37,29 +37,33 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
-import androidx.navigation.NavController
 import androidx.navigation.compose.*
 import androidx.navigation.compose.NavHost
+import cc.atomtech.rfi_timetable.components.NavBar
 import cc.atomtech.rfi_timetable.models.TimetableState
+import cc.atomtech.rfi_timetable.models.TrainData
+import cc.atomtech.rfi_timetable.views.Timetable
+import cc.atomtech.rfi_timetable.views.TrainDetails
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun App(navController: NavController) {
-    var trains by remember { mutableStateOf<TimetableState?>(null) }
+fun Main(navController: NavHostController) {
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
     var isSearching by remember { mutableStateOf(false) }
     var stationId by remember { mutableStateOf(1728) }
+    var timetable by remember { mutableStateOf<TimetableState?>(null) }
+    var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
 
 
     @Composable
     fun loadData() {
         LaunchedEffect(Unit) {
             try {
-                trains = RfiScraper.getStationTimetable(stationId)
+                timetable = RfiScraper.getStationTimetable(stationId)
                 loading = false
             } catch (e: Exception) {
                 println(e.printStackTrace())
@@ -97,7 +101,7 @@ fun App(navController: NavController) {
                 TopAppBar(
                     title = {
                         if(!isSearching) {
-                            Text(trains?.stationName ?: "Timetables")
+                            Text(timetable?.stationName ?: "Timetables")
                         } else {
                             TextField(value = "",
                                 onValueChange = {
@@ -129,28 +133,7 @@ fun App(navController: NavController) {
                     }
                 )
             },
-            bottomBar = {
-                NavigationBar {
-                    NavigationBarItem(label = { Text("Departures") },
-                        icon = { Icon(Icons.Rounded.ArrowUpward, contentDescription = "Departures") },
-                        selected = true,
-                        onClick = {
-
-                        })
-                    NavigationBarItem(label = { Text("Arrivals") },
-                        icon = { Icon(Icons.Rounded.ArrowDownward, contentDescription = "Arrivals") },
-                        selected = false,
-                        onClick = {
-
-                        })
-                    NavigationBarItem(label = { Text("Favourite Stations") },
-                        icon = { Icon(Icons.Rounded.Star, contentDescription = "Star") },
-                        selected = false,
-                        onClick = {
-
-                        })
-                }
-            }
+            bottomBar = { NavBar(navController) }
         ) { paddingValues ->
             Surface (
                 modifier = Modifier.padding(
@@ -159,34 +142,54 @@ fun App(navController: NavController) {
                     start = 12.dp
                 ).fillMaxWidth()
             ) {
-                if(!loading) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(PaddingValues(0.dp, 12.dp, 12.dp, 12.dp))
-                    ) {
-                        if(trains?.departures?.isEmpty() == true) {
-                            Text("No departures")
-                        }
-                        LazyColumn() {
-                            items(trains?.getDepartures() ?: listOf()) { train ->
-                                train.mobileRow()
-                                Divider(
-                                    color = colorScheme.onSurface.copy(alpha = 0.1f),
-                                    modifier = Modifier.fillMaxWidth()
-                                )
+                NavHost(
+                    navController = navController,
+                    startDestination = "departures"
+                ) {
+                    composable("departures") {
+                        if (!loading) {
+                            Timetable(
+                                trainList = timetable?.uiState?.value?.departures,
+                                colorScheme = colorScheme,
+                                onTrainSelected = { selectedTrain: TrainData ->
+                                    detailViewSelectedTrain = selectedTrain
+                                    navController.navigate("details")
+                                }
+                            )
+                        } else {
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight()
+                                    .padding(PaddingValues(64.dp))
+                            ) {
+                                CircularProgressIndicator()
                             }
                         }
                     }
-                } else {
-                    Surface (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .padding(PaddingValues(64.dp))
-                    ) {
-                        CircularProgressIndicator()
+                    composable("arrivals") {
+                        if (!loading) {
+                            Timetable(
+                                trainList = timetable?.uiState?.value?.arrivals,
+                                colorScheme = colorScheme,
+                                onTrainSelected = { selectedTrain: TrainData ->
+                                    detailViewSelectedTrain = selectedTrain
+                                    navController.navigate("details")
+                                }
+                            )
+                        } else {
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight()
+                                    .padding(PaddingValues(64.dp))
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
                     }
+                    composable("favourites") {}
+                    composable("details") { TrainDetails(detailViewSelectedTrain) }
                 }
             }
 
@@ -195,14 +198,20 @@ fun App(navController: NavController) {
 }
 
 
-@Composable
-fun AppNavHost(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = "main"
-    ) {
-        composable("main") { App(navController) }
-
-    }
-}
+//@Composable
+//fun AppNavHost(navController: NavHostController) {
+//    val timetable by remember { mutableStateOf<TimetableState?>(null) }
+//
+//    NavHost(
+//        navController = navController,
+//        startDestination = "main"
+//    ) {
+//        composable("main") { Main(navController) }
+//        composable("trainDetails/{type}/{number}") { backStateEntry ->
+//            TrainDetails(
+//                backStateEntry.arguments?.getString("type") == "arrivals",
+//                backStateEntry.arguments?.getString("number"),
+//                timetable)
+//        }
+//    }
 

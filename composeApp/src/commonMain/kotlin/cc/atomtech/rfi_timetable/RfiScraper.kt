@@ -1,5 +1,6 @@
 package cc.atomtech.rfi_timetable
 
+import cc.atomtech.rfi_timetable.models.TimetableData
 import cc.atomtech.rfi_timetable.models.TimetableState
 import cc.atomtech.rfi_timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
@@ -50,54 +51,52 @@ object RfiScraper {
         val departingTrains: ArrayList<TrainData> = arrayListOf()
         val arrivingTrains: ArrayList<TrainData> = arrayListOf()
 
-        if(departuresTableBody != null) {
-            departuresTableBody.getElementsByTag("tr").forEach { tr ->
-                if (tr.children()[0].tagName() != "th") {
-                    if (tr.id().isNotEmpty()) {
-                        println(tr.id())
+        departuresTableBody?.getElementsByTag("tr")?.forEach { tr ->
+            if (tr.children()[0].tagName() != "th") {
+                if (tr.id().isNotEmpty()) {
+                    println(tr.id())
 
-                        val trainNumber = tr.id()
+                    val trainNumber = tr.id()
 
-                        val operator =
-                            tr.getElementById(HtmlTagsIdNames.OPERATOR_FIELD)!!
-                                .children()[0].attribute(
-                                "alt"
-                            )?.value ?: "UNDEFINED"
-                        val category =
-                            tr.getElementById(HtmlTagsIdNames.CATEGORY_FIELD)!!
-                                .children()[0].attribute(
-                                "alt"
-                            )?.value ?: "UNDEFINED"
-                        val platform =
-                            tr.getElementById(HtmlTagsIdNames.PLATFORM_FIELD)!!.children()[0].html()
-                        val station =
-                            tr.getElementById(HtmlTagsIdNames.STATION_FIELD)!!.children()[0].html()
-                        val time =
-                            tr.getElementById(HtmlTagsIdNames.TIME_FIELD)!!.html()
-                        val delay =
-                            tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
+                    val operator =
+                        tr.getElementById(HtmlTagsIdNames.OPERATOR_FIELD)!!
+                            .children()[0].attribute(
+                            "alt"
+                        )?.value ?: "UNDEFINED"
+                    val category =
+                        tr.getElementById(HtmlTagsIdNames.CATEGORY_FIELD)!!
+                            .children()[0].attribute(
+                            "alt"
+                        )?.value ?: "UNDEFINED"
+                    val platform =
+                        tr.getElementById(HtmlTagsIdNames.PLATFORM_FIELD)!!.children()[0].html()
+                    val station =
+                        tr.getElementById(HtmlTagsIdNames.STATION_FIELD)!!.children()[0].html()
+                    val time =
+                        tr.getElementById(HtmlTagsIdNames.TIME_FIELD)!!.html()
+                    val delay =
+                        tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
 
-                        var delayMinutes = 0
-                        if (delay == "RITARDO") {
-                            delayMinutes = Int.MAX_VALUE
-                        } else if (delay == "Cancellato") {
-                            delayMinutes = Int.MIN_VALUE
-                        } else if (delay.isNotEmpty()) {
-                            delayMinutes = delay.toInt()
-                        }
-
-                        departingTrains.add(
-                            TrainData(
-                                number = trainNumber,
-                                operatorName = operator,
-                                category = category,
-                                platform = platform,
-                                station = station.stationName(),
-                                time = time,
-                                delay = delayMinutes
-                            )
-                        )
+                    var delayMinutes = 0
+                    if (delay == "RITARDO") {
+                        delayMinutes = Int.MAX_VALUE
+                    } else if (delay == "Cancellato") {
+                        delayMinutes = Int.MIN_VALUE
+                    } else if (delay.isNotEmpty()) {
+                        delayMinutes = delay.toInt()
                     }
+
+                    departingTrains.add(
+                        TrainData(
+                            number = trainNumber,
+                            operatorName = operator,
+                            category = category,
+                            platform = platform,
+                            station = station.stationName(),
+                            time = time,
+                            delay = delayMinutes
+                        )
+                    )
                 }
             }
         }

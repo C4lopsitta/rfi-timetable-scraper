@@ -20,16 +20,4 @@ class TimetableState(val stationName: String,
     fun setNewTimetable(timeTable: TimetableData) {
         this._uiState.value = timeTable
     }
-
-    fun getStationName(): String {
-        return uiState.value.stationName
-    }
-
-    fun getDepartures(): List<TrainData> {
-        return uiState.value.departures
-    }
-
-    fun getArrivals(): List<TrainData> {
-        return uiState.value.arrivals
-    }
 }

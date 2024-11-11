@@ -24,10 +24,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 
 class TrainData(
     private val operatorName: String?,
-    private val number: String?,
+    val number: String?,
     private val category: String?,
     private var platform: String?,
     private val delay: Int,
@@ -58,6 +60,10 @@ class TrainData(
             return "BUS"
         if(category.contains("REGIO EXPRESS"))
             return "RE"
+        if(category.contains("MALPENSA EXPRESS"))
+            return "MPX"
+        if(category.contains("EUROCITY"))
+            return "EC"
         if(operatorName == "FRECCIAROSSA")
             return "FR"
         if(operatorName == "ITALO")
@@ -66,7 +72,7 @@ class TrainData(
     }
 
     @Composable
-    fun mobileRow()  {
+    fun mobileRow(viewDetails: (TrainData) -> Unit)  {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -77,9 +83,7 @@ class TrainData(
                     indication = LocalIndication.current,
                     role  = Role.Button,
                     onClickLabel = "Click to open details",
-                    onClick = {
-
-                    }
+                    onClick = { viewDetails(this@TrainData) }
                 )
         ) {
             // TODO)) Add icons
