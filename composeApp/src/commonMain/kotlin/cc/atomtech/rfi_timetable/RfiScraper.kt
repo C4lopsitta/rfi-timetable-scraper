@@ -5,6 +5,7 @@ import cc.atomtech.rfi_timetable.models.TimetableState
 import cc.atomtech.rfi_timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
+import com.fleeksoft.ksoup.select.Elements
 import java.util.Locale
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -39,19 +40,9 @@ object RfiScraper {
         }
     }
 
-
-    @OptIn(ExperimentalEncodingApi::class)
-    suspend fun getStationTimetable(stationId: Int): TimetableState {
-        val departures = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryDepartures}${stationId}")
-
-        val title = departures.body().getElementById(HtmlTagsIdNames.STATION_NAME)?.html() ?: "Error"
-        val departuresTableBody = departures.body().getElementById(HtmlTagsIdNames.TABLE)
-        val stationInfo = departures.body().getElementById(HtmlTagsIdNames.STATION_INFO)
-
-        val departingTrains: ArrayList<TrainData> = arrayListOf()
-        val arrivingTrains: ArrayList<TrainData> = arrayListOf()
-
-        departuresTableBody?.getElementsByTag("tr")?.forEach { tr ->
+    private fun tableToTrainList(tableRows: Elements?): List<TrainData> {
+        val trains: ArrayList<TrainData> = arrayListOf()
+        tableRows?.forEach { tr ->
             if (tr.children()[0].tagName() != "th") {
                 if (tr.id().isNotEmpty()) {
                     println(tr.id())
@@ -86,7 +77,7 @@ object RfiScraper {
                         delayMinutes = delay.toInt()
                     }
 
-                    departingTrains.add(
+                    trains.add(
                         TrainData(
                             number = trainNumber,
                             operatorName = operator,
@@ -101,10 +92,23 @@ object RfiScraper {
             }
         }
 
-//        println("Recieved data:\nSTATION $title\n${tableBody?.html()}\n${stationInfo?.html()}")
+        return trains.toList()
+    }
+
+    suspend fun getStationTimetable(stationId: Int): TimetableState {
+        val departures = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryDepartures}${stationId}")
+        val arrivals = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryArrivals}${stationId}")
+
+        val title = departures.body().getElementById(HtmlTagsIdNames.STATION_NAME)?.html() ?: "Error"
+        val departuresTableBody = departures.body().getElementById(HtmlTagsIdNames.TABLE)
+        val arrivalsTableBody = arrivals.body().getElementById(HtmlTagsIdNames.TABLE)
+        val stationInfo = departures.body().getElementById(HtmlTagsIdNames.STATION_INFO)
+
+        val departingTrains: List<TrainData> = tableToTrainList(departuresTableBody?.getElementsByTag("tr"))
+        val arrivingTrains: List<TrainData> = tableToTrainList(arrivalsTableBody?.getElementsByTag("tr"))
 
         return TimetableState(stationName = title.stationName(),
-                         departures = departingTrains.toList(),
-                         arrivals = arrivingTrains.toList())
+                         departures = departingTrains,
+                         arrivals = arrivingTrains)
     }
 }
