@@ -39,7 +39,10 @@ class TrainData(
         if(operatorName == null) return null
         if(operatorName.contains("TPER"))
             return "Trenitalia TPER"
-        if(operatorName.contains("TRENITALIA"))
+        if(operatorName.contains("TRENITALIA") ||
+            operatorName.contains("FRECCIAROSSA") ||
+            operatorName.contains("FRECCIARGENTO") ||
+            operatorName.contains("FRECCIABIANCA"))
             return "Trenitalia"
         if(operatorName.contains("Trenord"))
             return "Trenord"
@@ -77,6 +80,10 @@ class TrainData(
             return "Eurocity"
         if(operatorName == "FRECCIAROSSA")
             return "Frecciarossa"
+        if(operatorName == "FRECCIARGENTO")
+            return "Frecciargento"
+        if(operatorName == "FRECCIABIANCA")
+            return "Frecciabianca"
         if(operatorName == "ITALO")
             return "Italo"
         return null
@@ -111,6 +118,10 @@ class TrainData(
             return "EC"
         if(operatorName == "FRECCIAROSSA")
             return "FR"
+        if(operatorName == "FRECCIARGENTO")
+            return "FAg"
+        if(operatorName == "FRECCIABIANCA")
+            return "FB"
         if(operatorName == "ITALO")
             return "ITA"
         return null

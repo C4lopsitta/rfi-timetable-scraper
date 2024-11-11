@@ -171,7 +171,7 @@ fun Main(navController: NavHostController) {
                                 colorScheme = colorScheme,
                                 onTrainSelected = { selectedTrain: TrainData ->
                                     detailViewSelectedTrain = selectedTrain
-                                    navController.navigate("details/${false}")
+                                    navController.navigate("details/false")
                                 }
                             )
                         }
@@ -183,17 +183,15 @@ fun Main(navController: NavHostController) {
                                 colorScheme = colorScheme,
                                 onTrainSelected = { selectedTrain: TrainData ->
                                     detailViewSelectedTrain = selectedTrain
-                                    navController.navigate("details/${true}")
+                                    navController.navigate("details/true")
                                 }
                             )
                         }
                     }
                     composable("favourites") {}
                     composable("details/{isArrival}") {
-                        val isArrival = it.arguments?.getBoolean("isArrival")
-                        if (isArrival != null) {
-                            TrainDetails(detailViewSelectedTrain, isArrival)
-                        }
+                        val isArrival = it.arguments?.getString("isArrival") == "true"
+                        TrainDetails(detailViewSelectedTrain, isArrival)
                     }
                 }
             }
