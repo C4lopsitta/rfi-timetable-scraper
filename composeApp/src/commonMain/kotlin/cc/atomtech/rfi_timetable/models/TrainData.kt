@@ -24,18 +24,63 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHost
-import androidx.navigation.NavHostController
 
 class TrainData(
     private val operatorName: String?,
     val number: String?,
     private val category: String?,
-    private var platform: String?,
-    private val delay: Int,
-    private val station: String? = null,
-    private val time: String? = null,
-    private val details: String? = null) {
+    var platform: String?,
+    val delay: Int,
+    val station: String? = null,
+    val time: String? = null,
+    val details: String? = null) {
+
+    fun getTrainOperatorString(): String? {
+        if(operatorName == null) return null
+        if(operatorName.contains("TPER"))
+            return "Trenitalia TPER"
+        if(operatorName.contains("TRENITALIA"))
+            return "Trenitalia"
+        if(operatorName.contains("Trenord"))
+            return "Trenord"
+        if(operatorName.contains("ITALO"))
+            return "NTV Italo"
+        return null
+    }
+
+    fun getTrainCategoryString(): String? {
+        if(category == null) return null
+        if(category.contains("VELOCE"))
+            return "Regionale Veloce"
+        if(category.contains("REGIONALE"))
+            return "Regionale"
+        if(category.contains("Servizio Ferroviario Metropolitano")) {
+            val lineNumber = category.last()
+            return "SFM Linea $lineNumber"
+        }
+        if(category.contains("INTERCITY")) {
+            if (category.contains("NOTTE"))
+                return "Intercity Notte"
+            return "Intercity"
+        }
+        if(category.contains("Trenord"))
+            return "Trenord"
+        if(category.contains("SUBURBANO"))
+            return "Suburbano ${category.substringAfter("SUBURBANO ")}"
+        if(category.contains("AUTOCORSA"))
+            return "Bus"
+        if(category.contains("REGIO EXPRESS"))
+            return "Regio Express"
+        if(category.contains("MALPENSA EXPRESS"))
+            return "Malpensa Express"
+        if(category.contains("EUROCITY"))
+            return "Eurocity"
+        if(operatorName == "FRECCIAROSSA")
+            return "Frecciarossa"
+        if(operatorName == "ITALO")
+            return "Italo"
+        return null
+    }
 
     fun getTrainCategoryRowString(): String? {
         if(category == null) return null
@@ -68,6 +113,24 @@ class TrainData(
             return "FR"
         if(operatorName == "ITALO")
             return "ITA"
+        return null
+    }
+
+    fun getDelayString(addSpace: Boolean = true): String? {
+        if (time != null) {
+            when (delay) {
+                Int.MAX_VALUE -> {
+                    return "${if(addSpace) " " else ""}DELAYED"
+                }
+                Int.MIN_VALUE -> {
+                    return "CANCELLED"
+                }
+                0 -> { return if (addSpace) "" else null }
+                else -> {
+                    return "${if(addSpace) " " else ""}+$delay minutes"
+                }
+            }
+        }
         return null
     }
 
@@ -114,22 +177,10 @@ class TrainData(
                          fontSize = 20.sp,
                          fontWeight = FontWeight.SemiBold )
                     var timeString: String? = null
-                    if (time != null) {
+                    if(time != null) {
                         timeString = "$time"
-                        when (delay) {
-                            Int.MAX_VALUE -> {
-                                timeString += " DELAYED"
-                            }
-                            Int.MIN_VALUE -> {
-                                timeString = "CANCELLED"
-                            }
-                            0 -> {  }
-                            else -> {
-                                timeString += "\t+$delay minutes"
-                            }
-                        }
+                        timeString += getDelayString()
                     }
-
                     Text(timeString ?: "Undefined o'clock")
                 }
             }

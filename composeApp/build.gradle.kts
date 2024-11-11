@@ -51,7 +51,10 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.ktor.client.cio)
+            implementation("io.ktor:ktor-client-cio:${libs.versions.ktor.get()}") {
+                exclude (group = "io.ktor.client", module = "ktor-client-okhttp")
+                exclude (group = "io.ktor.client", module = "ktor-client-okhttp3")
+            }
         }
     }
 }
@@ -75,6 +78,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

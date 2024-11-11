@@ -11,8 +11,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Close
@@ -113,10 +116,23 @@ fun Main(navController: NavHostController) {
                     },
                     navigationIcon = {
                         Surface ( modifier = Modifier.padding(PaddingValues(if(!isSearching) 12.dp else 0.dp)) ) {
-                            if(!isSearching) {
+                            if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("details/") == true) {
+                                IconButton(content = {
+                                    Icon(
+                                        Icons.AutoMirrored.Rounded.ArrowBack,
+                                        contentDescription = "Back"
+                                    )
+                                },
+                                    onClick = { navController.popBackStack() })
+                            } else if (!isSearching) {
                                 Icon(Icons.Rounded.Train, contentDescription = "Train")
                             } else {
-                                IconButton(content = { Icon(Icons.Rounded.Close, contentDescription = "Close Search") },
+                                IconButton(content = {
+                                    Icon(
+                                        Icons.Rounded.Close,
+                                        contentDescription = "Close Search"
+                                    )
+                                },
                                     onClick = { isSearching = false })
                             }
                         }
@@ -139,12 +155,14 @@ fun Main(navController: NavHostController) {
                 modifier = Modifier.padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
-                    start = 12.dp
                 ).fillMaxWidth()
             ) {
+                if(loading)
+                    LinearProgressIndicator()
                 NavHost(
                     navController = navController,
-                    startDestination = "departures"
+                    startDestination = "departures",
+                    modifier = Modifier.padding(start = 12.dp)
                 ) {
                     composable("departures") {
                         if (!loading) {
@@ -153,18 +171,9 @@ fun Main(navController: NavHostController) {
                                 colorScheme = colorScheme,
                                 onTrainSelected = { selectedTrain: TrainData ->
                                     detailViewSelectedTrain = selectedTrain
-                                    navController.navigate("details")
+                                    navController.navigate("details/${false}")
                                 }
                             )
-                        } else {
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()
-                                    .padding(PaddingValues(64.dp))
-                            ) {
-                                CircularProgressIndicator()
-                            }
                         }
                     }
                     composable("arrivals") {
@@ -174,22 +183,18 @@ fun Main(navController: NavHostController) {
                                 colorScheme = colorScheme,
                                 onTrainSelected = { selectedTrain: TrainData ->
                                     detailViewSelectedTrain = selectedTrain
-                                    navController.navigate("details")
+                                    navController.navigate("details/${true}")
                                 }
                             )
-                        } else {
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()
-                                    .padding(PaddingValues(64.dp))
-                            ) {
-                                CircularProgressIndicator()
-                            }
                         }
                     }
                     composable("favourites") {}
-                    composable("details") { TrainDetails(detailViewSelectedTrain) }
+                    composable("details/{isArrival}") {
+                        val isArrival = it.arguments?.getBoolean("isArrival")
+                        if (isArrival != null) {
+                            TrainDetails(detailViewSelectedTrain, isArrival)
+                        }
+                    }
                 }
             }
 
