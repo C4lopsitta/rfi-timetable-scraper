@@ -1,12 +1,21 @@
 package cc.atomtech.rfi_timetable
 
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.TextField
+import androidx.compose.material3.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
@@ -14,6 +23,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,11 +35,15 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import androidx.navigation.compose.NavHost
 import cc.atomtech.rfi_timetable.components.NavBar
+import cc.atomtech.rfi_timetable.models.Station
 import cc.atomtech.rfi_timetable.models.Stations
 import cc.atomtech.rfi_timetable.models.TimetableState
 import cc.atomtech.rfi_timetable.models.TrainData
@@ -44,9 +58,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun Main(navController: NavHostController) {
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
-    var isSearching by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
+    var searchSuggestions by remember { mutableStateOf<List<Station>?>(null) }
     val stations by remember { mutableStateOf(Stations(listOf())) }
-    var stationId by remember { mutableStateOf(685) }
+    var stationId by remember { mutableStateOf(1728) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
     var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
 
@@ -59,19 +74,16 @@ fun Main(navController: NavHostController) {
         }
     }
 
-    @Composable
-    fun loadData() {
-        LaunchedEffect(Unit) {
-            try {
-                timetable = RfiScraper.getStationTimetable(stationId)
-                loading = false
-            } catch (e: Exception) {
-                println(e.printStackTrace())
-                error = e.toString()
-            }
+    LaunchedEffect(stationId) {
+        try {
+            loading = true
+            timetable = RfiScraper.getStationTimetable(stationId)
+            loading = false
+        } catch (e: Exception) {
+            println(e.printStackTrace())
+            error = e.toString()
         }
     }
-    loadData()
 
     if(error != null) {
         AlertDialog(
@@ -100,19 +112,22 @@ fun Main(navController: NavHostController) {
             topBar = {
                 TopAppBar(
                     title = {
-                        if(!isSearching) {
+                        if(navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
                             Text(timetable?.stationName ?: "Timetables")
                         } else {
-                            TextField(value = "",
-                                onValueChange = {
-
+                            TextField(value = searchQuery,
+                                onValueChange = { query: String ->
+                                    searchQuery = query
+                                    if(stations.stations.isNotEmpty())
+                                        searchSuggestions = stations.search(query)
                                 },
-                                placeholder = { Text("Search") }
+                                placeholder = { Text("Search") },
+                                maxLines = 1
                             )
                         }
                     },
                     navigationIcon = {
-                        Surface ( modifier = Modifier.padding(PaddingValues(if(!isSearching) 12.dp else 0.dp)) ) {
+                        Surface ( modifier = Modifier.padding(PaddingValues(if(navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) 12.dp else 0.dp)) ) {
                             if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("details/") == true) {
                                 IconButton(content = {
                                     Icon(
@@ -121,7 +136,7 @@ fun Main(navController: NavHostController) {
                                     )
                                 },
                                     onClick = { navController.popBackStack() })
-                            } else if (!isSearching) {
+                            } else if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
                                 Icon(Icons.Rounded.Train, contentDescription = "Train")
                             } else {
                                 IconButton(content = {
@@ -130,18 +145,14 @@ fun Main(navController: NavHostController) {
                                         contentDescription = "Close Search"
                                     )
                                 },
-                                    onClick = { isSearching = false })
+                                    onClick = { navController.popBackStack() })
                             }
                         }
                     },
                     actions = {
                         IconButton(content = { Icon(Icons.Rounded.Search, contentDescription = "Search") },
                             onClick = {
-                                if(!isSearching) {
-                                    isSearching = true
-                                    return@IconButton
-                                }
-
+                                navController.navigate("search")
                             })
                     }
                 )
@@ -186,6 +197,32 @@ fun Main(navController: NavHostController) {
                         }
                     }
                     composable("favourites") {}
+                    composable("search") {
+                        if(stations.stations.isNotEmpty()) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 12.dp)
+                            ) {
+                                items(searchSuggestions ?: listOf()) { suggestion ->
+                                    Text(suggestion.name,
+                                        fontSize = 24.sp,
+                                        modifier = Modifier.fillMaxWidth()
+                                            .padding(vertical = 12.dp)
+                                            .clickable(interactionSource = remember { MutableInteractionSource() },
+                                                indication = LocalIndication.current,
+                                                role  = Role.Button,
+                                                onClickLabel = "Click to open details",
+                                                onClick = {
+                                                    stationId = suggestion.id
+                                                    navController.popBackStack()
+                                                }
+                                            ))
+                                    HorizontalDivider()
+                                }
+                            }
+                        }
+                    }
                     composable("details/{isArrival}") {
                         val isArrival = it.arguments?.getString("isArrival") == "true"
                         TrainDetails(detailViewSelectedTrain, isArrival)

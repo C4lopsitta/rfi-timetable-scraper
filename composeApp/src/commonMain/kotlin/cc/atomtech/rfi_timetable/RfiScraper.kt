@@ -30,10 +30,17 @@ object HtmlTagsIdNames {
 }
 
 object RfiScraper {
-    private const val stationsUrl = "https://www.rfi.it/en/stations/station-page/quality-services/Public-information/Live-departures-Arrivals-Monitor.html"
+    private const val stationsUrl = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Home"
     private const val baseUrl = "https://iechub.rfi.it/ArriviPartenze/ArrivalsDepartures/Monitor"
     private const val baseQueryDepartures = "?Arrivals=False&PlaceId="
     private const val baseQueryArrivals = "?Arrivals=True&PlaceId="
+
+    private fun String.stationName(): String {
+        this.lowercase(Locale.getDefault())
+        return this.lowercase().split(" ").joinToString(" ") { word ->
+            word.replaceFirstChar { it.uppercaseChar() }
+        }
+    }
 
     suspend fun getStations(): List<Station> {
         val stations = Ksoup.parseGetRequest(url = stationsUrl)
@@ -43,17 +50,10 @@ object RfiScraper {
         val stationsList: ArrayList<Station> = arrayListOf()
 
         stationList?.getElementsByTag("option")?.forEach { option ->
-            stationsList.add(Station(option.html(), option.value().toInt()))
+            stationsList.add(Station(option.html().stationName(), option.value().toInt()))
         }
 
         return stationsList.toList()
-    }
-
-    private fun String.stationName(): String {
-        this.lowercase(Locale.getDefault())
-        return this.lowercase().split(" ").joinToString(" ") { word ->
-            word.replaceFirstChar { it.uppercaseChar() }
-        }
     }
 
     private fun tableToTrainList(tableRows: Elements?): List<TrainData> {
