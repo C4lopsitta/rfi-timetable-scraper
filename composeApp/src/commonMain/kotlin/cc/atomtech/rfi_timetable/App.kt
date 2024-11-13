@@ -20,6 +20,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.ElevatedButton
@@ -64,6 +65,7 @@ fun Main(navController: NavHostController) {
     var searchSuggestions by remember { mutableStateOf<List<Station>?>(null) }
     val stations by remember { mutableStateOf(Stations(listOf())) }
     var stationId by remember { mutableStateOf(1728) }
+    var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
     var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
 
@@ -76,7 +78,7 @@ fun Main(navController: NavHostController) {
         }
     }
 
-    LaunchedEffect(stationId) {
+    LaunchedEffect(stationId, reloadTrigger) {
         try {
             loading = true
             timetable = RfiScraper.getStationTimetable(stationId)
@@ -158,6 +160,8 @@ fun Main(navController: NavHostController) {
                             onClick = {
                                 navController.navigate("search")
                             })
+                        IconButton(content = { Icon(Icons.Rounded.Refresh, contentDescription = "Reload") },
+                            onClick = { reloadTrigger = !reloadTrigger })
                     }
                 )
             },
@@ -185,7 +189,8 @@ fun Main(navController: NavHostController) {
                                     detailViewSelectedTrain = selectedTrain
                                     navController.navigate("details/false")
                                 },
-                                stationInfo = timetable?.uiState?.value?.stationInfo
+                                stationInfo = timetable?.uiState?.value?.stationInfo,
+                                lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0
                             )
                         }
                     }
@@ -198,11 +203,13 @@ fun Main(navController: NavHostController) {
                                     detailViewSelectedTrain = selectedTrain
                                     navController.navigate("details/true")
                                 },
-                                stationInfo = timetable?.uiState?.value?.stationInfo
+                                stationInfo = timetable?.uiState?.value?.stationInfo,
+                                lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0
                             )
                         }
                     }
                     composable("favourites") {}
+                    composable("infolavori") {}
                     composable("search") {
                         if(stations.stations.isNotEmpty()) {
                             LazyColumn(

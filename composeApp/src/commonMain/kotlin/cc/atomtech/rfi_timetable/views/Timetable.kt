@@ -13,17 +13,19 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.rfi_timetable.models.TrainData
+import java.time.Instant
+import java.time.ZoneId
 import java.util.Locale
 
 @Composable
 fun Timetable(trainList: List<TrainData>?,
               colorScheme: ColorScheme,
               stationInfo: String?,
-              onTrainSelected: (TrainData) -> Unit) {
+              onTrainSelected: (TrainData) -> Unit,
+              lastUpdate: Long) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -57,6 +59,9 @@ fun Timetable(trainList: List<TrainData>?,
                           }
                     )
                 }
+            }
+            item {
+                Text("Last update: ${Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault()).toLocalDateTime()}",)
             }
         }
     }
