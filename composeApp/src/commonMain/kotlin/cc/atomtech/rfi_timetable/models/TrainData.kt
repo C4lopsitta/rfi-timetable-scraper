@@ -27,6 +27,18 @@ import androidx.compose.ui.unit.sp
 import cc.atomtech.rfi_timetable.enumerations.Category
 import cc.atomtech.rfi_timetable.enumerations.Operator
 
+data class Stop(val stationName: String, val time: String?) {
+    @Composable
+    fun build() {
+        Column (
+            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
+        ) {
+            Text(stationName, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+            Text(time ?: "")
+        }
+    }
+}
+
 class TrainData(
     val operator: Operator,
     private val operatorName: String?,
@@ -36,6 +48,7 @@ class TrainData(
     val delay: Int,
     val station: String? = null,
     val time: String? = null,
+    val stops: List<Stop>,
     val details: String? = null) {
 
     fun getDelayString(addSpace: Boolean = true): String? {

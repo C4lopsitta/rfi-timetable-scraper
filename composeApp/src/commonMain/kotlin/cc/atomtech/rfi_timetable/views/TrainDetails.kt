@@ -1,11 +1,17 @@
 package cc.atomtech.rfi_timetable.views
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +25,8 @@ import cc.atomtech.rfi_timetable.models.TrainData
 @Composable
 fun TrainDetails(trainData: TrainData?,
                  isArrival: Boolean) {
-
     Column (
-        modifier = Modifier.fillMaxSize().padding( end = 12.dp ),
+        modifier = Modifier.fillMaxSize().padding( end = 12.dp ).verticalScroll(rememberScrollState())
     ) {
         Text("Train number ${trainData?.number} to")
         Text(trainData?.station ?: "No data", fontSize = 32.sp, fontWeight = FontWeight.SemiBold, lineHeight = 38.sp)
@@ -71,10 +76,19 @@ fun TrainDetails(trainData: TrainData?,
                     fontWeight = FontWeight.SemiBold )
             }
         }
-        HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
-        Text("Details")
-        HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
-        Text(if(isArrival) "Stopped in" else "Stops in")
-
+        if(trainData?.details != null) {
+            if(trainData.details.isNotEmpty()) {
+                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                Text("Details")
+                Text(trainData.details ?: "")
+            }
+        }
+        if(trainData?.stops != null) {
+            if(trainData.stops.size > 0) {
+                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                Text(if (isArrival) "Stopped in" else "Stops in")
+                trainData.stops.forEach { stop -> stop.build() }
+            }
+        }
     }
 }

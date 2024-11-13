@@ -1,15 +1,13 @@
 package cc.atomtech.rfi_timetable
 
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.toUpperCase
 import cc.atomtech.rfi_timetable.enumerations.Category
 import cc.atomtech.rfi_timetable.enumerations.Operator
 import cc.atomtech.rfi_timetable.models.Station
+import cc.atomtech.rfi_timetable.models.Stop
 import cc.atomtech.rfi_timetable.models.TimetableState
 import cc.atomtech.rfi_timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
-import com.fleeksoft.ksoup.network.parsePostRequest
 import com.fleeksoft.ksoup.select.Elements
 import java.util.Locale
 
@@ -25,7 +23,8 @@ object HtmlTagsIdNames {
     const val TIME_FIELD = "ROrario"
     const val DELAY_FIELD = "RRitardo"
     const val PLATFORM_FIELD = "RBinario"
-    const val DETAILS_FILED_BUTTON = "RDettagli"
+    const val DETAILS_BUTTON_FIELD = "RDettagli"
+    const val DETAILS_POPUP_ELEMENT_CLASS = "FermateSuccessivePopupStyle"
     const val STAITONS_LIST = "ElencoLocalita"
 }
 
@@ -84,6 +83,29 @@ object RfiScraper {
                     val delay =
                         tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
 
+                    val stops = arrayListOf<Stop>()
+                    var moreInformationString = ""
+
+                    if(tr.getElementById(HtmlTagsIdNames.DETAILS_BUTTON_FIELD)?.children()?.size != 0) {
+                        val detailsPopupElements =
+                            tr.getElementsByClass(HtmlTagsIdNames.DETAILS_POPUP_ELEMENT_CLASS)[0].children()
+                        var nextStationsString = ""
+
+                        for(i in 0..<detailsPopupElements.size step 1) {
+                            if(detailsPopupElements[i].html() == "Fermate successive")
+                                nextStationsString = detailsPopupElements[i+1].html()
+                            if(detailsPopupElements[i].html() == "Informazioni")
+                                moreInformationString = detailsPopupElements[i+1].html()
+                        }
+
+                        if(nextStationsString.isNotEmpty()) {
+                            nextStationsString.split("FERMA A: ")[1]
+                            nextStationsString.split(" - ").forEach { stop ->
+                                stops.add(Stop(stop.split(" (")[0].removePrefix("FERMA A: "), stop.split("(")[1].removeSuffix(")")))
+                            }
+                        }
+                    }
+
                     var delayMinutes = 0
                     if (delay == "RITARDO") {
                         delayMinutes = Int.MAX_VALUE
@@ -102,7 +124,9 @@ object RfiScraper {
                             platform = platform,
                             station = station.stationName(),
                             time = time,
-                            delay = delayMinutes
+                            delay = delayMinutes,
+                            details = moreInformationString,
+                            stops = stops
                         )
                     )
                 }
@@ -124,8 +148,14 @@ object RfiScraper {
         val departingTrains: List<TrainData> = tableToTrainList(departuresTableBody?.getElementsByTag("tr"))
         val arrivingTrains: List<TrainData> = tableToTrainList(arrivalsTableBody?.getElementsByTag("tr"))
 
+        var stationInformation: String? = null
+        if(stationInfo?.children() != null) {
+            stationInformation = stationInfo.children()[0].html().removePrefix("<div>").removeSuffix("</div>")
+        }
+
         return TimetableState(stationName = title.stationName(),
                          departures = departingTrains,
-                         arrivals = arrivingTrains)
+                         arrivals = arrivingTrains,
+                         stationInfo = stationInformation)
     }
 }

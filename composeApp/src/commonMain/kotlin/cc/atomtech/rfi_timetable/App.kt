@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -30,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -122,7 +124,9 @@ fun Main(navController: NavHostController) {
                                         searchSuggestions = stations.search(query)
                                 },
                                 placeholder = { Text("Search") },
-                                maxLines = 1
+                                maxLines = 1,
+                                modifier = Modifier.fillMaxWidth().padding( horizontal = 12.dp ),
+                                shape = TextFieldDefaults.OutlinedTextFieldShape,
                             )
                         }
                     },
@@ -180,7 +184,8 @@ fun Main(navController: NavHostController) {
                                 onTrainSelected = { selectedTrain: TrainData ->
                                     detailViewSelectedTrain = selectedTrain
                                     navController.navigate("details/false")
-                                }
+                                },
+                                stationInfo = timetable?.uiState?.value?.stationInfo
                             )
                         }
                     }
@@ -192,7 +197,8 @@ fun Main(navController: NavHostController) {
                                 onTrainSelected = { selectedTrain: TrainData ->
                                     detailViewSelectedTrain = selectedTrain
                                     navController.navigate("details/true")
-                                }
+                                },
+                                stationInfo = timetable?.uiState?.value?.stationInfo
                             )
                         }
                     }
