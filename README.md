@@ -1,11 +1,21 @@
-This is a Kotlin Multiplatform project targeting Android, Desktop.
+# Timetables
+An application made to view Arrivals and Departures for every RFI managed passenger railway station.
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+It supports multiple platforms as it's a Kotlin Multiplatform Compose application but currently only Android APKs are available to be downloaded in the release.
 
+## Features
+- Search across all passenger staions
+- Visualize deparures and arrivals
+- View more details for each train (will be completed in next release)
+- Save favourite staions for rapid access (will be available in next release)
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Planned additions
+- A better Tablet/Desktop UI that will use the additional screen real estate to show more data in the list
+- Automatic refresh of data every 5 minutes
+- A refresh toggle
+
+## External links
+This application uses the pubblicly available [RFI Monitor Arrivi&Partenze Live website]([url](https://iechub.rfi.it/ArriviPartenze/ArrivalsDepartures/Home)) and parses the data in the HTML tables to then show to the user.
+
+## License
+This app is licensed under the [GPLv3 License](COPYING)
