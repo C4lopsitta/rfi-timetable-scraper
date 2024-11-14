@@ -70,6 +70,11 @@ class TrainData(
     }
 
     @Composable
+    fun desktopRow(viewDetails: (TrainData) -> Unit) {
+        return this.mobileRow { viewDetails(it) }
+    }
+
+    @Composable
     fun mobileRow(viewDetails: (TrainData) -> Unit)  {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

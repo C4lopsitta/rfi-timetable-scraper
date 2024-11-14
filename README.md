@@ -8,11 +8,12 @@ It supports multiple platforms as it's a Kotlin Multiplatform Compose applicatio
 - Visualize departures and arrivals
 - View more details for each train (will be completed in next release)
 - Save favourite stations for rapid access (will be available in next release)
+- An improved Desktop UI (versions 1.3 and above)
 
 ## Planned additions
-- A better Tablet/Desktop UI that will use the additional screen real estate to show more data in the list
+- Desktop UI on tablets
+- MacOS and Windows builds
 - Automatic refresh of data every 5 minutes
-- A refresh toggle
 - Visualizer for future or current line suspensions
 
 ## External links

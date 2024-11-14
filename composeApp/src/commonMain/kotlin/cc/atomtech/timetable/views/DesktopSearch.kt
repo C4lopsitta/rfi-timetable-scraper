@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,30 +34,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import cc.atomtech.timetable.models.Station
+import cc.atomtech.timetable.models.Stations
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DesktopSearch(searchSuggestions: List<Station>?,
+fun DesktopSearch(stations: Stations?,
                   navController: NavHostController,
                   setStationId: (Int) -> Unit) {
     var searchKey by remember { mutableStateOf("") }
+    var searchSuggestions by remember { mutableStateOf<List<Station>>(stations?.stations ?: listOf()) }
 
     Column (
-        modifier = Modifier.fillMaxHeight()
-            .padding( top = 24.dp )
-            .fillMaxWidth(0.55f),
+        modifier = Modifier.fillMaxSize()
+            .padding( top = 12.dp ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SearchBar(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(0.55f),
             inputField = {
                 SearchBarDefaults.InputField(
                     query = searchKey,
                     placeholder = { Text("Search for any station...") },
-                    onQueryChange = { newQuery -> searchKey = newQuery },
-                    onSearch = {
-
+                    onQueryChange = {
+                        newQuery -> searchKey = newQuery
+                        if(stations?.stations?.isNotEmpty() == true) {
+                            searchSuggestions = stations.search(searchKey)
+                        }
                     },
+                    onSearch = {  },
                     expanded = false,
                     onExpandedChange = {},
                     trailingIcon = {
@@ -70,12 +75,19 @@ fun DesktopSearch(searchSuggestions: List<Station>?,
             onExpandedChange = { },
             content = {}
         )
-        LazyColumn {
+        LazyColumn (
+            modifier = Modifier.fillMaxWidth(0.5f)
+        ) {
+            item {
+                Text("Search Results", modifier = Modifier.padding( top = 16.dp ))
+            }
             items(searchSuggestions ?: listOf()) { suggestion ->
                 Text(suggestion.name,
                     fontSize = 24.sp,
+                    lineHeight = 56.sp,
                     modifier = Modifier.fillMaxWidth()
-                        .padding(vertical = 12.dp)
+                        .height(72.dp)
+                        .padding( horizontal = 12.dp )
                         .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = LocalIndication.current,
                             role = Role.Button,

@@ -6,20 +6,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Engineering
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Engineering
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
@@ -33,6 +37,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 private fun isCurrentRoute(navController: NavHostController, route: String): Boolean {
     return navController.currentBackStackEntryAsState().value?.destination?.route == route
+}
+
+@Composable
+private fun currentRouteContains(navController: NavHostController, contains: String): Boolean {
+    return navController.currentBackStackEntryAsState().value?.destination?.route?.contains(contains) ?: false
 }
 
 @Composable
@@ -51,11 +60,23 @@ fun NavRail(navController: NavHostController,
     NavigationRail (
         modifier = Modifier.fillMaxHeight(),
     ) {
-        Icon(
-            contentDescription = "Timetables",
-            imageVector = Icons.Rounded.Train,
-            modifier = Modifier.padding(vertical = 24.dp)
-        )
+        if(currentRouteContains(navController, "details/")) {
+            IconButton(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier.padding(vertical = 12.dp)
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Rounded.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
+        } else {
+            Icon(
+                contentDescription = "Timetables",
+                imageVector = Icons.Rounded.Train,
+                modifier = Modifier.padding(vertical = 24.dp)
+            )
+        }
         HorizontalDivider( modifier = Modifier.width( 32.dp ).padding( bottom = 12.dp ) )
         NavigationRailItem(
             label = { Text("Search") },
@@ -142,6 +163,22 @@ fun NavRail(navController: NavHostController,
             selected = isCurrentRoute(navController, "infolavori"),
             onClick = {
                 navController.navigate("infolavori")
+            }
+        )
+        Spacer(Modifier.height(12.dp))
+        NavigationRailItem(
+            label = { Text("Info") },
+            icon = {
+                val isCurrentRoute = isCurrentRoute(navController, "appinfo")
+                HighlightedIcon(
+                    { Icon(Icons.Rounded.Info, contentDescription = "Info") },
+                    { Icon(Icons.Filled.Info, contentDescription = "Info") },
+                    isCurrentRoute
+                )
+            },
+            selected = isCurrentRoute(navController, "info"),
+            onClick = {
+                navController.navigate("info")
             }
         )
         Spacer(Modifier.height(12.dp))

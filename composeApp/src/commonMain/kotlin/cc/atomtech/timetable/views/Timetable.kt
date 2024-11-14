@@ -10,6 +10,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrainData
@@ -21,7 +22,8 @@ import java.util.Locale
 fun Timetable(trainList: List<TrainData>?,
               stationInfo: String?,
               onTrainSelected: (TrainData) -> Unit,
-              lastUpdate: Long) {
+              lastUpdate: Long,
+              isDesktop: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -32,12 +34,16 @@ fun Timetable(trainList: List<TrainData>?,
         }
         LazyColumn() {
             items(trainList ?: listOf()) { train ->
-                train.mobileRow(onTrainSelected)
+                if(isDesktop) {
+                    train.desktopRow(onTrainSelected)
+                } else {
+                    train.mobileRow(onTrainSelected)
+                }
                 HorizontalDivider()
             }
             if(stationInfo != null) {
                 item {
-                    Text("Station Information", fontSize = 20.sp)
+                    Text("Station Information", fontSize = 20.sp, modifier = Modifier.padding( top = 16.dp ))
                     Text(
                         stationInfo
                             .trim()
@@ -50,7 +56,10 @@ fun Timetable(trainList: List<TrainData>?,
                                     it.toString()
                           }
                     )
-                    Text("Last update: ${Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault()).toLocalDateTime()}",)
+                    Text(
+                        "Last update: ${Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault()).toLocalDateTime()}",
+                        modifier = Modifier.padding( vertical = 12.dp )
+                    )
                 }
             }
         }

@@ -31,6 +31,11 @@ kotlin {
                 exclude (group = "androidx.compose.ui", module = "ui-unit-desktop")
             }
         }
+
+        commonMain {
+            kotlin.srcDir("build/generated-src/kotlin")
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -87,6 +92,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.databinding.compiler.common)
     debugImplementation(compose.uiTooling)
 }
 
@@ -105,3 +111,22 @@ compose.desktop {
 }
 
 
+val buildConfigGenerator by tasks.registering(Sync::class) {
+    from(
+        resources.text.fromString(
+            """
+        |package my.project
+        |
+        |object BuildConfig {
+        |  const val PROJECT_VERSION = "${version ?: "error"}"
+        |}
+        |
+      """.trimMargin()
+        )
+    ) {
+        rename { "BuildConfig.kt" } // set the file name
+        into("my/project/") // change the directory to match the package
+    }
+
+    into(layout.buildDirectory.dir("generated-src/kotlin/"))
+}
