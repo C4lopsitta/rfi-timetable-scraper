@@ -157,11 +157,12 @@ fun Main(navController: NavHostController,
                 paddingValues = paddingValues,
                 navRail = {
                     if (isDesktop) {
-                        NavRail(navController = navController)
+                        NavRail(navController = navController) { reloadTrigger = !reloadTrigger }
                     }
                 }) {
                 NavigationBodyHost(
                     navController = navController,
+                    isDesktop = isDesktop,
                     isLoading = loading,
                     timetable = timetable,
                     stations = stations,

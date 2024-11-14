@@ -4,16 +4,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Engineering
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Engineering
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Train
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
@@ -40,7 +45,8 @@ private fun HighlightedIcon(icon: @Composable () -> Unit, highlighed: @Composabl
 }
 
 @Composable
-fun NavRail(navController: NavHostController) {
+fun NavRail(navController: NavHostController,
+            triggerReload: () -> Unit) {
 
     NavigationRail (
         modifier = Modifier.fillMaxHeight(),
@@ -50,6 +56,31 @@ fun NavRail(navController: NavHostController) {
             imageVector = Icons.Rounded.Train,
             modifier = Modifier.padding(vertical = 24.dp)
         )
+        HorizontalDivider( modifier = Modifier.width( 32.dp ).padding( bottom = 12.dp ) )
+        NavigationRailItem(
+            label = { Text("Search") },
+            icon = {
+                val isCurrentRoute = isCurrentRoute(navController, "search")
+                HighlightedIcon(
+                    { Icon(Icons.Rounded.Search, contentDescription = "Search") },
+                    { Icon(Icons.Filled.Search, contentDescription = "Search") },
+                    isCurrentRoute
+                )
+            },
+            selected = isCurrentRoute(navController, "search"),
+            onClick = {
+                navController.navigate("search")
+            }
+        )
+        NavigationRailItem(
+                label = { Text("Refresh") },
+        icon = { Icon(Icons.Rounded.Refresh, contentDescription = "Refresh") },
+        selected = false,
+        onClick = {
+            triggerReload()
+        }
+        )
+        HorizontalDivider( modifier = Modifier.width( 32.dp ).padding( vertical = 12.dp ) )
         NavigationRailItem(
             label = { Text("Departures") },
             icon = {
@@ -61,7 +92,9 @@ fun NavRail(navController: NavHostController) {
                 )
             },
             selected = isCurrentRoute(navController, "departures"),
-            onClick = {}
+            onClick = {
+                navController.navigate("departures")
+            }
         )
         Spacer(Modifier.height(12.dp))
         NavigationRailItem(
@@ -75,7 +108,9 @@ fun NavRail(navController: NavHostController) {
                 )
             },
             selected = isCurrentRoute(navController, "arrivals"),
-            onClick = {}
+            onClick = {
+                navController.navigate("arrivals")
+            }
         )
         Spacer(Modifier.height(12.dp))
         NavigationRailItem(
@@ -89,7 +124,9 @@ fun NavRail(navController: NavHostController) {
                 )
             },
             selected = isCurrentRoute(navController, "favourites"),
-            onClick = {}
+            onClick = {
+                navController.navigate("favourites")
+            }
         )
         Spacer(Modifier.height(12.dp))
         NavigationRailItem(
@@ -103,7 +140,9 @@ fun NavRail(navController: NavHostController) {
                 )
             },
             selected = isCurrentRoute(navController, "infolavori"),
-            onClick = {}
+            onClick = {
+                navController.navigate("infolavori")
+            }
         )
         Spacer(Modifier.height(12.dp))
     }

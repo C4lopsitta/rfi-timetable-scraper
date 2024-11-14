@@ -29,10 +29,13 @@ import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.unit.Dp
+import cc.atomtech.timetable.views.DesktopSearch
+import cc.atomtech.timetable.views.MobileSearch
 
 @Composable
 fun NavigationBodyHost(
     navController: NavHostController,
+    isDesktop: Boolean,
     isLoading: Boolean,
     timetable: TimetableState?,
     stations: Stations,
@@ -74,29 +77,13 @@ fun NavigationBodyHost(
         composable("favourites") {}
         composable("infolavori") {}
         composable("search") {
-            if (stations.stations.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 12.dp)
-                ) {
-                    items(searchSuggestions ?: listOf()) { suggestion ->
-                        Text(suggestion.name,
-                            fontSize = 24.sp,
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(vertical = 12.dp)
-                                .clickable(interactionSource = remember { MutableInteractionSource() },
-                                    indication = LocalIndication.current,
-                                    role = Role.Button,
-                                    onClickLabel = "Click to open details",
-                                    onClick = {
-                                        setStationId(suggestion.id)
-                                        navController.popBackStack()
-                                    }
-                                ))
-                        HorizontalDivider()
-                    }
-                }
+            if(isDesktop) {
+                DesktopSearch(searchSuggestions = searchSuggestions,
+                    navController = navController) { setStationId(it) }
+            } else {
+                MobileSearch(stations = stations,
+                    searchSuggestions = searchSuggestions,
+                    navController = navController) { setStationId(it) }
             }
         }
         composable("details/{isArrival}") {

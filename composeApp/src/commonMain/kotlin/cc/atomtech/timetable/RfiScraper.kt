@@ -60,7 +60,6 @@ object RfiScraper {
         tableRows?.forEach { tr ->
             if (tr.children()[0].tagName() != "th") {
                 if (tr.id().isNotEmpty()) {
-                    println(tr.id())
 
                     val trainNumber = tr.id()
 
