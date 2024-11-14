@@ -1,10 +1,9 @@
-package cc.atomtech.rfi_timetable.models
+package cc.atomtech.timetable.models
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.sql.Time
 import java.time.Instant
 
 data class TimetableData(
@@ -12,7 +11,7 @@ data class TimetableData(
     val departures: List<TrainData>,
     val arrivals: List<TrainData>,
     val stationInfo: String?,
-    var lastUptade: Long = Time.from(Instant.now()).toInstant().toEpochMilli()
+    var lastUptade: Long = Instant.now().toEpochMilli()
 )
 
 class TimetableState(val stationName: String,
@@ -24,6 +23,6 @@ class TimetableState(val stationName: String,
 
     fun setNewTimetable(timeTable: TimetableData) {
         this._uiState.value = timeTable
-        this._uiState.value.lastUptade = Time.from(Instant.now()).toInstant().toEpochMilli()
+        this._uiState.value.lastUptade = Instant.now().toEpochMilli()
     }
 }

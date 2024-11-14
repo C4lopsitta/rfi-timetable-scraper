@@ -1,4 +1,4 @@
-package cc.atomtech.rfi_timetable.components
+package cc.atomtech.timetable.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
@@ -60,7 +60,7 @@ fun NavBar(navController: NavHostController) {
             onClick = {
                 navController.navigate("arrivals")
             })
-        NavigationBarItem(label = { Text("Favourite Stations") },
+        NavigationBarItem(label = { Text("Favourites") },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "favourites")
                 HighlightedIcon(

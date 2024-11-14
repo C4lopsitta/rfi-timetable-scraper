@@ -1,4 +1,4 @@
-package cc.atomtech.rfi_timetable.models
+package cc.atomtech.timetable.models
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
@@ -24,8 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.rfi_timetable.enumerations.Category
-import cc.atomtech.rfi_timetable.enumerations.Operator
+import cc.atomtech.timetable.enumerations.Category
+import cc.atomtech.timetable.enumerations.Operator
 
 data class Stop(val stationName: String, val time: String?) {
     @Composable

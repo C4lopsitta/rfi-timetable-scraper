@@ -1,11 +1,11 @@
-package cc.atomtech.rfi_timetable
+package cc.atomtech.timetable
 
-import cc.atomtech.rfi_timetable.enumerations.Category
-import cc.atomtech.rfi_timetable.enumerations.Operator
-import cc.atomtech.rfi_timetable.models.Station
-import cc.atomtech.rfi_timetable.models.Stop
-import cc.atomtech.rfi_timetable.models.TimetableState
-import cc.atomtech.rfi_timetable.models.TrainData
+import cc.atomtech.timetable.enumerations.Category
+import cc.atomtech.timetable.enumerations.Operator
+import cc.atomtech.timetable.models.Station
+import cc.atomtech.timetable.models.Stop
+import cc.atomtech.timetable.models.TimetableState
+import cc.atomtech.timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.select.Elements

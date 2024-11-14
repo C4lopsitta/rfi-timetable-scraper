@@ -1,4 +1,4 @@
-package cc.atomtech.rfi_timetable
+package cc.atomtech.timetable
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -7,9 +7,9 @@ import androidx.navigation.compose.rememberNavController
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Timetables",
+        title = "Timetables"
     ) {
         val navController = rememberNavController()
-        Main(navController)
+        Main(navController, isDesktop = true)
     }
 }

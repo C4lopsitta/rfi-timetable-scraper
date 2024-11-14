@@ -1,4 +1,4 @@
-package cc.atomtech.rfi_timetable.models
+package cc.atomtech.timetable.models
 
 class Stations(var stations: List<Station>) {
     fun search(query: String): List<Station> {

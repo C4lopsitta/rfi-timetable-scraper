@@ -1,3 +1,4 @@
+import org.gradle.internal.declarativedsl.dom.resolution.resolutionContainer
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -13,7 +14,7 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     
@@ -25,7 +26,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.okhttp)
+//            implementation(libs.ktor.client.okhttp)
             implementation(compose.ui) {
                 exclude (group = "androidx.compose.ui", module = "ui-unit-desktop")
             }
@@ -47,28 +48,25 @@ kotlin {
             implementation(libs.ksoup.network)
             implementation(libs.navigation.compose)
             implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.ktor.client.cio)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation("io.ktor:ktor-client-cio:${libs.versions.ktor.get()}") {
-                exclude (group = "io.ktor.client", module = "ktor-client-okhttp")
-                exclude (group = "io.ktor.client", module = "ktor-client-okhttp3")
-            }
         }
     }
 }
 
 android {
-    namespace = "cc.atomtech.rfi_timetable"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    namespace = "cc.atomtech.timetable"
+    compileSdkVersion(libs.versions.android.compileSdk.get().toInt())
 
     defaultConfig {
-        applicationId = "cc.atomtech.rfi_timetable"
+        applicationId = "cc.atomtech.timetable"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
     packaging {
         resources {
@@ -77,13 +75,13 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildToolsVersion = "34.0.0"
 }
@@ -94,12 +92,16 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "cc.atomtech.rfi_timetable.MainKt"
+        mainClass = "cc.atomtech.timetable.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "cc.atomtech.rfi_timetable"
-            packageVersion = "1.0.0"
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.AppImage, TargetFormat.Pkg, TargetFormat.Rpm, TargetFormat.Exe)
+            packageName = "Timetable"
+            packageVersion = "1.1.0"
+            description = "Scraper app that uses RFI's Arrivi&Partenze website to visualize departures and arrivals for any RFI-Managed railway station"
         }
+
     }
 }
+
+

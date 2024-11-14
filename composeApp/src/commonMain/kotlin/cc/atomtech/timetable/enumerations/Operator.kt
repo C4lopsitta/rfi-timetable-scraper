@@ -1,4 +1,4 @@
-package cc.atomtech.rfi_timetable.enumerations
+package cc.atomtech.timetable.enumerations
 
 enum class Operator() {
     UNDEFINED,
