@@ -5,11 +5,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import my.project.BuildConfig
 
 @Composable
 fun AppInfo() {
-    val versionNumber = if(BuildConfig.PROJECT_VERSION != "unspecified") BuildConfig.PROJECT_VERSION else "1.3.0"
+    val versionNumber = "1.3.0"
 
     Column {
         Text("Timetable", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)

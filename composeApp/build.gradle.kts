@@ -75,7 +75,7 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,MD,LICENSE.md,NOTICE.md}"
         }
     }
     buildTypes {
@@ -106,7 +106,6 @@ compose.desktop {
             packageVersion = "1.3.0"
             description = "Scraper app that uses RFI's Arrivi&Partenze website to visualize departures and arrivals for any RFI-Managed railway station"
         }
-
     }
 }
 

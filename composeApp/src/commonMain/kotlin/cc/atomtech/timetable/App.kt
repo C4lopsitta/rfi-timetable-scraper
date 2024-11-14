@@ -14,6 +14,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Train
+import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,7 +28,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import cc.atomtech.timetable.components.NavBar
@@ -74,26 +78,30 @@ fun Main(navController: NavHostController,
         }
     }
 
+    val colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
+
     if(error != null) {
         BasicAlertDialog(
             onDismissRequest = {
                 error = null
-            }
+            },
         ) {
-            Column {
-                Text("Data fetch error")
-                Text(error.toString())
-                ElevatedButton(
-                    content = { Text("Ok") },
-                    onClick = {
-                        error = null
-                    }
-                )
+            Card () {
+                Column (
+                    modifier = Modifier.padding( 16.dp )
+                ) {
+                    Text("Data fetch error", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(error.toString())
+                    ElevatedButton(
+                        content = { Text("Ok") },
+                        onClick = {
+                            error = null
+                        }
+                    )
+                }
             }
         }
     }
-
-    val colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
 
     MaterialTheme (
         colorScheme = colorScheme
