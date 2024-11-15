@@ -70,8 +70,8 @@ android {
         applicationId = "cc.atomtech.timetable"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 3
-        versionName = "1.3"
+        versionCode = 4
+        versionName = "1.3.1"
     }
     packaging {
         resources {
@@ -103,7 +103,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.AppImage, TargetFormat.Pkg, TargetFormat.Rpm, TargetFormat.Exe)
             packageName = "Timetable"
-            packageVersion = "1.3.0"
+            packageVersion = "1.3.1"
             description = "Scraper app that uses RFI's Arrivi&Partenze website to visualize departures and arrivals for any RFI-Managed railway station"
         }
     }
