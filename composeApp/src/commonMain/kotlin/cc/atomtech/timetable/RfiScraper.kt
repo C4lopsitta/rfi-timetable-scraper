@@ -62,17 +62,28 @@ object RfiScraper {
                 if (tr.id().isNotEmpty()) {
 
                     val trainNumber = tr.id()
+                    var operator = "UNDEFINED"
+                    var category = "UNDEFINED"
 
-                    val operator =
-                        tr.getElementById(HtmlTagsIdNames.OPERATOR_FIELD)!!
-                            .children()[0].attribute(
-                            "alt"
-                        )?.value ?: "UNDEFINED"
-                    val category =
-                        tr.getElementById(HtmlTagsIdNames.CATEGORY_FIELD)!!
-                            .children()[0].attribute(
-                            "alt"
-                        )?.value ?: "UNDEFINED"
+                    try {
+                        operator =
+                            tr.getElementById(HtmlTagsIdNames.OPERATOR_FIELD)!!
+                                .children()[0].attribute(
+                                "alt"
+                            )?.value ?: "UNDEFINED"
+                    } catch (e: Exception) {
+                        operator = "UNDEFINED"
+                    }
+                    try {
+                        category =
+                            tr.getElementById(HtmlTagsIdNames.CATEGORY_FIELD)!!
+                                .children()[0].attribute(
+                                "alt"
+                            )?.value ?: "UNDEFINED"
+                    } catch (e: Exception) {
+                        category = "UNDEFINED"
+                    }
+
                     val platform =
                         tr.getElementById(HtmlTagsIdNames.PLATFORM_FIELD)!!.children()[0].html()
                     val station =
