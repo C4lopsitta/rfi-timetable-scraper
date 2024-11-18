@@ -3,12 +3,17 @@ package cc.atomtech.timetable.views
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,19 +37,26 @@ fun MobileSearch(stations: Stations,
                 .padding(horizontal = 12.dp)
         ) {
             items(searchSuggestions ?: listOf()) { suggestion ->
-                Text(suggestion.name,
-                    fontSize = 24.sp,
+                Row (
                     modifier = Modifier.fillMaxWidth()
                         .padding(vertical = 12.dp)
                         .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = LocalIndication.current,
                             role = Role.Button,
-                            onClickLabel = "Click to open details",
+                            onClickLabel = "Pick ${suggestion.name} as station",
                             onClick = {
                                 setStationId(suggestion.id)
                                 navController.popBackStack()
                             }
-                        ))
+                        )
+                ) {
+                    Text(suggestion.name, fontSize = 24.sp)
+                    IconButton(
+                        onClick = {
+
+                        }
+                    ) { Icon(Icons.Rounded.Star, contentDescription = "Favourite location") }
+                }
                 HorizontalDivider()
             }
         }

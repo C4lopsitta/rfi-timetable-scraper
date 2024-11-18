@@ -31,7 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import cc.atomtech.timetable.components.NavBar
@@ -41,25 +44,49 @@ import cc.atomtech.timetable.components.ScaffoldBody
 import cc.atomtech.timetable.models.Station
 import cc.atomtech.timetable.models.Stations
 import cc.atomtech.timetable.models.TimetableState
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import okio.Path.Companion.toPath
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+
+const val preferencesFile = "timetables-prefs.preferences_pb"
+
+@Composable
+expect fun storePreferences(): DataStore<Preferences>
+
+
+fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
+    PreferenceDataStoreFactory.createWithPath(
+        produceFile = { createPath().toPath() }
+    )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun Main(navController: NavHostController,
          isDesktop: Boolean = false) {
+    val preferences = AppPreferences(storePreferences())
+
+    var stationId by remember { mutableStateOf(1728) }
+
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
     var searchQuery by remember { mutableStateOf("") }
     var searchSuggestions by remember { mutableStateOf<List<Station>?>(null) }
     val stations by remember { mutableStateOf(Stations(listOf())) }
-    var stationId by remember { mutableStateOf(1728) }
     var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
     LaunchedEffect(Unit) {
         try {
+            stationId = preferences.getStationId().first()
             stations.stations = RfiScraper.getStations()
         } catch (e: Exception) {
             println(e.printStackTrace())
@@ -69,9 +96,11 @@ fun Main(navController: NavHostController,
 
     LaunchedEffect(stationId, reloadTrigger) {
         try {
+            timetable = null
             loading = true
             timetable = RfiScraper.getStationTimetable(stationId)
             loading = false
+        } catch (_: CancellationException) {
         } catch (e: Exception) {
             println(e.printStackTrace())
             error = e.toString()
@@ -175,7 +204,12 @@ fun Main(navController: NavHostController,
                     timetable = timetable,
                     stations = stations,
                     searchSuggestions = searchSuggestions,
-                    setStationId = { newId -> stationId = newId },
+                    setStationId = { newId ->
+                        stationId = newId
+                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                            preferences.setStationId(newId)
+                        }
+                    },
                 )
             }
         }

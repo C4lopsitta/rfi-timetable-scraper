@@ -98,7 +98,7 @@ class TrainData(
                 ) {
                     Column (
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.width(52.dp)
+                        modifier = Modifier.width(60.dp)
                     ) {
                         val trainCategory = category.toShortString()
                         if(category != Category.UNDEFINED) {
@@ -120,6 +120,7 @@ class TrainData(
                     if(time != null) {
                         timeString = "$time"
                         timeString += getDelayString()
+                        if(timeString.contains("CANCELLED")) timeString = "CANCELLED"
                     }
                     Text(timeString ?: "Undefined o'clock")
                 }
