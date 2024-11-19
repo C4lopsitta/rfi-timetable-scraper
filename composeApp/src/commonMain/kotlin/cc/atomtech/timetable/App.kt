@@ -175,7 +175,11 @@ fun Main(navController: NavHostController,
                                         contentDescription = "Close Search"
                                     )
                                 },
-                                    onClick = { navController.popBackStack() })
+                                    onClick = {
+                                        navController.popBackStack()
+                                        searchQuery = ""
+                                        searchSuggestions = listOf()
+                                    })
                             }
                         }
                     },
