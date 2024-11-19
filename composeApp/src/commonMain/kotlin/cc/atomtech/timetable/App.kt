@@ -47,13 +47,17 @@ import cc.atomtech.timetable.models.TimetableState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okio.Path.Companion.toPath
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import java.time.Duration
+import java.time.temporal.TemporalAmount
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
@@ -85,6 +89,9 @@ fun Main(navController: NavHostController,
     var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
+    val reloaderMinutes = 0.5
+    var timetableRefresher: Job? = null
+
     LaunchedEffect(Unit) {
         try {
             stationId = preferences.getStationId().first()
@@ -106,6 +113,16 @@ fun Main(navController: NavHostController,
         } catch (e: Exception) {
             println(e.printStackTrace())
             error = e.toString()
+        } finally {
+            timetableRefresher?.cancel()
+            if(reloaderMinutes > 0) {
+                timetableRefresher = CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+                    while (true) {
+                        delay((reloaderMinutes * 60 * 1000).toLong())
+                        reloadTrigger = !reloadTrigger
+                    }
+                }
+            }
         }
     }
 

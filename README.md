@@ -3,16 +3,19 @@ An application made to view Arrivals and Departures for every RFI managed passen
 
 It supports multiple platforms as it's a Kotlin Multiplatform Compose application but currently only Android APKs are available to be downloaded in the release.
 
+## Downloads
+Right now the GitHub releases are a bit behind, but soon the app will be available on the Google Play Store.
+
 ## Features
 - Search across all passenger stations
 - Visualize departures and arrivals
 - View more details for each train
 - Save favourite stations for rapid access (will be available in next release)
 - An improved Desktop and Tablet UI (versions 1.3.4 and above)
+- Automatic data refresh every 5 minutes (versions 1.3.4 and above)
 
 ## Planned additions
 - MacOS and Windows builds
-- Automatic refresh of data every 5 minutes
 - Visualizer for future or current line suspensions
 
 ## External links
