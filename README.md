@@ -6,12 +6,11 @@ It supports multiple platforms as it's a Kotlin Multiplatform Compose applicatio
 ## Features
 - Search across all passenger stations
 - Visualize departures and arrivals
-- View more details for each train (will be completed in next release)
+- View more details for each train
 - Save favourite stations for rapid access (will be available in next release)
-- An improved Desktop UI (versions 1.3 and above)
+- An improved Desktop and Tablet UI (versions 1.3.4 and above)
 
 ## Planned additions
-- Desktop UI on tablets
 - MacOS and Windows builds
 - Automatic refresh of data every 5 minutes
 - Visualizer for future or current line suspensions
