@@ -75,32 +75,28 @@ fun NavigationBodyHost(
         ) {
 
             composable("departures") {
-                if (!isLoading) {
-                    Timetable(
-                        trainList = timetable?.uiState?.value?.departures,
-                        onTrainSelected = { selectedTrain: TrainData ->
-                            detailViewSelectedTrain = selectedTrain
-                            navController.navigate("details/false")
-                        },
-                        stationInfo = timetable?.uiState?.value?.stationInfo,
-                        lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
-                        isDesktop = isDesktop
-                    )
-                }
+                Timetable(
+                    trainList = timetable?.uiState?.value?.departures,
+                    onTrainSelected = { selectedTrain: TrainData ->
+                        detailViewSelectedTrain = selectedTrain
+                        navController.navigate("details/false")
+                    },
+                    stationInfo = timetable?.uiState?.value?.stationInfo,
+                    lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
+                    isDesktop = isDesktop
+                )
             }
             composable("arrivals") {
-                if (!isLoading) {
-                    Timetable(
-                        trainList = timetable?.uiState?.value?.arrivals,
-                        onTrainSelected = { selectedTrain: TrainData ->
-                            detailViewSelectedTrain = selectedTrain
-                            navController.navigate("details/true")
-                        },
-                        stationInfo = timetable?.uiState?.value?.stationInfo,
-                        lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
-                        isDesktop = isDesktop
-                    )
-                }
+                Timetable(
+                    trainList = timetable?.uiState?.value?.arrivals,
+                    onTrainSelected = { selectedTrain: TrainData ->
+                        detailViewSelectedTrain = selectedTrain
+                        navController.navigate("details/true")
+                    },
+                    stationInfo = timetable?.uiState?.value?.stationInfo,
+                    lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
+                    isDesktop = isDesktop
+                )
             }
             composable("favourites") { FavouriteStations(favouriteStations) }
             composable("infolavori") { InfoLavori() }

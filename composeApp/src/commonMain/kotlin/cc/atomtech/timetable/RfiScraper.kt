@@ -4,6 +4,7 @@ import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.models.Station
 import cc.atomtech.timetable.models.Stop
+import cc.atomtech.timetable.models.TimetableData
 import cc.atomtech.timetable.models.TimetableState
 import cc.atomtech.timetable.models.TrainData
 import com.fleeksoft.ksoup.Ksoup
@@ -147,6 +148,15 @@ object RfiScraper {
     }
 
     suspend fun getStationTimetable(stationId: Int): TimetableState {
+        val state = reloadStation(stationId)
+
+        return TimetableState(stationName = state.stationName.stationName(),
+                         departures = state.departures,
+                         arrivals = state.arrivals,
+                         stationInfo = state.stationInfo)
+    }
+
+    suspend fun reloadStation(stationId: Int): TimetableData {
         val departures = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryDepartures}${stationId}")
         val arrivals = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryArrivals}${stationId}")
 
@@ -163,9 +173,11 @@ object RfiScraper {
             stationInformation = stationInfo.children()[0].html().removePrefix("<div>").removeSuffix("</div>")
         }
 
-        return TimetableState(stationName = title.stationName(),
-                         departures = departingTrains,
-                         arrivals = arrivingTrains,
-                         stationInfo = stationInformation)
+        return TimetableData(
+            departures = departingTrains,
+            arrivals = arrivingTrains,
+            stationName = title.stationName(),
+            stationInfo = stationInformation
+        )
     }
 }

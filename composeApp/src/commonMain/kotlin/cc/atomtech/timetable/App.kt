@@ -89,7 +89,8 @@ fun Main(navController: NavHostController,
     var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
-    val reloaderMinutes = 0.5
+    val reloaderMinutes = 5
+    var isNewStationSet by remember { mutableStateOf(true) }
     var timetableRefresher: Job? = null
 
     LaunchedEffect(Unit) {
@@ -105,10 +106,16 @@ fun Main(navController: NavHostController,
 
     LaunchedEffect(stationId, reloadTrigger) {
         try {
-            timetable = null
             loading = true
-            timetable = RfiScraper.getStationTimetable(stationId)
+            if(isNewStationSet) {
+                println("Full reload")
+                timetable = null
+                timetable = RfiScraper.getStationTimetable(stationId)
+            } else {
+                timetable?.setNewTimetable(RfiScraper.reloadStation(stationId))
+            }
             loading = false
+            isNewStationSet = false
         } catch (_: CancellationException) {
         } catch (e: Exception) {
             println(e.printStackTrace())
@@ -117,10 +124,8 @@ fun Main(navController: NavHostController,
             timetableRefresher?.cancel()
             if(reloaderMinutes > 0) {
                 timetableRefresher = CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-                    while (true) {
-                        delay((reloaderMinutes * 60 * 1000).toLong())
-                        reloadTrigger = !reloadTrigger
-                    }
+                    delay((reloaderMinutes * 60 * 1000).toLong())
+                    reloadTrigger = !reloadTrigger
                 }
             }
         }
@@ -230,6 +235,7 @@ fun Main(navController: NavHostController,
                     searchSuggestions = searchSuggestions,
                     setStationId = { newId ->
                         stationId = newId
+                        isNewStationSet = true
                         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
                             preferences.setStationId(newId)
                         }
