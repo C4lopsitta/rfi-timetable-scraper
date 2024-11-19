@@ -40,7 +40,7 @@ fun MobileSearch(stations: Stations,
                  navController: NavHostController,
                  favouriteStations: MutableSet<String>,
                  setStationId: (Int) -> Unit) {
-    if (stations.stations.isNotEmpty()) {
+    if (stations.stations.isNotEmpty() && searchSuggestions?.isNotEmpty() == true) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,7 +78,6 @@ fun MobileSearch(stations: Stations,
             }
         }
     } else {
-
         Column (
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
