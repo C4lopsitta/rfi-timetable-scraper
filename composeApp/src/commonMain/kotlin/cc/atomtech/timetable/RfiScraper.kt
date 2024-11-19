@@ -42,7 +42,7 @@ object RfiScraper {
         }
     }
 
-    suspend fun getStations(): List<Station> {
+    suspend fun getStations(): ArrayList<Station> {
         val stations = Ksoup.parseGetRequest(url = stationsUrl)
 
         val stationList = stations.body().getElementById(HtmlTagsIdNames.STAITONS_LIST)
@@ -53,7 +53,7 @@ object RfiScraper {
             stationsList.add(Station(option.html().stationName(), option.value().toInt()))
         }
 
-        return stationsList.toList()
+        return stationsList
     }
 
     private fun tableToTrainList(tableRows: Elements?): List<TrainData> {

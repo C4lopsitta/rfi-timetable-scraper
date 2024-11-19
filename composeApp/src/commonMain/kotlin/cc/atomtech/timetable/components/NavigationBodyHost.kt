@@ -52,9 +52,10 @@ fun NavigationBodyHost(
     isLoading: Boolean,
     timetable: TimetableState?,
     stations: Stations,
-    favouriteStations: MutableSet<String>,
+    favouriteStations: Stations,
     searchSuggestions: List<Station>?,
-    setStationId: (Int) -> Unit) {
+    setStationId: (Int) -> Unit,
+    updateFavourites: (String) -> Unit) {
     var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
 
     Column {
@@ -98,7 +99,15 @@ fun NavigationBodyHost(
                     isDesktop = isDesktop
                 )
             }
-            composable("favourites") { FavouriteStations(favouriteStations) }
+            composable("favourites") {
+                FavouriteStations(
+                    favouriteStations,
+                    setStation = {
+                        setStationId(it)
+                        navController.navigate("departures")
+                    }
+                )
+            }
             composable("infolavori") { InfoLavori() }
             composable("search") {
                 if (isDesktop) {
@@ -111,7 +120,8 @@ fun NavigationBodyHost(
                         stations = stations,
                         searchSuggestions = searchSuggestions,
                         favouriteStations = favouriteStations,
-                        navController = navController
+                        navController = navController,
+                        updateFavourites = updateFavourites
                     ) { setStationId(it) }
                 }
             }

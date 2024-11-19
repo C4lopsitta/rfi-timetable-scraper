@@ -56,6 +56,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okio.Path.Companion.toPath
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import rfi.composeapp.generated.resources.Res
 import java.time.Duration
 import java.time.temporal.TemporalAmount
 
@@ -79,13 +80,13 @@ fun Main(navController: NavHostController,
     val preferences = AppPreferences(storePreferences())
 
     var stationId by remember { mutableStateOf(1728) }
-    var favouriteStations by remember { mutableStateOf(mutableSetOf<String>()) }
+    var favouriteStations by remember { mutableStateOf<Stations>(Stations(arrayListOf())) }
 
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
     var searchQuery by remember { mutableStateOf("") }
     var searchSuggestions by remember { mutableStateOf<List<Station>?>(null) }
-    val stations by remember { mutableStateOf(Stations(listOf())) }
+    val stations by remember { mutableStateOf(Stations(arrayListOf())) }
     var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
@@ -96,8 +97,8 @@ fun Main(navController: NavHostController,
     LaunchedEffect(Unit) {
         try {
             stationId = preferences.getStationId().first()
-            favouriteStations = preferences.getFavouriteStations().first().toMutableSet()
             stations.stations = RfiScraper.getStations()
+            favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stations)
         } catch (e: Exception) {
             println(e.printStackTrace())
             error = e.toString()
@@ -240,6 +241,11 @@ fun Main(navController: NavHostController,
                             preferences.setStationId(newId)
                         }
                     },
+                    updateFavourites = { favourites: String ->
+                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                            preferences.setFavouriteStations(favourites)
+                        }
+                    }
                 )
             }
         }

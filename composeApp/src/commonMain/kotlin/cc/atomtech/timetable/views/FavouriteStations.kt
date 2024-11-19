@@ -19,13 +19,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cc.atomtech.timetable.models.Stations
 
 @Composable
-fun FavouriteStations(favouriteStations: MutableSet<String>) {
-    if(favouriteStations.isNotEmpty()) {
-        LazyColumn {
-            items(favouriteStations.toList()) {
-                Text(it)
+fun FavouriteStations(favouriteStations: Stations,
+                      setStation: (Int) -> Unit) {
+    if(favouriteStations.stations.isNotEmpty()) {
+        LazyColumn (
+            modifier = Modifier.fillMaxSize().padding( end = 12.dp )
+        ) {
+            items(favouriteStations.stations) {
+                it.toFavouritesRow(setStation)
             }
         }
     } else {

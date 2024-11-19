@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -39,19 +40,17 @@ class AppPreferences(
         }
     }
 
-    fun getFavouriteStations(): Flow<Set<String>> {
+    fun getFavouriteStations(): Flow<String> {
         return preferences.data.map {
-            it[stringSetPreferencesKey(FAVOURITE_STATIONS)] ?: setOf()
+            it[stringPreferencesKey(FAVOURITE_STATIONS)] ?: ""
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun addFavouriteStation(stationId: String) {
+    suspend fun setFavouriteStations(favourites: String) {
         return withContext(Dispatchers.IO) {
             try {
                 preferences.edit {
-                    val newSet: MutableSet<String> = (it[stringSetPreferencesKey(FAVOURITE_STATIONS)]?.toMutableSet() ?: mutableSetOf<String>())
-                    newSet.add(stationId)
-                    it[stringSetPreferencesKey(FAVOURITE_STATIONS)] = newSet.toSet()
+                    it[stringPreferencesKey(FAVOURITE_STATIONS)] = favourites
                 }
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
@@ -59,18 +58,4 @@ class AppPreferences(
             }
         }
     }
-
-    suspend fun removeFavouriteStation(stationId: String) {
-        return withContext(Dispatchers.IO) {
-            try {
-                preferences.edit {
-                    val newSet: MutableSet<String> = (it[stringSetPreferencesKey(FAVOURITE_STATIONS)]?.toMutableSet() ?: mutableSetOf<String>())
-                    newSet.remove(stationId)
-                    it[stringSetPreferencesKey(FAVOURITE_STATIONS)] = newSet.toSet()
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) throw e
-                e.printStackTrace()
-            }
-        }    }
 }
