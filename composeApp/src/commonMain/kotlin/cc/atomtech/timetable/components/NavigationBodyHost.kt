@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.DesktopSearch
+import cc.atomtech.timetable.views.FavouriteStations
+import cc.atomtech.timetable.views.InfoLavori
 import cc.atomtech.timetable.views.MobileSearch
 
 @Composable
@@ -50,6 +52,7 @@ fun NavigationBodyHost(
     isLoading: Boolean,
     timetable: TimetableState?,
     stations: Stations,
+    favouriteStations: MutableSet<String>,
     searchSuggestions: List<Station>?,
     setStationId: (Int) -> Unit) {
     var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
@@ -99,8 +102,8 @@ fun NavigationBodyHost(
                     )
                 }
             }
-            composable("favourites") {}
-            composable("infolavori") {}
+            composable("favourites") { FavouriteStations(favouriteStations) }
+            composable("infolavori") { InfoLavori() }
             composable("search") {
                 if (isDesktop) {
                     DesktopSearch(
@@ -111,6 +114,7 @@ fun NavigationBodyHost(
                     MobileSearch(
                         stations = stations,
                         searchSuggestions = searchSuggestions,
+                        favouriteStations = favouriteStations,
                         navController = navController
                     ) { setStationId(it) }
                 }

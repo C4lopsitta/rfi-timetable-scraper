@@ -75,6 +75,7 @@ fun Main(navController: NavHostController,
     val preferences = AppPreferences(storePreferences())
 
     var stationId by remember { mutableStateOf(1728) }
+    var favouriteStations by remember { mutableStateOf(mutableSetOf<String>()) }
 
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
@@ -87,6 +88,7 @@ fun Main(navController: NavHostController,
     LaunchedEffect(Unit) {
         try {
             stationId = preferences.getStationId().first()
+            favouriteStations = preferences.getFavouriteStations().first().toMutableSet()
             stations.stations = RfiScraper.getStations()
         } catch (e: Exception) {
             println(e.printStackTrace())
@@ -203,6 +205,7 @@ fun Main(navController: NavHostController,
                     isLoading = loading,
                     timetable = timetable,
                     stations = stations,
+                    favouriteStations = favouriteStations,
                     searchSuggestions = searchSuggestions,
                     setStationId = { newId ->
                         stationId = newId
