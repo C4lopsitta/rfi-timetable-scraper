@@ -36,10 +36,19 @@ object RfiScraper {
     private const val baseQueryArrivals = "?Arrivals=True&PlaceId="
 
     private fun String.stationName(): String {
-        this.lowercase(Locale.getDefault())
-        return this.lowercase().split(" ").joinToString(" ") { word ->
-            word.replaceFirstChar { it.uppercaseChar() }
-        }
+        return this.lowercase(Locale.getDefault())
+            .replace("''''", "'")
+            .split(" ") // Split by spaces
+            .joinToString(" ") { word ->
+                word.split(".") // Further split by periods
+                    .joinToString(". ") { part ->
+                        part.replaceFirstChar { it.uppercaseChar() }
+                    }
+                word.split("-") // Further split by periods
+                    .joinToString("-") { part ->
+                        part.replaceFirstChar { it.uppercaseChar() }
+                    }
+            }
     }
 
     suspend fun getStations(): ArrayList<Station> {
@@ -109,10 +118,12 @@ object RfiScraper {
                                 moreInformationString = detailsPopupElements[i+1].html()
                         }
 
+                        println(tr.id())
                         if(nextStationsString.isNotEmpty()) {
+                            println(nextStationsString)
                             nextStationsString.split("FERMA A: ")[1]
                             nextStationsString.split(" - ").forEach { stop ->
-                                stops.add(Stop(stop.split(" (")[0].removePrefix("FERMA A: "), stop.split("(")[1].removeSuffix(")")))
+                                stops.add(Stop(stop.split(" (")[0].removePrefix("FERMA A: ").stationName(), stop.split("(")[1].removeSuffix(")")))
                             }
                         }
                     }
