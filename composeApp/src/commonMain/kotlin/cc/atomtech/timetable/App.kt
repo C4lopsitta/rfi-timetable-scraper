@@ -2,28 +2,21 @@ package cc.atomtech.timetable
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.TextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.automirrored.rounded.Announcement
+import androidx.compose.material.icons.rounded.Timelapse
 import androidx.compose.material.icons.rounded.Train
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
@@ -35,7 +28,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.*
-import androidx.navigation.compose.*
+import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.components.NavBar
 import cc.atomtech.timetable.components.NavRail
 import cc.atomtech.timetable.components.NavigationBodyHost
@@ -53,7 +46,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okio.Path.Companion.toPath
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.components.AppBar
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
@@ -88,6 +81,8 @@ fun Main(navController: NavHostController,
     val reloaderMinutes = 5
     var isNewStationSet by remember { mutableStateOf(true) }
     var timetableRefresher: Job? = null
+
+    var tabIndex by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         try {
@@ -161,62 +156,51 @@ fun Main(navController: NavHostController,
         colorScheme = colorScheme
     ) {
         Scaffold (
-            topBar = { if(!isDesktop) TopAppBar(
-                    title = {
-                        if(navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
-                            Text(timetable?.stationName ?: Strings.get("app_name"))
-                        } else if( navController.currentBackStackEntryAsState().value?.destination?.route?.contains("") == false ) {
-                            Text(Strings.get("top_strikes_maintenances"))
-                        } else {
-                            TextField(value = searchQuery,
-                                onValueChange = { query: String ->
-                                    searchQuery = query
-                                    if(stations.stations.isNotEmpty())
-                                        searchSuggestions = stations.search(query)
-                                },
-                                placeholder = { Text(Strings.get("station_search_placeholder")) },
-                                maxLines = 1,
-                                modifier = Modifier.fillMaxWidth().padding( horizontal = 12.dp ),
-                                shape = TextFieldDefaults.OutlinedTextFieldShape,
+            topBar = {
+                if(!isDesktop) {
+                    if(navController.currentBackStackEntryAsState().value?.destination?.route
+                        ?.contains("infolavori") == true ) {
+                        TabRow (
+                            selectedTabIndex = tabIndex
+                        ) {
+                            Tab(
+                                selected = true,
+                                onClick = { tabIndex = 0 },
+                                text = { Text(Strings.get("real_time")) },
+                                icon = { Icon(Icons.Rounded.Timelapse, contentDescription = Strings.get("real_time")) }
+                            )
+                            Tab(
+                                selected = true,
+                                onClick = { tabIndex = 1 },
+                                text = { Text(Strings.get("announcements")) },
+                                icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = Strings.get("announcements")) }
+                            )
+                            Tab(
+                                selected = true,
+                                onClick = { tabIndex = 2 },
+                                text = { Text(Strings.get("trenitalia")) },
+                                icon = { Icon(Icons.Rounded.Train, contentDescription = Strings.get("trenitalia")) }
                             )
                         }
-                    },
-                    navigationIcon = {
-                        Surface ( modifier = Modifier.padding(PaddingValues(if(navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) 12.dp else 0.dp)) ) {
-                            if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("details/") == true) {
-                                IconButton(content = {
-                                    Icon(
-                                        Icons.AutoMirrored.Rounded.ArrowBack,
-                                        contentDescription = Strings.get("back")
-                                    )
-                                },
-                                    onClick = { navController.popBackStack() })
-                            } else if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
-                                Icon(Icons.Rounded.Train, contentDescription = Strings.get("app_name"))
-                            } else {
-                                IconButton(content = {
-                                    Icon(
-                                        Icons.Rounded.Close,
-                                        contentDescription = Strings.get("close_search")
-                                    )
-                                },
-                                    onClick = {
-                                        navController.popBackStack()
-                                        searchQuery = ""
-                                        searchSuggestions = listOf()
-                                    })
-                            }
-                        }
-                    },
-                    actions = {
-                        IconButton(content = { Icon(Icons.Rounded.Search, contentDescription = Strings.get("search")) },
-                            onClick = {
-                                navController.navigate("search")
-                            })
-                        IconButton(content = { Icon(Icons.Rounded.Refresh, contentDescription = Strings.get("reload")) },
-                            onClick = { reloadTrigger = !reloadTrigger })
+                    } else {
+                        AppBar(
+                            navController = navController,
+                            searchQuery = searchQuery,
+                            timetable = timetable,
+                            triggerReload = { reloadTrigger = !reloadTrigger },
+                            updateSearchQuery = { query: String ->
+                                searchQuery = query
+                                if (stations.stations.isNotEmpty())
+                                    searchSuggestions = stations.search(query)
+                            },
+                            resetSearchSuggestions = {
+                                navController.popBackStack()
+                                searchQuery = ""
+                                searchSuggestions = listOf()
+                            },
+                        )
                     }
-                )
+                }
             },
             bottomBar = { if(!isDesktop) NavBar(navController) }
         ) { paddingValues ->
@@ -234,6 +218,7 @@ fun Main(navController: NavHostController,
                     isLoading = loading,
                     timetable = timetable,
                     stations = stations,
+                    tabIndex = tabIndex,
                     favouriteStations = favouriteStations,
                     searchSuggestions = searchSuggestions,
                     setStationId = { newId ->

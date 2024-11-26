@@ -37,8 +37,7 @@ import cc.atomtech.timetable.Strings
 import kotlin.coroutines.cancellation.CancellationException
 
 @Composable
-fun InfoLavori() {
-    var tabIndex by remember { mutableStateOf(0) }
+fun InfoLavori(tabIndex: Int) {
     var baseFeed by remember { mutableStateOf<List<FeedItem>>(listOf()) }
     var baseFeedAnnouncements by remember { mutableStateOf<List<FeedItem>>(listOf()) }
 
@@ -55,30 +54,6 @@ fun InfoLavori() {
     Column (
         modifier = Modifier.fillMaxSize().padding( end = 12.dp ),
     ) {
-
-        TabRow (
-            selectedTabIndex = tabIndex
-        ) {
-            Tab(
-                selected = true,
-                onClick = { tabIndex = 0 },
-                text = { Text(Strings.get("real_time")) },
-                icon = { Icon(Icons.Rounded.Timelapse, contentDescription = Strings.get("real_time")) }
-            )
-            Tab(
-                selected = true,
-                onClick = { tabIndex = 1 },
-                text = { Text(Strings.get("announcements")) },
-                icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = Strings.get("announcements")) }
-            )
-            Tab(
-                selected = true,
-                onClick = { tabIndex = 2 },
-                text = { Text(Strings.get("trenitalia")) },
-                icon = { Icon(Icons.Rounded.Train, contentDescription = Strings.get("trenitalia")) }
-            )
-        }
-
         when(tabIndex) {
             0 -> LazyColumn {
                 items(baseFeed) { item ->

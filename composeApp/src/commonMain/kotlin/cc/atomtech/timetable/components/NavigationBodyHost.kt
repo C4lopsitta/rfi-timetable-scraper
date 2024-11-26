@@ -34,6 +34,7 @@ fun NavigationBodyHost(
     navController: NavHostController,
     isDesktop: Boolean,
     isLoading: Boolean,
+    tabIndex: Int,
     timetable: TimetableState?,
     stations: Stations,
     favouriteStations: Stations,
@@ -92,7 +93,9 @@ fun NavigationBodyHost(
                     }
                 )
             }
-            composable("infolavori") { InfoLavori() }
+            composable("infolavori") {
+                InfoLavori(tabIndex = tabIndex)
+            }
             composable("search") {
                 if (isDesktop) {
                     DesktopSearch(
