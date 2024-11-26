@@ -94,76 +94,87 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                     modifier = Modifier.padding( start = 12.dp )
                 )
             }
-            if(!info!!.isTrafficRegular) {
-                for (event in info!!.irregularTrafficEvents) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top,
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = LocalIndication.current,
-                            role = Role.Button,
-                            onClickLabel = Strings.get("view_issue_details"),
-                            onClick = {
-                                chosenEvent = event
-                                showSheet = true
+            LazyColumn {
+                item {
+                    if (!info!!.isTrafficRegular) {
+                        for (event in info!!.irregularTrafficEvents) {
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Top,
+                                modifier = Modifier.clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = LocalIndication.current,
+                                    role = Role.Button,
+                                    onClickLabel = Strings.get("view_issue_details"),
+                                    onClick = {
+                                        chosenEvent = event
+                                        showSheet = true
+                                    }
+                                )
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    event.title,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier
+                                        .padding(bottom = 12.dp)
+                                        .fillMaxWidth(0.9f)
+                                )
+                                Icon(
+                                    Icons.AutoMirrored.Rounded.ArrowForward,
+                                    contentDescription = Strings.get("view_issue_details")
+                                )
                             }
-                        )
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            event.title,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier
-                                .padding(bottom = 12.dp)
-                                .fillMaxWidth(0.9f)
-                        )
-                        Icon(
-                            Icons.AutoMirrored.Rounded.ArrowForward,
-                            contentDescription = Strings.get("view_issue_details")
-                        )
+                            HorizontalDivider(modifier = Modifier.padding(bottom = 12.dp))
+                        }
                     }
-                    HorizontalDivider( modifier = Modifier.padding( bottom = 12.dp ) )
+                }
+                item {
+                    Text(
+                        Strings.get("regions"),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(vertical = 12.dp)
+                    )
+                    LazyRow(
+                    ) {
+                        items(info!!.infoLavori) { regionInfo ->
+                            TrenitaliaRegionCard(
+                                name = regionInfo.regionName,
+                                noticesAvailable = regionInfo.issues.size,
+                            ) { navigateToRegionDetails(regionInfo) }
+                        }
+                    }
                 }
             }
-            Text(
-                Strings.get("regions"),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding( vertical = 12.dp )
-            )
-            LazyRow (
-            ) {
-                items(info!!.infoLavori) { regionInfo ->
-                    TrenitaliaRegionCard(
-                        name = regionInfo.regionName,
-                        noticesAvailable = regionInfo.issues.size,
-                    ) { navigateToRegionDetails(regionInfo) }
-                }
-            }
-            if(showSheet) {
+            if (showSheet) {
                 ModalBottomSheet(
                     onDismissRequest = { showSheet = false },
                     sheetState = sheetState
                 ) {
-                    Column (
-                        modifier = Modifier.padding( 12.dp )
+                    Column(
+                        modifier = Modifier.padding(12.dp)
                     ) {
-                        Text(chosenEvent?.title ?: "", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
-                        HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+                        Text(
+                            chosenEvent?.title ?: "",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
                         LazyColumn {
                             items(chosenEvent?.details ?: listOf()) { detail ->
-                                if(detail.contains("Aggiornamento - ore") ||
-                                    detail.contains("Inizio evento - ore")) {
+                                if (detail.contains("Aggiornamento - ore") ||
+                                    detail.contains("Inizio evento - ore")
+                                ) {
                                     Text(
                                         detail,
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.SemiBold,
-                                        modifier = Modifier.padding( vertical = 12.dp )
+                                        modifier = Modifier.padding(vertical = 12.dp)
                                     )
                                 } else {
-                                    Text(detail, modifier = Modifier.padding( bottom = 12.dp ))
+                                    Text(detail, modifier = Modifier.padding(bottom = 12.dp))
                                 }
                             }
                         }

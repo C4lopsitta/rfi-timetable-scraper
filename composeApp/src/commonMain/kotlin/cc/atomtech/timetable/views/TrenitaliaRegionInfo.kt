@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Celebration
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,21 +31,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import cc.atomtech.timetable.Strings
 import cc.atomtech.timetable.components.RowLink
 
 @Composable
-fun TrenitaliaRegionInfo(selectedRegion: TrenitaliaInfoLavori?) {
+fun TrenitaliaRegionInfo(
+    selectedRegion: TrenitaliaInfoLavori?,
+    navController: NavHostController
+) {
     val uriHandler = LocalUriHandler.current
 
     Column {
-        Text(
-            selectedRegion?.regionName ?: Strings.get("undefined"),
-            fontSize = 48.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding( top = 12.dp, end = 12.dp, bottom = 12.dp )
-        )
+        Row {
+            IconButton(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier.width(48.dp).height(48.dp).align(Alignment.CenterVertically)
+            ) {
+                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = Strings.get("back"))
+            }
+            Text(
+                selectedRegion?.regionName ?: Strings.get("undefined"),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(top = 12.dp, end = 12.dp, bottom = 12.dp)
+            )
+        }
         HorizontalDivider()
         Column {
             RowLink(

@@ -43,8 +43,8 @@
     <string name="favourites_details">Cerca ed aggiungi le tue stazioni preferite per raggiungerle in pochi secondi</string>
     <string name="search_results">Risultati di Ricerca</string>
     <string name="delete">Elimina</string>
-    <string name="traffic_regular">Traffico Regolare sulle Linee</string>
-    <string name="traffic_irregular">Traffico Irregolare sulle Linee</string>
+    <string name="traffic_regular">Traffico Regolare</string>
+    <string name="traffic_irregular">Traffico Irregolare</string>
     <string name="click_go_to_region">Vai alla regione del %1$s</string>
     <string name="regions">Regioni</string>
     <string name="notices_available">Ci sono %1$s\navvisi</string>

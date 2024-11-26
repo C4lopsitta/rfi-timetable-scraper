@@ -105,7 +105,10 @@ fun NavigationBodyHost(
                 }
             }
             composable("infolavori/regionInfo") {
-                TrenitaliaRegionInfo(selectedRegionInfo)
+                TrenitaliaRegionInfo(
+                    selectedRegionInfo,
+                    navController
+                )
             }
             composable("search") {
                 if (isDesktop) {
