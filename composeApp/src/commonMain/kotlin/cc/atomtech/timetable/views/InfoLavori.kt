@@ -76,11 +76,33 @@ fun InfoLavori() {
             )
         }
 
-        LazyColumn {
-            items(baseFeed) { item ->
-                item.toMobileRow()
-                HorizontalDivider()
+        when(tabIndex) {
+            0 -> LazyColumn {
+                items(baseFeed) { item ->
+                    item.toMobileRow()
+                    HorizontalDivider()
+                }
+            }
+            else -> Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    Icons.Rounded.Engineering,
+                    contentDescription = "Rail Works",
+                    tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.width(92.dp).height(92.dp)
+                )
+                Text(
+                    "Stay updated with rail accidents, issues, planned strikes and changes in service schedule. This feature is currently not yet implemented.",
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center
+                )
             }
         }
+
     }
 }
