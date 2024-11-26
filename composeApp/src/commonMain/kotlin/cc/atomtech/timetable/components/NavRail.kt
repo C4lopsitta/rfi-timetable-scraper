@@ -37,7 +37,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 private fun isCurrentRoute(navController: NavHostController, route: String): Boolean {
-    return navController.currentBackStackEntryAsState().value?.destination?.route == route
+    return navController.currentBackStackEntryAsState().value?.destination?.route?.contains(route) ?: false
 }
 
 @Composable

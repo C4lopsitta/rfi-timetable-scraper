@@ -6,7 +6,7 @@
     <string name="nav_works">Rail Works</string>
     <string name="error_data_fetch">Error fetching data</string>
     <string name="top_strikes_maintenances">Strikes and Works</string>
-    <string name="station_search_placeholder">Search a Station...</string>
+    <string name="station_search_placeholder">Search a Station…</string>
     <string name="back">Back</string>
     <string name="close_search">Close Search</string>
     <string name="search">Search</string>
@@ -35,7 +35,7 @@
     <string name="previous_stops">Stopped in</string>
     <string name="next_stops">Stops in</string>
     <string name="no_trains">No trains</string>
-    <string name="no_trains_details">No trains are on the timetable for this station.\\nLast update %1$s</string>
+    <string name="no_trains_details">No trains are on the timetable for this station.\nLast update %1$s</string>
     <string name="station_info">Station Information</string>
     <string name="last_update">Last update</string>
     <string name="favourite_locaiton">Favourite Station</string>
@@ -44,4 +44,10 @@
     <string name="favourites_details">Search and add your favourite stations for quick access</string>
     <string name="search_results">Search Results</string>
     <string name="delete">Delete</string>
+    <string name="traffic_regular">Regular Railway Traffic</string>
+    <string name="traffic_irregular">Irregular Railway Traffic</string>
+    <string name="click_go_to_region">Go to %1$s</string>
+    <string name="regions">Regions</string>
+    <string name="notices_available">There are %1$s\nannouncements</string>
+    <string name="view_issue_details">View details about the issue</string>
 </resources>

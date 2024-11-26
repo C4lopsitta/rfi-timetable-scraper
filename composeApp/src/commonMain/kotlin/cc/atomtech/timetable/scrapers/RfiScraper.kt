@@ -1,4 +1,4 @@
-package cc.atomtech.timetable
+package cc.atomtech.timetable.scrapers
 
 import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
@@ -170,8 +170,8 @@ object RfiScraper {
     }
 
     suspend fun reloadStation(stationId: Int): TimetableData {
-        val departures = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryDepartures}${stationId}")
-        val arrivals = Ksoup.parseGetRequest(url="${baseUrl}${baseQueryArrivals}${stationId}")
+        val departures = Ksoup.parseGetRequest(url="$baseUrl$baseQueryDepartures${stationId}")
+        val arrivals = Ksoup.parseGetRequest(url="$baseUrl$baseQueryArrivals${stationId}")
 
         val title = departures.body().getElementById(HtmlTagsIdNames.STATION_NAME)?.html() ?: "Error"
         val departuresTableBody = departures.body().getElementById(HtmlTagsIdNames.TABLE)

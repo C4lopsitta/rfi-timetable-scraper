@@ -20,7 +20,7 @@ import cc.atomtech.timetable.Strings
 
 @Composable
 private fun isCurrentRoute(navController: NavHostController, route: String): Boolean {
-    return navController.currentBackStackEntryAsState().value?.destination?.route == route
+    return navController.currentBackStackEntryAsState().value?.destination?.route?.contains(route) ?: false
 }
 
 @Composable

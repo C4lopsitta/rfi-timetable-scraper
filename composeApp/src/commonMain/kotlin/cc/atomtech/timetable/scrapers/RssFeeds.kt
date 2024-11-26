@@ -1,4 +1,4 @@
-package cc.atomtech.timetable
+package cc.atomtech.timetable.scrapers
 
 import cc.atomtech.timetable.models.FeedItem
 import com.fleeksoft.ksoup.Ksoup

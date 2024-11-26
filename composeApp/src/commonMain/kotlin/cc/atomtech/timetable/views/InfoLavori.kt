@@ -2,7 +2,6 @@ package cc.atomtech.timetable.views
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -10,15 +9,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.Announcement
-import androidx.compose.material.icons.rounded.Announcement
 import androidx.compose.material.icons.rounded.Engineering
-import androidx.compose.material.icons.rounded.Timelapse
-import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,13 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.RssFeeds
+import androidx.navigation.NavHostController
+import cc.atomtech.timetable.scrapers.RssFeeds
 import cc.atomtech.timetable.models.FeedItem
 import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import kotlin.coroutines.cancellation.CancellationException
 
 @Composable
-fun InfoLavori(tabIndex: Int) {
+fun InfoLavori(tabIndex: Int,
+               navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit) {
     var baseFeed by remember { mutableStateOf<List<FeedItem>>(listOf()) }
     var baseFeedAnnouncements by remember { mutableStateOf<List<FeedItem>>(listOf()) }
 
@@ -67,6 +63,7 @@ fun InfoLavori(tabIndex: Int) {
                     HorizontalDivider()
                 }
             }
+            2 -> InfoLavoriTrenitalia(navigateToRegionDetails = { navigateToRegionDetails(it) })
             else -> Column (
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,

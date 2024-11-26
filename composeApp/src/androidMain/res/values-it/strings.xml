@@ -7,7 +7,7 @@
     <string name="nav_works">Info Lavori</string>
     <string name="error_data_fetch">Errore durante il caricamento dei dati</string>
     <string name="top_strikes_maintenances">Scioperi e Lavori</string>
-    <string name="station_search_placeholder">Cerca una Stazione...</string>
+    <string name="station_search_placeholder">Cerca una Stazione…</string>
     <string name="back">Indietro</string>
     <string name="close_search">Chiudi Ricerca</string>
     <string name="search">Cerca</string>
@@ -34,7 +34,7 @@
     <string name="previous_stops">Fermato a</string>
     <string name="next_stops">Ferma a</string>
     <string name="no_trains">Nessun treno</string>
-    <string name="no_trains_details">Nessun treno disponibile al momento.\\nUltimo aggiornamento %1$s</string>
+    <string name="no_trains_details">Nessun treno disponibile al momento.\nUltimo aggiornamento %1$s</string>
     <string name="station_info">Informazioni Stazione</string>
     <string name="last_update">Ultimo aggiornamento</string>
     <string name="favourite_locaiton">Stazione Preferita</string>
@@ -43,4 +43,10 @@
     <string name="favourites_details">Cerca ed aggiungi le tue stazioni preferite per raggiungerle in pochi secondi</string>
     <string name="search_results">Risultati di Ricerca</string>
     <string name="delete">Elimina</string>
+    <string name="traffic_regular">Traffico Regolare sulle Linee</string>
+    <string name="traffic_irregular">Traffico Irregolare sulle Linee</string>
+    <string name="click_go_to_region">Vai alla regione del %1$s</string>
+    <string name="regions">Regioni</string>
+    <string name="notices_available">Ci sono %1$s\navvisi</string>
+    <string name="view_issue_details">Visualizza i dettagli sul problema</string>
 </resources>

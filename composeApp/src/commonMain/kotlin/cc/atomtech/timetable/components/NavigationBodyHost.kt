@@ -28,6 +28,8 @@ import cc.atomtech.timetable.views.FavouriteStations
 import cc.atomtech.timetable.views.InfoLavori
 import cc.atomtech.timetable.views.MobileSearch
 import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.models.TrenitaliaInfoLavori
+import cc.atomtech.timetable.views.TrenitaliaRegionInfo
 
 @Composable
 fun NavigationBodyHost(
@@ -42,6 +44,7 @@ fun NavigationBodyHost(
     setStationId: (Int) -> Unit,
     updateFavourites: (String) -> Unit) {
     var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
+    var selectedRegionInfo by remember { mutableStateOf<TrenitaliaInfoLavori?>(null) }
 
     Column {
         if(isDesktop) {
@@ -94,7 +97,15 @@ fun NavigationBodyHost(
                 )
             }
             composable("infolavori") {
-                InfoLavori(tabIndex = tabIndex)
+                InfoLavori(
+                    tabIndex = tabIndex,
+                ) { regionInfo ->
+                    selectedRegionInfo = regionInfo
+                    navController.navigate("infolavori/regionInfo")
+                }
+            }
+            composable("infolavori/regionInfo") {
+                TrenitaliaRegionInfo(selectedRegionInfo)
             }
             composable("search") {
                 if (isDesktop) {
