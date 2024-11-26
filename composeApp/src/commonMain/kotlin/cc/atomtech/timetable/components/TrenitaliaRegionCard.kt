@@ -6,14 +6,16 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -34,7 +36,7 @@ fun TrenitaliaRegionCard(
     Card (
         modifier = Modifier
             .fillMaxWidth(0.3f)
-            .fillMaxHeight(0.2f)
+            .height(128.dp)
             .padding( end = 12.dp )
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -51,6 +53,9 @@ fun TrenitaliaRegionCard(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.Start
         ) {
+//            IconButton(
+//                onClick = {  }
+//            ) { Icon(Icons.Rounded.Favorite, contentDescription = "") }
             Text(Strings.format("notices_available", "$noticesAvailable"))
             Row (
                 modifier = Modifier.fillMaxWidth(),

@@ -6,7 +6,6 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
 import java.util.Locale
-import cc.atomtech.timetable.Strings
 import cc.atomtech.timetable.components.TrenitaliaIrregularTrafficDetails
 
 private object ElementIds {
@@ -42,7 +41,40 @@ object TrenitaliaScraper {
     fun getInfoLavoriElement(element: Element): TrenitaliaInfoLavori {
         val regionName = element.getElementsByTag("a")[0].text().removePrefix("INFOLAVORI ").stationName()
 
-        return TrenitaliaInfoLavori(regionName)
+        val paragraphs = element.getElementsByTag("p")
+
+        val issues = arrayListOf<TrenitaliaIrregularTrafficDetails>()
+
+        if(paragraphs.size > 1) {
+            for (i in 0..<paragraphs.size step 2) {
+                if (paragraphs[i].text().isBlank() || paragraphs[i].text().isEmpty()) break
+
+                var link: String? = null
+                try {
+                    link = paragraphs[i].getElementsByTag("a")[0].attribute("href")?.value
+                } catch (_: Exception) {}
+                var title = ""
+                try {
+                    title = paragraphs[i].getElementsByTag(if (link != null) "a" else "b")[0].text()
+                } catch (_: Exception) {}
+                var body = ""
+                try {
+                    body = paragraphs[i + 1].text()
+                } catch (_: Exception) {
+                }
+
+                // TODO)) Add a better serializer for the paragraph
+                issues.add(
+                    TrenitaliaIrregularTrafficDetails(
+                        title = title,
+                        link = link,
+                        details = listOf(body)
+                    )
+                )
+            }
+        }
+
+        return TrenitaliaInfoLavori(regionName, issues.toList())
     }
 
     suspend fun scrape(): TrenitaliaInfo {
@@ -69,6 +101,8 @@ object TrenitaliaScraper {
                     title = item.getElementsByTag("a")[0].text(),
                     details = irregularTrafficBody.toList()
                 ))
+
+//                items.remove(item)
             }
         }
 
@@ -81,6 +115,7 @@ object TrenitaliaScraper {
         for(item in items) {
             if(item.getElementsByTag("a")[0].id().contains("INFOLAVORI")) {
                 infoLavori.add(getInfoLavoriElement(item))
+//                items.remove(item)
             }
         }
 

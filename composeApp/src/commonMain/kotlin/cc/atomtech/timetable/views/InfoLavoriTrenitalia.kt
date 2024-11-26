@@ -65,7 +65,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding( top = 12.dp, bottom = 12.dp, end = 12.dp )
+            .padding( top = 12.dp, bottom = 12.dp )
     ) {
         if (info != null) {
             Row (
@@ -138,7 +138,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                 items(info!!.infoLavori) { regionInfo ->
                     TrenitaliaRegionCard(
                         name = regionInfo.regionName,
-                        noticesAvailable = 0,
+                        noticesAvailable = regionInfo.issues.size,
                     ) { navigateToRegionDetails(regionInfo) }
                 }
             }
