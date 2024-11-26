@@ -14,6 +14,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -47,6 +52,7 @@ import kotlinx.coroutines.launch
 import okio.Path.Companion.toPath
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import cc.atomtech.timetable.components.AppBar
+import cc.atomtech.timetable.components.InfoLavoriTabBar
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
@@ -84,6 +90,8 @@ fun Main(navController: NavHostController,
 
     var tabIndex by remember { mutableStateOf(0) }
 
+    val snackbarHostState = SnackbarHostState()
+
     LaunchedEffect(Unit) {
         try {
             stationId = preferences.getStationId().first()
@@ -117,6 +125,19 @@ fun Main(navController: NavHostController,
         } catch (e: Exception) {
             println(e.printStackTrace())
             error = e.toString()
+
+            e.message?.let {
+                val snackBarResults = snackbarHostState.showSnackbar(
+                    message = it,
+                    duration = SnackbarDuration.Long,
+                    actionLabel = "Retry"
+                ).run {
+                    when (this) {
+                        SnackbarResult.Dismissed -> return@let
+                        SnackbarResult.ActionPerformed -> { reloadTrigger = !reloadTrigger }
+                    }
+                }
+            }
         } finally {
             timetableRefresher?.cancel()
             if(reloaderMinutes > 0) {
@@ -130,28 +151,28 @@ fun Main(navController: NavHostController,
 
     val colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
 
-    if(error != null) {
-        BasicAlertDialog(
-            onDismissRequest = {
-                error = null
-            },
-        ) {
-            Card () {
-                Column (
-                    modifier = Modifier.padding( 16.dp )
-                ) {
-                    Text(Strings.get("error_data_fetch"), fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-                    Text(error.toString())
-                    ElevatedButton(
-                        content = { Text("Ok") },
-                        onClick = {
-                            error = null
-                        }
-                    )
-                }
-            }
-        }
-    }
+//    if(error != null) {
+//        BasicAlertDialog(
+//            onDismissRequest = {
+//                error = null
+//            },
+//        ) {
+//            Card () {
+//                Column (
+//                    modifier = Modifier.padding( 16.dp )
+//                ) {
+//                    Text(Strings.get("error_data_fetch"), fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+//                    Text(error.toString())
+//                    ElevatedButton(
+//                        content = { Text("Ok") },
+//                        onClick = {
+//                            error = null
+//                        }
+//                    )
+//                }
+//            }
+//        }
+//    }
     MaterialTheme (
         colorScheme = colorScheme
     ) {
@@ -160,28 +181,7 @@ fun Main(navController: NavHostController,
                 if(!isDesktop) {
                     if(navController.currentBackStackEntryAsState().value?.destination?.route
                         ?.contains("infolavori") == true ) {
-                        TabRow (
-                            selectedTabIndex = tabIndex
-                        ) {
-                            Tab(
-                                selected = true,
-                                onClick = { tabIndex = 0 },
-                                text = { Text(Strings.get("real_time")) },
-                                icon = { Icon(Icons.Rounded.Timelapse, contentDescription = Strings.get("real_time")) }
-                            )
-                            Tab(
-                                selected = true,
-                                onClick = { tabIndex = 1 },
-                                text = { Text(Strings.get("announcements")) },
-                                icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = Strings.get("announcements")) }
-                            )
-                            Tab(
-                                selected = true,
-                                onClick = { tabIndex = 2 },
-                                text = { Text(Strings.get("trenitalia")) },
-                                icon = { Icon(Icons.Rounded.Train, contentDescription = Strings.get("trenitalia")) }
-                            )
-                        }
+                        InfoLavoriTabBar(tabIndex) { tabIndex = it }
                     } else {
                         AppBar(
                             navController = navController,
@@ -202,7 +202,13 @@ fun Main(navController: NavHostController,
                     }
                 }
             },
-            bottomBar = { if(!isDesktop) NavBar(navController) }
+            snackbarHost = {
+                SnackbarHost( snackbarHostState )
+            },
+            bottomBar = { if(!isDesktop) NavBar(navController) },
+            floatingActionButton = {
+
+            }
         ) { paddingValues ->
             ScaffoldBody(isLoading = loading,
                 isDesktop = isDesktop,
