@@ -50,4 +50,8 @@
     <string name="regions">Regions</string>
     <string name="notices_available">There are %1$s\nannouncements</string>
     <string name="view_issue_details">View details about the issue</string>
+    <string name="bus_service_stops">View bus service stops</string>
+    <string name="works_and_service_modifications">View Works and Service Modifications</string>
+    <string name="no_announcements">No announcements</string>
+    <string name="no_announcements_desc">There are no issues currently in %1$s!</string>
 </resources>

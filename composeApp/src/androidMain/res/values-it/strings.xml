@@ -49,4 +49,8 @@
     <string name="regions">Regioni</string>
     <string name="notices_available">Ci sono %1$s\navvisi</string>
     <string name="view_issue_details">Visualizza i dettagli sul problema</string>
+    <string name="bus_service_stops">Visualizza punti fermata bus</string>
+    <string name="works_and_service_modifications">Visualizza Lavori e Modifiche al Servizio</string>
+    <string name="no_announcements">Nessun annuncio</string>
+    <string name="no_announcements_desc">Non ci sono problemi al momento in %1$s!</string>
 </resources>

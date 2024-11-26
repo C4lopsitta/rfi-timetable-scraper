@@ -45,6 +45,25 @@ object TrenitaliaScraper {
 
         val issues = arrayListOf<TrenitaliaIrregularTrafficDetails>()
 
+        var busLink = ""
+        var worksAndModificationsToServiceLink = ""
+
+        val busElement = paragraphs.find {
+            it.text().contains("Punti di fermata bus Trenitalia")
+        }
+        if(busElement != null) {
+            busLink = busElement.getElementsByTag("a")[0].attribute("href")?.value ?: ""
+            paragraphs.remove(busElement)
+        }
+
+        val worksAndModificationsToServiceElement = paragraphs.find {
+            it.text().contains("Lavori e modifiche al servizio")
+        }
+        if(worksAndModificationsToServiceElement != null) {
+            worksAndModificationsToServiceLink = worksAndModificationsToServiceElement.getElementsByTag("a")[0].attribute("href")?.value ?: ""
+            paragraphs.remove(worksAndModificationsToServiceElement)
+        }
+
         if(paragraphs.size > 1) {
             for (i in 0..<paragraphs.size step 2) {
                 if (paragraphs[i].text().isBlank() || paragraphs[i].text().isEmpty()) break
@@ -74,7 +93,12 @@ object TrenitaliaScraper {
             }
         }
 
-        return TrenitaliaInfoLavori(regionName, issues.toList())
+        return TrenitaliaInfoLavori(
+            regionName = regionName,
+            issues = issues.toList(),
+            busServiceLink = busLink,
+            worksAndServiceModificationsLink = worksAndModificationsToServiceLink
+        )
     }
 
     suspend fun scrape(): TrenitaliaInfo {
