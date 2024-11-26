@@ -28,6 +28,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -117,6 +118,12 @@ fun Main(navController: NavHostController,
             }
             loading = false
             isNewStationSet = false
+
+            val feed = RssFeeds.fetchRss(RssFeeds.allRegionsLive)
+            for (item in RssFeeds.parseFeed(feed)) {
+                println(item)
+            }
+
         } catch (_: CancellationException) {
         } catch (e: Exception) {
             println(e.printStackTrace())
@@ -156,7 +163,6 @@ fun Main(navController: NavHostController,
             }
         }
     }
-
     MaterialTheme (
         colorScheme = colorScheme
     ) {
@@ -165,6 +171,8 @@ fun Main(navController: NavHostController,
                     title = {
                         if(navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
                             Text(timetable?.stationName ?: "Timetables")
+                        } else if( navController.currentBackStackEntryAsState().value?.destination?.route?.contains("") == false ) {
+                            Text("Strikes and Maintenances")
                         } else {
                             TextField(value = searchQuery,
                                 onValueChange = { query: String ->
@@ -236,6 +244,7 @@ fun Main(navController: NavHostController,
                     searchSuggestions = searchSuggestions,
                     setStationId = { newId ->
                         stationId = newId
+                        navController.popBackStack()
                         isNewStationSet = true
                         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
                             preferences.setStationId(newId)

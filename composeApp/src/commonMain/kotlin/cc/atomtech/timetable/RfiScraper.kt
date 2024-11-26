@@ -26,7 +26,7 @@ object HtmlTagsIdNames {
     const val PLATFORM_FIELD = "RBinario"
     const val DETAILS_BUTTON_FIELD = "RDettagli"
     const val DETAILS_POPUP_ELEMENT_CLASS = "FermateSuccessivePopupStyle"
-    const val STAITONS_LIST = "ElencoLocalita"
+    const val STATIONS_LIST = "ElencoLocalita"
 }
 
 object RfiScraper {
@@ -38,23 +38,27 @@ object RfiScraper {
     private fun String.stationName(): String {
         return this.lowercase(Locale.getDefault())
             .replace("''''", "'")
-            .split(" ") // Split by spaces
+            .split(" ")
             .joinToString(" ") { word ->
-                word.split(".") // Further split by periods
-                    .joinToString(". ") { part ->
+                word.split(".")
+                    .joinToString(".") { part ->
                         part.replaceFirstChar { it.uppercaseChar() }
                     }
-                word.split("-") // Further split by periods
+            }
+            .split(" ")
+            .joinToString(" ") { word ->
+                word.split("-")
                     .joinToString("-") { part ->
                         part.replaceFirstChar { it.uppercaseChar() }
                     }
             }
+            .replace("-", " - ")
     }
 
     suspend fun getStations(): ArrayList<Station> {
         val stations = Ksoup.parseGetRequest(url = stationsUrl)
 
-        val stationList = stations.body().getElementById(HtmlTagsIdNames.STAITONS_LIST)
+        val stationList = stations.body().getElementById(HtmlTagsIdNames.STATIONS_LIST)
 
         val stationsList: ArrayList<Station> = arrayListOf()
 
@@ -118,9 +122,7 @@ object RfiScraper {
                                 moreInformationString = detailsPopupElements[i+1].html()
                         }
 
-                        println(tr.id())
                         if(nextStationsString.isNotEmpty()) {
-                            println(nextStationsString)
                             nextStationsString.split("FERMA A: ")[1]
                             nextStationsString.split(" - ").forEach { stop ->
                                 stops.add(Stop(stop.split(" (")[0].removePrefix("FERMA A: ").stationName(), stop.split("(")[1].removeSuffix(")")))
