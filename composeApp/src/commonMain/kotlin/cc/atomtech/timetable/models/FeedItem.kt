@@ -24,7 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.Strings
 
-class FeedItem (val title: String, val url: String, val pubDate: String? = null) {
+class FeedItem (
+    val title: String,
+    val url: String,
+    val description: String? = null,
+    val pubDate: String? = null
+) {
     @Composable
     fun toMobileRow() {
         val uriHandler = LocalUriHandler.current
@@ -41,14 +46,15 @@ class FeedItem (val title: String, val url: String, val pubDate: String? = null)
                     }),
         ) {
             Row (
-                modifier = Modifier.fillMaxWidth().height(48.dp),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(title.split(":")[0], fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-                Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = Strings.get("open_in_browser"))
+                Text(title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.fillMaxWidth(0.9f))
+                Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = Strings.get("open_in_browser"), modifier = Modifier.height(48.dp))
             }
-            Text(title.split(": ")[1])
+            if(description != null)
+                Text(description)
             Text(pubDate ?: "", fontSize = 12.sp, fontWeight = FontWeight.Light)
         }
     }

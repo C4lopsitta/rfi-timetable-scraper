@@ -72,7 +72,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 9
-        versionName = "1.3.6"
+        versionName = "1.3.5-loc"
         resourceConfigurations.add("en")
         resourceConfigurations.add("it")
     }

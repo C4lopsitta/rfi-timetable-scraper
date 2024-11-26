@@ -40,10 +40,12 @@ import kotlin.coroutines.cancellation.CancellationException
 fun InfoLavori() {
     var tabIndex by remember { mutableStateOf(0) }
     var baseFeed by remember { mutableStateOf<List<FeedItem>>(listOf()) }
+    var baseFeedAnnouncements by remember { mutableStateOf<List<FeedItem>>(listOf()) }
 
     LaunchedEffect(Unit) {
         try {
             baseFeed = RssFeeds.parseFeed(RssFeeds.fetchRss(RssFeeds.allRegionsLive))
+            baseFeedAnnouncements = RssFeeds.parseFeed(RssFeeds.fetchRss(RssFeeds.allRegionsNotices), isAnnouncements = true)
         } catch (_: CancellationException) {
         } catch(e: Exception) {
             println(e.printStackTrace())
@@ -80,6 +82,12 @@ fun InfoLavori() {
         when(tabIndex) {
             0 -> LazyColumn {
                 items(baseFeed) { item ->
+                    item.toMobileRow()
+                    HorizontalDivider()
+                }
+            }
+            1 -> LazyColumn {
+                items(baseFeedAnnouncements) { item ->
                     item.toMobileRow()
                     HorizontalDivider()
                 }
