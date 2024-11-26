@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrainData
+import cc.atomtech.timetable.Strings
 
 @Composable
 fun TrainDetails(trainData: TrainData?,
@@ -24,8 +25,8 @@ fun TrainDetails(trainData: TrainData?,
     Column (
         modifier = Modifier.fillMaxSize().padding( end = 12.dp ).verticalScroll(rememberScrollState())
     ) {
-        Text("Train number ${trainData?.number} to")
-        Text(trainData?.station ?: "No data", fontSize = 32.sp, fontWeight = FontWeight.SemiBold, lineHeight = 38.sp)
+        Text(Strings.format("details_number", "${trainData?.number}"))
+        Text(trainData?.station ?: Strings.get("undefined"), fontSize = 32.sp, fontWeight = FontWeight.SemiBold, lineHeight = 38.sp)
         HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         Row (
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -33,20 +34,20 @@ fun TrainDetails(trainData: TrainData?,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column {
-                Text("${if (isArrival) "Arrives" else "Departs"} at")
+                Text(if (isArrival) Strings.get("details_arrives") else Strings.get("details_departs"))
                 Text(trainData?.time ?: "--:--", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
             }
             Column (
                 horizontalAlignment = Alignment.End
             ) {
-                Text( "From platform" )
-                Text( trainData?.platform ?: "--",
+                Text( Strings.get("details_from_platform"))
+                Text( trainData?.platform ?: Strings.get("platform_to_be_announced"),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold )
             }
         }
         if(trainData?.getDelayString(addSpace = false) != null) {
-            Text("Delay", modifier = Modifier.padding( top = 12.dp ) )
+            Text(Strings.get("delay"), modifier = Modifier.padding( top = 12.dp ) )
             Text(trainData.getDelayString(addSpace = false) ?: "",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold)
@@ -58,7 +59,7 @@ fun TrainDetails(trainData: TrainData?,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column {
-                Text("Operator")
+                Text(Strings.get("operator"))
                 Text(trainData?.operator.toString(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold)
@@ -66,7 +67,7 @@ fun TrainDetails(trainData: TrainData?,
             Column (
                 horizontalAlignment = Alignment.End
             ) {
-                Text( "Service" )
+                Text( Strings.get("service") )
                 Text( trainData?.category.toString(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold )
@@ -75,14 +76,14 @@ fun TrainDetails(trainData: TrainData?,
         if(trainData?.details != null) {
             if(trainData.details.isNotEmpty()) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                Text("Details")
+                Text(Strings.get("details"))
                 Text(trainData.details ?: "")
             }
         }
         if(trainData?.stops != null) {
-            if(trainData.stops.size > 0) {
+            if(trainData.stops.isNotEmpty()) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                Text(if (isArrival) "Stopped in" else "Stops in")
+                Text(if (isArrival) Strings.get("previous_stops") else Strings.get("next_stops"))
                 trainData.stops.forEach { stop -> stop.build() }
             }
         }

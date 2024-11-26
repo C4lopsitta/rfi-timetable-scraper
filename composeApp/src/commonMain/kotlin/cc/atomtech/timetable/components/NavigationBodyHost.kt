@@ -1,16 +1,8 @@
 package cc.atomtech.timetable.components
 
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -30,20 +21,13 @@ import cc.atomtech.timetable.models.TimetableState
 import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
-import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.DesktopSearch
 import cc.atomtech.timetable.views.FavouriteStations
 import cc.atomtech.timetable.views.InfoLavori
 import cc.atomtech.timetable.views.MobileSearch
+import cc.atomtech.timetable.Strings
 
 @Composable
 fun NavigationBodyHost(
@@ -63,7 +47,7 @@ fun NavigationBodyHost(
             Row (
                 modifier = Modifier.padding( vertical = 20.dp, horizontal = 16.dp ),
             ) {
-                Text(timetable?.stationName ?: "Timetable",
+                Text(timetable?.stationName ?: Strings.get("app_name"),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )

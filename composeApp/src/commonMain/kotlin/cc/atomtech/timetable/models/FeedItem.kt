@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
-import androidx.compose.material.icons.rounded.OpenInBrowser
-import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
@@ -24,6 +22,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cc.atomtech.timetable.Strings
 
 class FeedItem (val title: String, val url: String, val pubDate: String? = null) {
     @Composable
@@ -36,7 +35,7 @@ class FeedItem (val title: String, val url: String, val pubDate: String? = null)
                 .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = LocalIndication.current,
                     role  = Role.Button,
-                    onClickLabel = "Click to open details",
+                    onClickLabel = Strings.get("click_for_details"),
                     onClick = {
                         uriHandler.openUri(url)
                     }),
@@ -47,7 +46,7 @@ class FeedItem (val title: String, val url: String, val pubDate: String? = null)
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(title.split(":")[0], fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-                Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = "Open in Browser")
+                Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = Strings.get("open_in_browser"))
             }
             Text(title.split(": ")[1])
             Text(pubDate ?: "", fontSize = 12.sp, fontWeight = FontWeight.Light)

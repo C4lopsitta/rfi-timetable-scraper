@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import cc.atomtech.timetable.models.Station
 import cc.atomtech.timetable.models.Stations
+import cc.atomtech.timetable.Strings
 
 @Composable
 fun MobileSearch(stations: Stations,
@@ -64,7 +65,7 @@ fun MobileSearch(stations: Stations,
                         .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = LocalIndication.current,
                             role = Role.Button,
-                            onClickLabel = "Pick ${suggestion.name} as station",
+                            onClickLabel = Strings.format("pick_station", suggestion.name),
                             onClick = {
                                 setStationId(suggestion.id)
                                 navController.popBackStack()
@@ -89,7 +90,7 @@ fun MobileSearch(stations: Stations,
                         },
                         content = {
                             println("${suggestion.name}.isFavourite($isFavourite)")
-                            Icon(icon, contentDescription = "Favourite location")
+                            Icon(icon, contentDescription = Strings.get("favourite_station"))
                         }
                     )
                 }
@@ -104,12 +105,12 @@ fun MobileSearch(stations: Stations,
         ) {
             Icon(
                 Icons.Rounded.Search,
-                contentDescription = "Search",
+                contentDescription = Strings.get("search"),
                 tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.width(92.dp).height(92.dp)
             )
             Text(
-                "Start searching for any RFI Passenger Railway Station",
+                Strings.get("station_search_details"),
                 color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                 fontSize = 18.sp,

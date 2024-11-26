@@ -1,4 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Orari</string>
+    <string name="nav_departures">Partenze</string>
+    <string name="nav_arrivals">Arrivi</string>
+    <string name="nav_favourites">Preferiti</string>
+    <string name="nav_works">Info Lavori</string>
+    <string name="error_data_fetch">Errore durante il caricamento dei dati</string>
+    <string name="top_strikes_maintenances">Scioperi e Lavori</string>
+    <string name="station_search_placeholder">Cerca una Stazione...</string>
+    <string name="back">Indietro</string>
+    <string name="close_search">Chiudi Ricerca</string>
+    <string name="search">Cerca</string>
+    <string name="reload">Ricarica</string>
+    <string name="real_time">Tempo Reale</string>
+    <string name="announcements">Annunci</string>
+    <string name="rail_works_details">Rimani aggiornato con incidenti, problemi, scioperi e cambi nel servizio ferroviario. Questa funzione è in fase di implementazione.</string>
+    <string name="delayed">IN RITARDO</string>
+    <string name="cancelled">CANCELLATO</string>
+    <string name="minutes">minuti</string>
+    <string name="click_for_details">Clicca per visualizzare i dettagli</string>
+    <string name="undefined">Non definito</string>
+    <string name="platform">Binario</string>
+    <string name="open_in_browser">Apri nel Browser</string>
+    <string name="details_number">Treno numero %1$s per</string>
+    <string name="details_arrives">Arriva alle</string>
+    <string name="details_departs">Parte alle</string>
+    <string name="details_from_platform">Dal binario</string>
+    <string name="platform_to_be_announced">N.D.</string>
+    <string name="delay">Ritardo</string>
+    <string name="operator">Azienda</string>
+    <string name="service">Servizio</string>
+    <string name="details">Dettagli</string>
+    <string name="previous_stops">Fermato a</string>
+    <string name="next_stops">Ferma a</string>
+    <string name="no_trains">Nessun treno</string>
+    <string name="no_trains_details">Nessun treno disponibile al momento.\\nUltimo aggiornamento %1$s</string>
+    <string name="station_info">Informazioni Stazione</string>
+    <string name="last_update">Ultimo aggiornamento</string>
+    <string name="favourite_locaiton">Stazione Preferita</string>
+    <string name="pick_station">Scegli %1$s come stazione</string>
+    <string name="station_search_details">Cerca una qualsiasi stazione ferroviaria passeggeri RFI</string>
+    <string name="favourites_details">Cerca ed aggiungi le tue stazioni preferite per raggiungerle in pochi secondi</string>
+    <string name="search_results">Risultati di Ricerca</string>
+    <string name="delete">Elimina</string>
 </resources>

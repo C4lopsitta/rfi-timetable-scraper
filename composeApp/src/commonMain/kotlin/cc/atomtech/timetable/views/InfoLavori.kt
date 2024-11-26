@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.RssFeeds
 import cc.atomtech.timetable.models.FeedItem
+import cc.atomtech.timetable.Strings
 import kotlin.coroutines.cancellation.CancellationException
 
 @Composable
@@ -59,20 +60,20 @@ fun InfoLavori() {
             Tab(
                 selected = true,
                 onClick = { tabIndex = 0 },
-                text = { Text("Real time") },
-                icon = { Icon(Icons.Rounded.Timelapse, contentDescription = "Real time") }
+                text = { Text(Strings.get("real_time")) },
+                icon = { Icon(Icons.Rounded.Timelapse, contentDescription = Strings.get("real_time")) }
             )
             Tab(
                 selected = true,
                 onClick = { tabIndex = 1 },
-                text = { Text("Announcements") },
-                icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = "Announcements") }
+                text = { Text(Strings.get("announcements")) },
+                icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = Strings.get("announcements")) }
             )
             Tab(
                 selected = true,
                 onClick = { tabIndex = 2 },
-                text = { Text("Trenitalia") },
-                icon = { Icon(Icons.Rounded.Train, contentDescription = "Trenitalia") }
+                text = { Text(Strings.get("trenitalia")) },
+                icon = { Icon(Icons.Rounded.Train, contentDescription = Strings.get("trenitalia")) }
             )
         }
 
@@ -90,12 +91,12 @@ fun InfoLavori() {
             ) {
                 Icon(
                     Icons.Rounded.Engineering,
-                    contentDescription = "Rail Works",
+                    contentDescription = Strings.get("rail_works"),
                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.width(92.dp).height(92.dp)
                 )
                 Text(
-                    "Stay updated with rail accidents, issues, planned strikes and changes in service schedule. This feature is currently not yet implemented.",
+                    Strings.get("rail_works_details"),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                     fontSize = 18.sp,

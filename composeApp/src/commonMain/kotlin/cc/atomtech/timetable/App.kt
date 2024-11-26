@@ -28,14 +28,12 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import cc.atomtech.timetable.components.NavBar
@@ -50,16 +48,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okio.Path.Companion.toPath
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import rfi.composeapp.generated.resources.Res
-import java.time.Duration
-import java.time.temporal.TemporalAmount
+import cc.atomtech.timetable.Strings
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
@@ -151,7 +145,7 @@ fun Main(navController: NavHostController,
                 Column (
                     modifier = Modifier.padding( 16.dp )
                 ) {
-                    Text("Data fetch error", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text(Strings.get("error_data_fetch"), fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
                     Text(error.toString())
                     ElevatedButton(
                         content = { Text("Ok") },
@@ -170,9 +164,9 @@ fun Main(navController: NavHostController,
             topBar = { if(!isDesktop) TopAppBar(
                     title = {
                         if(navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
-                            Text(timetable?.stationName ?: "Timetables")
+                            Text(timetable?.stationName ?: Strings.get("app_name"))
                         } else if( navController.currentBackStackEntryAsState().value?.destination?.route?.contains("") == false ) {
-                            Text("Strikes and Maintenances")
+                            Text(Strings.get("top_strikes_maintenances"))
                         } else {
                             TextField(value = searchQuery,
                                 onValueChange = { query: String ->
@@ -180,7 +174,7 @@ fun Main(navController: NavHostController,
                                     if(stations.stations.isNotEmpty())
                                         searchSuggestions = stations.search(query)
                                 },
-                                placeholder = { Text("Search") },
+                                placeholder = { Text(Strings.get("station_search_placeholder")) },
                                 maxLines = 1,
                                 modifier = Modifier.fillMaxWidth().padding( horizontal = 12.dp ),
                                 shape = TextFieldDefaults.OutlinedTextFieldShape,
@@ -193,17 +187,17 @@ fun Main(navController: NavHostController,
                                 IconButton(content = {
                                     Icon(
                                         Icons.AutoMirrored.Rounded.ArrowBack,
-                                        contentDescription = "Back"
+                                        contentDescription = Strings.get("back")
                                     )
                                 },
                                     onClick = { navController.popBackStack() })
                             } else if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
-                                Icon(Icons.Rounded.Train, contentDescription = "Train")
+                                Icon(Icons.Rounded.Train, contentDescription = Strings.get("app_name"))
                             } else {
                                 IconButton(content = {
                                     Icon(
                                         Icons.Rounded.Close,
-                                        contentDescription = "Close Search"
+                                        contentDescription = Strings.get("close_search")
                                     )
                                 },
                                     onClick = {
@@ -215,11 +209,11 @@ fun Main(navController: NavHostController,
                         }
                     },
                     actions = {
-                        IconButton(content = { Icon(Icons.Rounded.Search, contentDescription = "Search") },
+                        IconButton(content = { Icon(Icons.Rounded.Search, contentDescription = Strings.get("search")) },
                             onClick = {
                                 navController.navigate("search")
                             })
-                        IconButton(content = { Icon(Icons.Rounded.Refresh, contentDescription = "Reload") },
+                        IconButton(content = { Icon(Icons.Rounded.Refresh, contentDescription = Strings.get("reload")) },
                             onClick = { reloadTrigger = !reloadTrigger })
                     }
                 )

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
+import cc.atomtech.timetable.Strings
 
 data class Stop(val stationName: String, val time: String?) {
     @Composable
@@ -55,14 +56,14 @@ class TrainData(
         if (time != null) {
             when (delay) {
                 Int.MAX_VALUE -> {
-                    return "${if(addSpace) " " else ""}DELAYED"
+                    return "${if(addSpace) " " else ""}${Strings.get("delayed")}"
                 }
                 Int.MIN_VALUE -> {
-                    return "CANCELLED"
+                    return Strings.get("cancelled")
                 }
                 0 -> { return if (addSpace) "" else null }
                 else -> {
-                    return "${if(addSpace) " " else ""}+$delay minutes"
+                    return "${if(addSpace) " " else ""}+$delay ${Strings.get("minutes")}"
                 }
             }
         }
@@ -85,7 +86,7 @@ class TrainData(
                 .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = LocalIndication.current,
                     role  = Role.Button,
-                    onClickLabel = "Click to open details",
+                    onClickLabel = Strings.get("click_for_details"),
                     onClick = { viewDetails(this@TrainData) }
                 )
         ) {
@@ -113,16 +114,16 @@ class TrainData(
                 }
                 Column {
                     Text(
-                        station ?: "Undefined",
+                        station ?: Strings.get("undefined"),
                          fontSize = 20.sp,
                          fontWeight = FontWeight.SemiBold )
                     var timeString: String? = null
                     if(time != null) {
                         timeString = "$time"
                         timeString += getDelayString()
-                        if(timeString.contains("CANCELLED")) timeString = "CANCELLED"
+                        if(timeString.contains(Strings.get("cancelled"))) timeString = Strings.get("cancelled")
                     }
-                    Text(timeString ?: "Undefined o'clock")
+                    Text(timeString ?: Strings.get("undefined"))
                 }
             }
             Row {
@@ -130,7 +131,7 @@ class TrainData(
                     modifier = Modifier.width(80.dp)
                 ) {
                     if(platform.isNullOrEmpty()) platform = null
-                    Text("Platform",
+                    Text(Strings.get("platform"),
                         fontSize = 12.sp,
                         textAlign = TextAlign.End,
                         modifier = Modifier.fillMaxWidth())

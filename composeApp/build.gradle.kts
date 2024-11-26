@@ -71,8 +71,10 @@ android {
         applicationId = "cc.atomtech.timetable"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 7
-        versionName = "1.3.4"
+        versionCode = 9
+        versionName = "1.3.6"
+        resourceConfigurations.add("en")
+        resourceConfigurations.add("it")
     }
     packaging {
         resources {

@@ -31,6 +31,8 @@ actual fun storePreferences(): DataStore<Preferences> {
 class MainActivity : ComponentActivity() {
     @Composable
     fun isTablet(): Boolean {
+        Strings.context = LocalContext.current
+
         val configuration = LocalConfiguration.current
         return if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             configuration.screenWidthDp > 840

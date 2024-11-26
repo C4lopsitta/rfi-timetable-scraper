@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import cc.atomtech.timetable.Strings
 
 @Composable
 private fun isCurrentRoute(navController: NavHostController, route: String): Boolean {
@@ -34,12 +35,12 @@ private fun HighlightedIcon(icon: @Composable () -> Unit, highlighed: @Composabl
 @Composable
 fun NavBar(navController: NavHostController) {
     NavigationBar {
-        NavigationBarItem(label = { Text("Departures") },
+        NavigationBarItem(label = { Text(Strings.get("nav_departures")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "departures")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = "Departures") },
-                    { Icon(Icons.Filled.ArrowUpward, contentDescription = "Departures") },
+                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = Strings.get("nav_departures")) },
+                    { Icon(Icons.Filled.ArrowUpward, contentDescription = Strings.get("nav_departures")) },
                     isCurrentRoute
                 )
             },
@@ -47,12 +48,12 @@ fun NavBar(navController: NavHostController) {
             onClick = {
                 navController.navigate("departures")
             })
-        NavigationBarItem(label = { Text("Arrivals") },
+        NavigationBarItem(label = { Text(Strings.get("nav_arrivals")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "arrivals")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = "Arrivals") },
-                    { Icon(Icons.Filled.ArrowDownward, contentDescription = "Arrivals") },
+                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = Strings.get("nav_arrivals")) },
+                    { Icon(Icons.Filled.ArrowDownward, contentDescription = Strings.get("nav_arrivals")) },
                     isCurrentRoute
                 )
             },
@@ -60,12 +61,12 @@ fun NavBar(navController: NavHostController) {
             onClick = {
                 navController.navigate("arrivals")
             })
-        NavigationBarItem(label = { Text("Favourites") },
+        NavigationBarItem(label = { Text(Strings.get("nav_favourites")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "favourites")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Star, contentDescription = "Favourites") },
-                    { Icon(Icons.Filled.Star, contentDescription = "Favourites") },
+                    { Icon(Icons.Rounded.Star, contentDescription = Strings.get("nav_favourites")) },
+                    { Icon(Icons.Filled.Star, contentDescription = Strings.get("nav_favourites")) },
                     isCurrentRoute
                 )
             },
@@ -73,12 +74,12 @@ fun NavBar(navController: NavHostController) {
             onClick = {
                 navController.navigate("favourites")
             })
-        NavigationBarItem(label = { Text("Rail Works") },
+        NavigationBarItem(label = { Text(Strings.get("nav_works")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "infolavori")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Engineering, contentDescription = "Rail Works") },
-                    { Icon(Icons.Filled.Engineering, contentDescription = "Rail Works") },
+                    { Icon(Icons.Rounded.Engineering, contentDescription = Strings.get("nav_works")) },
+                    { Icon(Icons.Filled.Engineering, contentDescription = Strings.get("nav_works")) },
                     isCurrentRoute
                 )
             },

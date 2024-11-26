@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.Stations
+import cc.atomtech.timetable.Strings
 
 @Composable
 fun FavouriteStations(favouriteStations: Stations,
@@ -44,7 +45,7 @@ fun FavouriteStations(favouriteStations: Stations,
                 modifier = Modifier.width(92.dp).height(92.dp)
             )
             Text(
-                "Search and add your favourite stations for quick access",
+                Strings.get("favourites_details"),
                 color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                 fontSize = 18.sp,

@@ -1,3 +1,47 @@
 <resources>
     <string name="app_name">Timetables</string>
+    <string name="nav_departures">Departures</string>
+    <string name="nav_arrivals">Arrivals</string>
+    <string name="nav_favourites">Favourites</string>
+    <string name="nav_works">Rail Works</string>
+    <string name="error_data_fetch">Error fetching data</string>
+    <string name="top_strikes_maintenances">Strikes and Works</string>
+    <string name="station_search_placeholder">Search a Station...</string>
+    <string name="back">Back</string>
+    <string name="close_search">Close Search</string>
+    <string name="search">Search</string>
+    <string name="reload">Reload</string>
+    <string name="real_time">Real Time</string>
+    <string name="announcements">Announcements</string>
+    <string name="trenitalia" translatable="false">Trenitalia</string>
+    <string name="rail_works_details">Stay updated with rail accidents, issues, planned strikes and changes in service schedule. This feature is currently not yet implemented.</string>
+    <string name="delayed">DELAYED</string>
+    <string name="cancelled">CANCELLED</string>
+    <string name="minutes">minutes</string>
+    <string name="click_for_details">Click to view details</string>
+    <string name="undefined">Undefined</string>
+    <string name="platform">Platform</string>
+    <string name="open_in_browser">Open in Browser</string>
+    <string name="app_version" translatable="false">1.3.6</string>
+    <string name="details_number">Train number %1$s to</string>
+    <string name="details_arrives">Arrives at</string>
+    <string name="details_departs">Departs at</string>
+    <string name="details_from_platform">From platform</string>
+    <string name="platform_to_be_announced">N.A.</string>
+    <string name="delay">Delay</string>
+    <string name="operator">Operator</string>
+    <string name="service">Service</string>
+    <string name="details">Details</string>
+    <string name="previous_stops">Stopped in</string>
+    <string name="next_stops">Stops in</string>
+    <string name="no_trains">No trains</string>
+    <string name="no_trains_details">No trains are on the timetable for this station.\\nLast update %1$s</string>
+    <string name="station_info">Station Information</string>
+    <string name="last_update">Last update</string>
+    <string name="favourite_locaiton">Favourite Station</string>
+    <string name="pick_station">Pick %1$s as station</string>
+    <string name="station_search_details">Start searching for any RFI Passenger Railway Station</string>
+    <string name="favourites_details">Search and add your favourite stations for quick access</string>
+    <string name="search_results">Search Results</string>
+    <string name="delete">Delete</string>
 </resources>

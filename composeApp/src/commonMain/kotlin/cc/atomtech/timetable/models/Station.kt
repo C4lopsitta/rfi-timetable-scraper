@@ -22,6 +22,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cc.atomtech.timetable.Strings
 
 data class Station(val name: String, val id: Int) {
     @Composable
@@ -33,7 +34,7 @@ data class Station(val name: String, val id: Int) {
                     interactionSource = remember { MutableInteractionSource() },
                     indication = LocalIndication.current,
                     role = Role.Button,
-                    onClickLabel = "Pick $name as station",
+                    onClickLabel = Strings.format("pick_station", name),
                     onClick = { setAsStation(id) }
                 ),
             verticalAlignment = Alignment.CenterVertically,
@@ -45,7 +46,7 @@ data class Station(val name: String, val id: Int) {
 
                 }
             ) {
-                Icon(Icons.Rounded.Delete, contentDescription = "Delete")
+                Icon(Icons.Rounded.Delete, contentDescription = Strings.get("delete"))
             }
         }
         HorizontalDivider()

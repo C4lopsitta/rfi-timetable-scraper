@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import cc.atomtech.timetable.Strings
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 
@@ -67,24 +68,24 @@ fun NavRail(navController: NavHostController,
             ) {
                 Icon(
                     Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = Strings.get("back")
                 )
             }
         } else {
             Icon(
-                contentDescription = "Timetables",
+                contentDescription = Strings.get("app_name"),
                 imageVector = Icons.Rounded.Train,
                 modifier = Modifier.padding(vertical = 24.dp)
             )
         }
         HorizontalDivider( modifier = Modifier.width( 32.dp ).padding( bottom = 12.dp ) )
         NavigationRailItem(
-            label = { Text("Search") },
+            label = { Text(Strings.get("search")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "search")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Search, contentDescription = "Search") },
-                    { Icon(Icons.Filled.Search, contentDescription = "Search") },
+                    { Icon(Icons.Rounded.Search, contentDescription = Strings.get("search")) },
+                    { Icon(Icons.Filled.Search, contentDescription = Strings.get("search")) },
                     isCurrentRoute
                 )
             },
@@ -94,8 +95,8 @@ fun NavRail(navController: NavHostController,
             }
         )
         NavigationRailItem(
-                label = { Text("Refresh") },
-        icon = { Icon(Icons.Rounded.Refresh, contentDescription = "Refresh") },
+                label = { Text(Strings.get("refresh")) },
+        icon = { Icon(Icons.Rounded.Refresh, contentDescription = Strings.get("refresh")) },
         selected = false,
         onClick = {
             triggerReload()
@@ -103,12 +104,12 @@ fun NavRail(navController: NavHostController,
         )
         HorizontalDivider( modifier = Modifier.width( 32.dp ).padding( vertical = 12.dp ) )
         NavigationRailItem(
-            label = { Text("Departures") },
+            label = { Text(Strings.get("nav_departures")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "departures")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = "Departures") },
-                    { Icon(Icons.Filled.ArrowUpward, contentDescription = "Departures") },
+                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = Strings.get("nav_departures")) },
+                    { Icon(Icons.Filled.ArrowUpward, contentDescription = Strings.get("nav_departures")) },
                     isCurrentRoute
                 )
             },
@@ -119,12 +120,12 @@ fun NavRail(navController: NavHostController,
         )
         Spacer(Modifier.height(12.dp))
         NavigationRailItem(
-            label = { Text("Arrivals") },
+            label = { Text(Strings.get("nav_arrivals")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "arrivals")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = "Arrivals") },
-                    { Icon(Icons.Filled.ArrowDownward, contentDescription = "Arrivals") },
+                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = Strings.get("nav_arrivals")) },
+                    { Icon(Icons.Filled.ArrowDownward, contentDescription = Strings.get("nav_arrivals")) },
                     isCurrentRoute
                 )
             },
@@ -135,12 +136,12 @@ fun NavRail(navController: NavHostController,
         )
         Spacer(Modifier.height(12.dp))
         NavigationRailItem(
-            label = { Text("Stations") },
+            label = { Text(Strings.get("nav_favourites")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "favourites")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Star, contentDescription = "Favourites") },
-                    { Icon(Icons.Filled.Star, contentDescription = "Favourites") },
+                    { Icon(Icons.Rounded.Star, contentDescription = Strings.get("nav_favourites")) },
+                    { Icon(Icons.Filled.Star, contentDescription = Strings.get("nav_favourites")) },
                     isCurrentRoute
                 )
             },
@@ -151,12 +152,12 @@ fun NavRail(navController: NavHostController,
         )
         Spacer(Modifier.height(12.dp))
         NavigationRailItem(
-            label = { Text("Rail Works") },
+            label = { Text(Strings.get("nav_works")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "infolavori")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Engineering, contentDescription = "Rail Works") },
-                    { Icon(Icons.Filled.Engineering, contentDescription = "Rail Works") },
+                    { Icon(Icons.Rounded.Engineering, contentDescription = Strings.get("nav_works")) },
+                    { Icon(Icons.Filled.Engineering, contentDescription = Strings.get("nav_works")) },
                     isCurrentRoute
                 )
             },
