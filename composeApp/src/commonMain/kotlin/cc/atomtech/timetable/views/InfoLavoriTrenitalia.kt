@@ -126,6 +126,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                             ) { navigateToRegionDetails(regionInfo) }
                         }
                     }
+                    HorizontalDivider(modifier = Modifier.padding( top = 12.dp ))
                 }
 
                 // past/future events
@@ -169,7 +170,8 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                         LazyColumn {
                             items(chosenEvent?.details ?: listOf()) { detail ->
                                 if (detail.contains("Aggiornamento - ore") ||
-                                    detail.contains("Inizio evento - ore")
+                                    detail.contains("Inizio evento - ore") ||
+                                    detail.contains("Fine evento - ore")
                                 ) {
                                     Text(
                                         detail,

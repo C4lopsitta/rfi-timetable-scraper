@@ -41,7 +41,7 @@ fun TrenitaliaEventRow(
         Text(
             event.title,
             fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold,
+//            fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .padding(bottom = 12.dp)
                 .fillMaxWidth(0.9f)
