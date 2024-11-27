@@ -53,4 +53,5 @@
     <string name="works_and_service_modifications">Visualizza Lavori e Modifiche al Servizio</string>
     <string name="no_announcements">Nessun annuncio</string>
     <string name="no_announcements_desc">Non ci sono problemi al momento in %1$s!</string>
+    <string name="past_future_events">Eventi Passati e Futuri</string>
 </resources>

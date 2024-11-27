@@ -1,10 +1,11 @@
 package cc.atomtech.timetable.models
 
-import cc.atomtech.timetable.components.TrenitaliaIrregularTrafficDetails
+import cc.atomtech.timetable.components.TrenitaliaEventDetails
 
 class TrenitaliaInfo(
     val isTrafficRegular: Boolean,
-    val irregularTrafficEvents: List<TrenitaliaIrregularTrafficDetails> = listOf(),
+    val extraEvents: List<TrenitaliaEventDetails> = listOf(),
+    val irregularTrafficEvents: List<TrenitaliaEventDetails> = listOf(),
     val infoLavori: List<TrenitaliaInfoLavori>
 ) {
 

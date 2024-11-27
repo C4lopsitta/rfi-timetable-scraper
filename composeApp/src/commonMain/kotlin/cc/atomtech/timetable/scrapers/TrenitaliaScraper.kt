@@ -6,12 +6,13 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
 import java.util.Locale
-import cc.atomtech.timetable.components.TrenitaliaIrregularTrafficDetails
+import cc.atomtech.timetable.components.TrenitaliaEventDetails
 
 private object ElementIds {
     const val REGULAR_TRAFFIC = "CIRCOLAZIONE_REGOLARE"
     const val IC_EC_INFO = "INFOTRENI_INTERCITY_-_EUROCITY"
     const val REGIONAL_INFO = "INFORMAZIONI_SUL_TRASPORTO_REGIONALE"
+    const val FR_INFO = "INFOTRENI_FRECCE_"
 }
 
 object TrenitaliaScraper {
@@ -38,12 +39,12 @@ object TrenitaliaScraper {
             .replace("-", " - ")
     }
 
-    fun getInfoLavoriElement(element: Element): TrenitaliaInfoLavori {
+    private fun getInfoLavoriElement(element: Element): TrenitaliaInfoLavori {
         val regionName = element.getElementsByTag("a")[0].text().removePrefix("INFOLAVORI ").stationName()
 
         val paragraphs = element.getElementsByTag("p")
 
-        val issues = arrayListOf<TrenitaliaIrregularTrafficDetails>()
+        val issues = arrayListOf<TrenitaliaEventDetails>()
 
         var busLink = ""
         var worksAndModificationsToServiceLink = ""
@@ -84,7 +85,7 @@ object TrenitaliaScraper {
 
                 // TODO)) Add a better serializer for the paragraph
                 issues.add(
-                    TrenitaliaIrregularTrafficDetails(
+                    TrenitaliaEventDetails(
                         title = title,
                         link = link,
                         details = listOf(body)
@@ -101,6 +102,22 @@ object TrenitaliaScraper {
         )
     }
 
+    private fun getExtraEvent(element: Element): TrenitaliaEventDetails {
+        val date: String = element.getElementsByTag("h4")[0].text()
+        val title: String = element.getElementsByTag("a")[0].text()
+        val details: ArrayList<String> = arrayListOf()
+
+        for(p in element.getElementsByClass("info-text")[0].children()) {
+            details.add(p.text())
+        }
+
+        return TrenitaliaEventDetails(
+            title = title,
+            details = details.toList(),
+            date = date
+        )
+    }
+
     suspend fun scrape(): TrenitaliaInfo {
         val page = Ksoup.parseGetRequest(baseUrl)
 
@@ -108,11 +125,13 @@ object TrenitaliaScraper {
             ?: throw Exception("Unable to fetch data")
         val items = dataBody.getElementsByTag("li")
 
+        // TODO)) Finish this
         val regularTraffic = items.find { it.getElementsByTag("a")[0].id() == ElementIds.REGULAR_TRAFFIC }
+        val frInfo = items.find { it.getElementsByTag("a")[0].id().contains(ElementIds.FR_INFO) }
         val icEcInfo = items.find { it.getElementsByTag("a")[0].id() == ElementIds.IC_EC_INFO }
         val regionalInfo = items.find { it.getElementsByTag("a")[0].id() == ElementIds.REGIONAL_INFO }
 
-        val irregularTrafficEvents = arrayListOf<TrenitaliaIrregularTrafficDetails>()
+        val irregularTrafficEvents = arrayListOf<TrenitaliaEventDetails>()
         for(item in items) {
             if(item.getElementsByTag("a").hasClass("inEvidenza")) {
                 val irregularTrafficBody = arrayListOf<String>()
@@ -121,17 +140,16 @@ object TrenitaliaScraper {
                     irregularTrafficBody.add(p.text())
                 }
 
-                irregularTrafficEvents.add(TrenitaliaIrregularTrafficDetails(
+                irregularTrafficEvents.add(TrenitaliaEventDetails(
                     title = item.getElementsByTag("a")[0].text(),
                     details = irregularTrafficBody.toList()
                 ))
-
-//                items.remove(item)
             }
         }
 
         items.remove(regularTraffic)
         items.remove(icEcInfo)
+        items.remove(frInfo)
         items.remove(regionalInfo)
 
         val infoLavori = arrayListOf<TrenitaliaInfoLavori>()
@@ -139,13 +157,23 @@ object TrenitaliaScraper {
         for(item in items) {
             if(item.getElementsByTag("a")[0].id().contains("INFOLAVORI")) {
                 infoLavori.add(getInfoLavoriElement(item))
-//                items.remove(item)
             }
         }
+        for(item in items.filter{ it.getElementsByTag("a")[0].id().contains("INFOLAVORI") }) {
+            items.remove(item)
+        }
+        items.remove(
+            items.find { it.getElementsByTag("a")[0].id().contains("INFOLEGENDA") }
+        )
+
+        val extraEvents: ArrayList<TrenitaliaEventDetails> = arrayListOf()
+
+        items.forEach { it -> extraEvents.add(getExtraEvent(it)) }
 
         return TrenitaliaInfo(
             isTrafficRegular = regularTraffic != null,
             irregularTrafficEvents = irregularTrafficEvents,
+            extraEvents = extraEvents.toList(),
             infoLavori = infoLavori.toList()
         )
     }
