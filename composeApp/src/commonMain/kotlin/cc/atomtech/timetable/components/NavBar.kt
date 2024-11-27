@@ -16,7 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
 private fun isCurrentRoute(navController: NavHostController, route: String): Boolean {
@@ -35,12 +35,12 @@ private fun HighlightedIcon(icon: @Composable () -> Unit, highlighed: @Composabl
 @Composable
 fun NavBar(navController: NavHostController) {
     NavigationBar {
-        NavigationBarItem(label = { Text(Strings.get("nav_departures")) },
+        NavigationBarItem(label = { Text(StringRes.get("nav_departures")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "departures")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = Strings.get("nav_departures")) },
-                    { Icon(Icons.Filled.ArrowUpward, contentDescription = Strings.get("nav_departures")) },
+                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
+                    { Icon(Icons.Filled.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
                     isCurrentRoute
                 )
             },
@@ -48,12 +48,12 @@ fun NavBar(navController: NavHostController) {
             onClick = {
                 navController.navigate("departures")
             })
-        NavigationBarItem(label = { Text(Strings.get("nav_arrivals")) },
+        NavigationBarItem(label = { Text(StringRes.get("nav_arrivals")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "arrivals")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = Strings.get("nav_arrivals")) },
-                    { Icon(Icons.Filled.ArrowDownward, contentDescription = Strings.get("nav_arrivals")) },
+                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
+                    { Icon(Icons.Filled.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
                     isCurrentRoute
                 )
             },
@@ -61,12 +61,12 @@ fun NavBar(navController: NavHostController) {
             onClick = {
                 navController.navigate("arrivals")
             })
-        NavigationBarItem(label = { Text(Strings.get("nav_favourites")) },
+        NavigationBarItem(label = { Text(StringRes.get("nav_favourites")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "favourites")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Star, contentDescription = Strings.get("nav_favourites")) },
-                    { Icon(Icons.Filled.Star, contentDescription = Strings.get("nav_favourites")) },
+                    { Icon(Icons.Rounded.Star, contentDescription = StringRes.get("nav_favourites")) },
+                    { Icon(Icons.Filled.Star, contentDescription = StringRes.get("nav_favourites")) },
                     isCurrentRoute
                 )
             },
@@ -74,12 +74,12 @@ fun NavBar(navController: NavHostController) {
             onClick = {
                 navController.navigate("favourites")
             })
-        NavigationBarItem(label = { Text(Strings.get("nav_works")) },
+        NavigationBarItem(label = { Text(StringRes.get("nav_works")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "infolavori")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Engineering, contentDescription = Strings.get("nav_works")) },
-                    { Icon(Icons.Filled.Engineering, contentDescription = Strings.get("nav_works")) },
+                    { Icon(Icons.Rounded.Engineering, contentDescription = StringRes.get("nav_works")) },
+                    { Icon(Icons.Filled.Engineering, contentDescription = StringRes.get("nav_works")) },
                     isCurrentRoute
                 )
             },

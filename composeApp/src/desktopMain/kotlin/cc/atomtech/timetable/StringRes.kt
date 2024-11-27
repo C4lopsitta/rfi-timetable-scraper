@@ -1,6 +1,6 @@
 package cc.atomtech.timetable
 
-actual object Strings {
+actual object StringRes {
     actual fun get(id: String, quantity: Int): String {
         TODO("Not yet implemented")
     }

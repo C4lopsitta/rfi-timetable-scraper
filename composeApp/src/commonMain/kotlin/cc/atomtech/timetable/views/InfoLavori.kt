@@ -24,10 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import cc.atomtech.timetable.scrapers.RssFeeds
 import cc.atomtech.timetable.models.FeedItem
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -71,12 +70,12 @@ fun InfoLavori(tabIndex: Int,
             ) {
                 Icon(
                     Icons.Rounded.Engineering,
-                    contentDescription = Strings.get("rail_works"),
+                    contentDescription = StringRes.get("rail_works"),
                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.width(92.dp).height(92.dp)
                 )
                 Text(
-                    Strings.get("rail_works_details"),
+                    StringRes.get("rail_works_details"),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                     fontSize = 18.sp,

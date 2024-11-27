@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import cc.atomtech.timetable.models.Station
 import cc.atomtech.timetable.models.Stations
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +52,7 @@ fun DesktopSearch(stations: Stations?,
             inputField = {
                 SearchBarDefaults.InputField(
                     query = searchKey,
-                    placeholder = { Text(Strings.get("station_search_placeholder")) },
+                    placeholder = { Text(StringRes.get("station_search_placeholder")) },
                     onQueryChange = {
                         newQuery -> searchKey = newQuery
                         if(stations?.stations?.isNotEmpty() == true) {
@@ -64,7 +64,7 @@ fun DesktopSearch(stations: Stations?,
                     onExpandedChange = {},
                     trailingIcon = {
                         IconButton(onClick = {}) {
-                            Icon(Icons.Rounded.Search, contentDescription = Strings.get("search"))
+                            Icon(Icons.Rounded.Search, contentDescription = StringRes.get("search"))
                         }
                     }
                 )
@@ -77,7 +77,7 @@ fun DesktopSearch(stations: Stations?,
             modifier = Modifier.fillMaxWidth(0.5f)
         ) {
             item {
-                Text(Strings.get("search_results"), modifier = Modifier.padding( top = 16.dp ))
+                Text(StringRes.get("search_results"), modifier = Modifier.padding( top = 16.dp ))
             }
             items(searchSuggestions ?: listOf()) { suggestion ->
                 Text(suggestion.name,
@@ -89,7 +89,7 @@ fun DesktopSearch(stations: Stations?,
                         .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = LocalIndication.current,
                             role = Role.Button,
-                            onClickLabel = Strings.format("pick_station", suggestion.name),
+                            onClickLabel = StringRes.format("pick_station", suggestion.name),
                             onClick = {
                                 setStationId(suggestion.id)
                                 navController.popBackStack()

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 
 @SuppressLint("StaticFieldLeak")
-actual object Strings {
+actual object StringRes {
     lateinit var context: Context
 
     @SuppressLint("DiscouragedApi")

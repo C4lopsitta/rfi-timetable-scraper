@@ -22,7 +22,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 class FeedItem (
     val title: String,
@@ -40,7 +40,7 @@ class FeedItem (
                 .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = LocalIndication.current,
                     role  = Role.Button,
-                    onClickLabel = Strings.get("click_for_details"),
+                    onClickLabel = StringRes.get("click_for_details"),
                     onClick = {
                         uriHandler.openUri(url)
                     }),
@@ -51,7 +51,7 @@ class FeedItem (
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.fillMaxWidth(0.9f))
-                Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = Strings.get("open_in_browser"), modifier = Modifier.height(48.dp))
+                Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = StringRes.get("open_in_browser"), modifier = Modifier.height(48.dp))
             }
             if(description != null)
                 Text(description)

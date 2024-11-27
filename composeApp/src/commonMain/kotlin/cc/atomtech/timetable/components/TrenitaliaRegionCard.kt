@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -25,7 +23,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
 fun TrenitaliaRegionCard(
@@ -42,7 +40,7 @@ fun TrenitaliaRegionCard(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = LocalIndication.current,
                 role  = Role.Button,
-                onClickLabel = Strings.format("click_go_to_region", name),
+                onClickLabel = StringRes.format("click_go_to_region", name),
                 onClick = { onClick() }
             )
     ) {
@@ -56,7 +54,7 @@ fun TrenitaliaRegionCard(
 //            IconButton(
 //                onClick = {  }
 //            ) { Icon(Icons.Rounded.Favorite, contentDescription = "") }
-            Text(Strings.format("notices_available", "$noticesAvailable"))
+            Text(StringRes.format("notices_available", "$noticesAvailable"))
             Row (
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -65,7 +63,7 @@ fun TrenitaliaRegionCard(
                 Text(name, fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
                 Icon(
                     Icons.AutoMirrored.Rounded.ArrowForward,
-                    contentDescription = Strings.format("click_go_to_region", name),
+                    contentDescription = StringRes.format("click_go_to_region", name),
                     modifier = Modifier.padding( start =  12.dp )
                 )
             }

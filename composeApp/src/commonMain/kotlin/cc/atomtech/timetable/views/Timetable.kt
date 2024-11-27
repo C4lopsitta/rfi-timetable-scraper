@@ -12,14 +12,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.RailwayAlert
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +25,7 @@ import cc.atomtech.timetable.models.TrainData
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
 fun Timetable(trainList: List<TrainData>?,
@@ -48,12 +46,12 @@ fun Timetable(trainList: List<TrainData>?,
             ) {
                 Icon(
                     Icons.Rounded.RailwayAlert,
-                    contentDescription = Strings.get("no_trains"),
+                    contentDescription = StringRes.get("no_trains"),
                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.width(92.dp).height(92.dp)
                 )
                 Text(
-                    Strings.format("no_trains_details", Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault()).toLocalDateTime()),
+                    StringRes.format("no_trains_details", Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault()).toLocalDateTime()),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                     fontSize = 18.sp,
@@ -73,7 +71,7 @@ fun Timetable(trainList: List<TrainData>?,
                 if (stationInfo != null) {
                     item {
                         Text(
-                            Strings.get("station_info"),
+                            StringRes.get("station_info"),
                             fontSize = 20.sp,
                             modifier = Modifier.padding(top = 16.dp)
                         )
@@ -90,7 +88,7 @@ fun Timetable(trainList: List<TrainData>?,
                                 }
                         )
                         Text(
-                            "${Strings.get("last_update")}: ${
+                            "${StringRes.get("last_update")}: ${
                                 Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault())
                                     .toLocalDateTime()
                             }",

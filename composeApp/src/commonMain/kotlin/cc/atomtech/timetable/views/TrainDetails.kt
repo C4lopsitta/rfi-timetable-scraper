@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrainData
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
 fun TrainDetails(trainData: TrainData?,
@@ -25,8 +25,8 @@ fun TrainDetails(trainData: TrainData?,
     Column (
         modifier = Modifier.fillMaxSize().padding( end = 12.dp ).verticalScroll(rememberScrollState())
     ) {
-        Text(Strings.format("details_number", "${trainData?.number}"))
-        Text(trainData?.station ?: Strings.get("undefined"), fontSize = 32.sp, fontWeight = FontWeight.SemiBold, lineHeight = 38.sp)
+        Text(StringRes.format("details_number", "${trainData?.number}"))
+        Text(trainData?.station ?: StringRes.get("undefined"), fontSize = 32.sp, fontWeight = FontWeight.SemiBold, lineHeight = 38.sp)
         HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         Row (
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -34,20 +34,20 @@ fun TrainDetails(trainData: TrainData?,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column {
-                Text(if (isArrival) Strings.get("details_arrives") else Strings.get("details_departs"))
+                Text(if (isArrival) StringRes.get("details_arrives") else StringRes.get("details_departs"))
                 Text(trainData?.time ?: "--:--", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
             }
             Column (
                 horizontalAlignment = Alignment.End
             ) {
-                Text( Strings.get("details_from_platform"))
-                Text( trainData?.platform ?: Strings.get("platform_to_be_announced"),
+                Text( StringRes.get("details_from_platform"))
+                Text( trainData?.platform ?: StringRes.get("platform_to_be_announced"),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold )
             }
         }
         if(trainData?.getDelayString(addSpace = false) != null) {
-            Text(Strings.get("delay"), modifier = Modifier.padding( top = 12.dp ) )
+            Text(StringRes.get("delay"), modifier = Modifier.padding( top = 12.dp ) )
             Text(trainData.getDelayString(addSpace = false) ?: "",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold)
@@ -59,7 +59,7 @@ fun TrainDetails(trainData: TrainData?,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column {
-                Text(Strings.get("operator"))
+                Text(StringRes.get("operator"))
                 Text(trainData?.operator.toString(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold)
@@ -67,7 +67,7 @@ fun TrainDetails(trainData: TrainData?,
             Column (
                 horizontalAlignment = Alignment.End
             ) {
-                Text( Strings.get("service") )
+                Text( StringRes.get("service") )
                 Text( trainData?.category.toString(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold )
@@ -76,14 +76,14 @@ fun TrainDetails(trainData: TrainData?,
         if(trainData?.details != null) {
             if(trainData.details.isNotEmpty()) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                Text(Strings.get("details"))
+                Text(StringRes.get("details"))
                 Text(trainData.details ?: "")
             }
         }
         if(trainData?.stops != null) {
             if(trainData.stops.isNotEmpty()) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                Text(if (isArrival) Strings.get("previous_stops") else Strings.get("next_stops"))
+                Text(if (isArrival) StringRes.get("previous_stops") else StringRes.get("next_stops"))
                 trainData.stops.forEach { stop -> stop.build() }
             }
         }

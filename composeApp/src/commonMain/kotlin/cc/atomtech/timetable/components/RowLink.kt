@@ -19,10 +19,10 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
-fun RowLink(onClickLabel: String = Strings.get("open_in_browser"),
+fun RowLink(onClickLabel: String = StringRes.get("open_in_browser"),
             link: String?,
             text: String) {
     val uriHandler = LocalUriHandler.current

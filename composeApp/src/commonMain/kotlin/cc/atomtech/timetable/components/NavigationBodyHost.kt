@@ -27,7 +27,7 @@ import cc.atomtech.timetable.views.DesktopSearch
 import cc.atomtech.timetable.views.FavouriteStations
 import cc.atomtech.timetable.views.InfoLavori
 import cc.atomtech.timetable.views.MobileSearch
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import cc.atomtech.timetable.views.TrenitaliaRegionInfo
 
@@ -51,7 +51,7 @@ fun NavigationBodyHost(
             Row (
                 modifier = Modifier.padding( vertical = 20.dp, horizontal = 16.dp ),
             ) {
-                Text(timetable?.stationName ?: Strings.get("app_name"),
+                Text(timetable?.stationName ?: StringRes.get("app_name"),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )
