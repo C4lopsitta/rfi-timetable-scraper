@@ -5,16 +5,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
 fun AppInfo() {
     val versionNumber = "1.3.0"
 
     Column {
-        Text(Strings.get("app_name"), fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
+        Text(StringRes.get("app_name"), fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
         Text("cc.atomtech.timetable", fontSize = 8.sp, fontWeight = FontWeight.Light)
         Text("Application licensed under GNU GPLv3.")
-        Text("Version ${Strings.get("app_version")}")
+        Text("Version ${StringRes.get("app_version")}")
     }
 }

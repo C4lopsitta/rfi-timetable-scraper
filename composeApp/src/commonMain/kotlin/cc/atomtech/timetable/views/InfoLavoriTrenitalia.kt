@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrenitaliaInfo
 import cc.atomtech.timetable.scrapers.TrenitaliaScraper
 import io.ktor.utils.io.CancellationException
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.components.TrenitaliaIrregularTrafficDetails
 import cc.atomtech.timetable.components.TrenitaliaRegionCard
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
@@ -77,18 +77,18 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                 if(info!!.isTrafficRegular) {
                     Icon(
                         Icons.Rounded.Train,
-                        contentDescription = Strings.get("traffic_regular"),
+                        contentDescription = StringRes.get("traffic_regular"),
                         modifier = Modifier.height(40.dp).width(40.dp)
                     )
                 } else {
                     Icon(
                         Icons.Rounded.RailwayAlert,
-                        contentDescription = Strings.get("traffic_irregular"),
+                        contentDescription = StringRes.get("traffic_irregular"),
                         modifier = Modifier.height(40.dp).width(40.dp)
                     )
                 }
                 Text(
-                    Strings.get(if (info!!.isTrafficRegular) "traffic_regular" else "traffic_irregular"),
+                    StringRes.get(if (info!!.isTrafficRegular) "traffic_regular" else "traffic_irregular"),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding( start = 12.dp )
@@ -105,7 +105,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = LocalIndication.current,
                                     role = Role.Button,
-                                    onClickLabel = Strings.get("view_issue_details"),
+                                    onClickLabel = StringRes.get("view_issue_details"),
                                     onClick = {
                                         chosenEvent = event
                                         showSheet = true
@@ -123,7 +123,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                                 )
                                 Icon(
                                     Icons.AutoMirrored.Rounded.ArrowForward,
-                                    contentDescription = Strings.get("view_issue_details")
+                                    contentDescription = StringRes.get("view_issue_details")
                                 )
                             }
                             HorizontalDivider(modifier = Modifier.padding(bottom = 12.dp))
@@ -132,7 +132,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                 }
                 item {
                     Text(
-                        Strings.get("regions"),
+                        StringRes.get("regions"),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(vertical = 12.dp)

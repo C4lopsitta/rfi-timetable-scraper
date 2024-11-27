@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.rounded.Engineering
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.HorizontalDivider
@@ -37,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import cc.atomtech.timetable.models.Station
 import cc.atomtech.timetable.models.Stations
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
 fun MobileSearch(stations: Stations,
@@ -65,7 +64,7 @@ fun MobileSearch(stations: Stations,
                         .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = LocalIndication.current,
                             role = Role.Button,
-                            onClickLabel = Strings.format("pick_station", suggestion.name),
+                            onClickLabel = StringRes.format("pick_station", suggestion.name),
                             onClick = {
                                 setStationId(suggestion.id)
                                 navController.popBackStack()
@@ -90,7 +89,7 @@ fun MobileSearch(stations: Stations,
                         },
                         content = {
                             println("${suggestion.name}.isFavourite($isFavourite)")
-                            Icon(icon, contentDescription = Strings.get("favourite_station"))
+                            Icon(icon, contentDescription = StringRes.get("favourite_station"))
                         }
                     )
                 }
@@ -105,12 +104,12 @@ fun MobileSearch(stations: Stations,
         ) {
             Icon(
                 Icons.Rounded.Search,
-                contentDescription = Strings.get("search"),
+                contentDescription = StringRes.get("search"),
                 tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.width(92.dp).height(92.dp)
             )
             Text(
-                Strings.get("station_search_details"),
+                StringRes.get("station_search_details"),
                 color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                 fontSize = 18.sp,

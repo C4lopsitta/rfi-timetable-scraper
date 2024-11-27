@@ -6,7 +6,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
@@ -22,7 +21,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 data class Station(val name: String, val id: Int) {
     @Composable
@@ -34,7 +33,7 @@ data class Station(val name: String, val id: Int) {
                     interactionSource = remember { MutableInteractionSource() },
                     indication = LocalIndication.current,
                     role = Role.Button,
-                    onClickLabel = Strings.format("pick_station", name),
+                    onClickLabel = StringRes.format("pick_station", name),
                     onClick = { setAsStation(id) }
                 ),
             verticalAlignment = Alignment.CenterVertically,
@@ -46,7 +45,7 @@ data class Station(val name: String, val id: Int) {
 
                 }
             ) {
-                Icon(Icons.Rounded.Delete, contentDescription = Strings.get("delete"))
+                Icon(Icons.Rounded.Delete, contentDescription = StringRes.get("delete"))
             }
         }
         HorizontalDivider()

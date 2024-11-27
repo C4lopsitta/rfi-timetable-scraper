@@ -75,6 +75,7 @@ android {
         versionName = "1.3.6"
         resourceConfigurations.add("en")
         resourceConfigurations.add("it")
+        multiDexEnabled = true
     }
     packaging {
         resources {

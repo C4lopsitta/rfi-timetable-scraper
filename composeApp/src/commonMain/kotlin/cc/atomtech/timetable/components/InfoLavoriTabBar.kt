@@ -9,7 +9,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 
 @Composable
 fun InfoLavoriTabBar(tabIndex: Int,
@@ -20,20 +20,20 @@ fun InfoLavoriTabBar(tabIndex: Int,
         Tab(
             selected = true,
             onClick = { setIndex(0) },
-            text = { Text(Strings.get("real_time")) },
-            icon = { Icon(Icons.Rounded.Timelapse, contentDescription = Strings.get("real_time")) }
+            text = { Text(StringRes.get("real_time")) },
+            icon = { Icon(Icons.Rounded.Timelapse, contentDescription = StringRes.get("real_time")) }
         )
         Tab(
             selected = true,
             onClick = { setIndex(1) },
-            text = { Text(Strings.get("announcements")) },
-            icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = Strings.get("announcements")) }
+            text = { Text(StringRes.get("announcements")) },
+            icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = StringRes.get("announcements")) }
         )
         Tab(
             selected = true,
             onClick = { setIndex(2) },
-            text = { Text(Strings.get("trenitalia")) },
-            icon = { Icon(Icons.Rounded.Train, contentDescription = Strings.get("trenitalia")) }
+            text = { Text(StringRes.get("trenitalia")) },
+            icon = { Icon(Icons.Rounded.Train, contentDescription = StringRes.get("trenitalia")) }
         )
     }
 }

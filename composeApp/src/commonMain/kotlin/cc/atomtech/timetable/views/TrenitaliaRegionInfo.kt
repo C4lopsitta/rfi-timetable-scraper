@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Celebration
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.components.RowLink
 
 @Composable
@@ -49,10 +47,10 @@ fun TrenitaliaRegionInfo(
                 onClick = { navController.popBackStack() },
                 modifier = Modifier.width(48.dp).height(48.dp).align(Alignment.CenterVertically)
             ) {
-                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = Strings.get("back"))
+                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = StringRes.get("back"))
             }
             Text(
-                selectedRegion?.regionName ?: Strings.get("undefined"),
+                selectedRegion?.regionName ?: StringRes.get("undefined"),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(top = 12.dp, end = 12.dp, bottom = 12.dp)
@@ -62,11 +60,11 @@ fun TrenitaliaRegionInfo(
         Column {
             RowLink(
                 link = selectedRegion?.worksAndServiceModificationsLink,
-                text = Strings.get("works_and_service_modifications")
+                text = StringRes.get("works_and_service_modifications")
             )
             RowLink(
                 link = selectedRegion?.busServiceLink,
-                text = Strings.get("bus_service_stops")
+                text = StringRes.get("bus_service_stops")
             )
         }
         HorizontalDivider( modifier = Modifier.padding( bottom = 12.dp ) )
@@ -78,12 +76,12 @@ fun TrenitaliaRegionInfo(
             ) {
                 Icon(
                     Icons.Rounded.Celebration,
-                    contentDescription = Strings.get("no_announcements"),
+                    contentDescription = StringRes.get("no_announcements"),
                     tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.width(92.dp).height(92.dp)
                 )
                 Text(
-                    Strings.format("no_announcements_desc", selectedRegion.regionName),
+                    StringRes.format("no_announcements_desc", selectedRegion.regionName),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                     fontSize = 18.sp,
@@ -98,7 +96,7 @@ fun TrenitaliaRegionInfo(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = LocalIndication.current,
                             role = Role.Button,
-                            onClickLabel = Strings.get("open_in_browser"),
+                            onClickLabel = StringRes.get("open_in_browser"),
                             onClick = {
                                 if (issue.link != null) {
                                     uriHandler.openUri(issue.link)

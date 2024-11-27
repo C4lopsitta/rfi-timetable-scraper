@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import cc.atomtech.timetable.Strings
+import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.TimetableState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,17 +36,17 @@ fun AppBar(navController: NavHostController,
     TopAppBar(
         title = {
             if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
-                Text(timetable?.stationName ?: Strings.get("app_name"))
+                Text(timetable?.stationName ?: StringRes.get("app_name"))
             } else if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains(
                     ""
                 ) == false
             ) {
-                Text(Strings.get("top_strikes_maintenances"))
+                Text(StringRes.get("top_strikes_maintenances"))
             } else {
                 TextField(
                     value = searchQuery,
                     onValueChange = { updateSearchQuery(it) },
-                    placeholder = { Text(Strings.get("station_search_placeholder")) },
+                    placeholder = { Text(StringRes.get("station_search_placeholder")) },
                     maxLines = 1,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                     shape = TextFieldDefaults.OutlinedTextFieldShape,
@@ -71,7 +71,7 @@ fun AppBar(navController: NavHostController,
                     IconButton(content = {
                         Icon(
                             Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = Strings.get("back")
+                            contentDescription = StringRes.get("back")
                         )
                     },
                         onClick = { navController.popBackStack() })
@@ -79,12 +79,12 @@ fun AppBar(navController: NavHostController,
                         "search"
                     ) == false
                 ) {
-                    Icon(Icons.Rounded.Train, contentDescription = Strings.get("app_name"))
+                    Icon(Icons.Rounded.Train, contentDescription = StringRes.get("app_name"))
                 } else {
                     IconButton(content = {
                         Icon(
                             Icons.Rounded.Close,
-                            contentDescription = Strings.get("close_search")
+                            contentDescription = StringRes.get("close_search")
                         )
                     },
                         onClick = { resetSearchSuggestions() })
@@ -95,7 +95,7 @@ fun AppBar(navController: NavHostController,
             IconButton(content = {
                 Icon(
                     Icons.Rounded.Search,
-                    contentDescription = Strings.get("search")
+                    contentDescription = StringRes.get("search")
                 )
             },
                 onClick = {
@@ -104,7 +104,7 @@ fun AppBar(navController: NavHostController,
             IconButton(content = {
                 Icon(
                     Icons.Rounded.Refresh,
-                    contentDescription = Strings.get("reload")
+                    contentDescription = StringRes.get("reload")
                 )
             },
                 onClick = { triggerReload() })
