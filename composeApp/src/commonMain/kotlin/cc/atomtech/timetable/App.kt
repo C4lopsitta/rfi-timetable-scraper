@@ -91,7 +91,6 @@ fun Main(navController: NavHostController,
         try {
             loading = true
             if(isNewStationSet) {
-                println("Full reload")
                 timetable = null
                 timetable = RfiScraper.getStationTimetable(stationId)
             } else {
@@ -101,9 +100,6 @@ fun Main(navController: NavHostController,
             isNewStationSet = false
 
             val feed = RssFeeds.fetchRss(RssFeeds.allRegionsLive)
-            for (item in RssFeeds.parseFeed(feed)) {
-                println(item)
-            }
 
         } catch (_: CancellationException) {
         } catch (e: Exception) {
@@ -180,11 +176,11 @@ fun Main(navController: NavHostController,
                         NavRail(navController = navController) { reloadTrigger = !reloadTrigger }
                     }
                 }) {
-                if(isNetworkAvailable()) {
-                    DeviceOffline {
-                        reloadTrigger = !reloadTrigger
-                    }
-                } else {
+//                if(isNetworkAvailable()) {
+//                    DeviceOffline {
+//                        reloadTrigger = !reloadTrigger
+//                    }
+//                } else {
                     NavigationBodyHost(
                         navController = navController,
                         isDesktop = isDesktop,
@@ -209,7 +205,7 @@ fun Main(navController: NavHostController,
                         }
                     )
                 }
-            }
+//            }
         }
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrainData
@@ -55,7 +56,7 @@ fun TrainDetails(trainData: DetailedTrainData,
     Column (
         modifier = Modifier.fillMaxSize().padding( end = 12.dp ).verticalScroll(rememberScrollState())
     ) {
-        // number with "to" text
+        // number with "to" text TODO)) Add from in case arrival
         Text(StringRes.format("details_number", trainData.number))
         Text(
             trainData.arrival,
@@ -65,13 +66,19 @@ fun TrainDetails(trainData: DetailedTrainData,
         )
 
         // "from" text if not line start
-        if(trainData.currentStationType != CurrentStationType.LINE_START) {
-            Text(StringRes.get("from"), modifier = Modifier.padding( top = 12.dp ))
+        if(trainData.currentStationType == CurrentStationType.STOP) {
+            Text(
+                StringRes.get("from"),
+                modifier = Modifier.padding( top = 12.dp ).fillMaxWidth(),
+//                textAlign = TextAlign.End
+            )
             Text(
                 trainData.departure,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.SemiBold,
-                lineHeight = 38.sp
+                lineHeight = 38.sp,
+//                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth()
             )
         }
 

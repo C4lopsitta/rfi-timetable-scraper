@@ -52,7 +52,7 @@ fun NavigationBodyHost(
 
     fun viewTrainDetails(pick: TrainData, pickedFromArrival: Boolean) {
         if(timetable == null) return
-        val pickTwin = (if(pickedFromArrival) timetable.arrivals else timetable.departures).find {
+        val pickTwin = (if(!pickedFromArrival) timetable.arrivals else timetable.departures).find {
             it.number == pick.number
         }
 
