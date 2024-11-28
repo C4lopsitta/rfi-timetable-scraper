@@ -125,10 +125,14 @@ object RfiScraper {
                         if(nextStationsString.isNotEmpty()) {
                             nextStationsString.split("FERMA A: ")[1]
                             nextStationsString.split(" - ").forEach { stop ->
+                                var time = stop.split("(")[1]
+                                    .removeSuffix(")")
+                                    .replace(".", ":")
+                                if(time.split(":").size == 1) time = "0$time"
                                 stops.add(
                                     TrainStop(
                                         name = stop.split(" (")[0].removePrefix("FERMA A: ").stationName(),
-                                        time = stop.split("(")[1].removeSuffix(")"),
+                                        time = time,
                                         isCurrentStop = false
                                     )
                                 )

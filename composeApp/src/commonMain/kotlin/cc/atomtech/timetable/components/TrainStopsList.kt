@@ -21,16 +21,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.models.TrainStop
+import cc.atomtech.timetable.StringRes
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
-private fun TrainStopEntry(stop: TrainStop, isLineStart: Boolean, isFirst: Boolean, isLast: Boolean) {
+private fun TrainStopEntry(
+    stop: TrainStop,
+    isLineStart: Boolean,
+    isFirst: Boolean,
+    isLast: Boolean,
+    delay: Int
+) {
     val lineColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
+    val cancelledColor = androidx.compose.material3.MaterialTheme.colorScheme.error
     val circleCenterColor = androidx.compose.material3.MaterialTheme.colorScheme.background
 
     Box (
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp)
+            .padding( top = if(isLineStart) 12.dp else 0.dp )
     ) {
         Canvas(
             modifier = Modifier
@@ -58,23 +69,38 @@ private fun TrainStopEntry(stop: TrainStop, isLineStart: Boolean, isFirst: Boole
                 end = Offset( x = baseXOffset.toPx(), y = if(isLast) yCenter else size.height )
             )
 
-            if(isLast || stop.isCurrentStop) {
-                drawCircle(
-                    color = lineColor,
-                    radius = 12.dp.toPx(),
-                    center = Offset( x = baseXOffset.toPx(), y = yCenter )
-                )
-                drawCircle(
-                    color = circleCenterColor,
-                    radius = 8.dp.toPx(),
-                    center = Offset( x = baseXOffset.toPx(), y = yCenter )
-                )
+            if(delay != Int.MIN_VALUE) {
+                if (isLast || stop.isCurrentStop) {
+                    drawCircle(
+                        color = lineColor,
+                        radius = 12.dp.toPx(),
+                        center = Offset(x = baseXOffset.toPx(), y = yCenter)
+                    )
+                    drawCircle(
+                        color = circleCenterColor,
+                        radius = 8.dp.toPx(),
+                        center = Offset(x = baseXOffset.toPx(), y = yCenter)
+                    )
+                } else {
+                    drawLine(
+                        color = lineColor,
+                        strokeWidth = 4.dp.toPx(),
+                        start = Offset(x = (baseXOffset + 12.dp).toPx(), y = yCenter),
+                        end = Offset(x = baseXOffset.toPx(), y = yCenter)
+                    )
+                }
             } else {
                 drawLine(
-                    color = lineColor,
+                    color = cancelledColor,
                     strokeWidth = 4.dp.toPx(),
-                    start = Offset( x = (baseXOffset + 12.dp).toPx(), y = yCenter ),
-                    end = Offset( x = baseXOffset.toPx(), y = yCenter )
+                    start = Offset(x = (baseXOffset + 12.dp).toPx(), y = (yCenter + 12.dp.toPx())),
+                    end = Offset(x = (baseXOffset - 12.dp).toPx(), y = (yCenter - 12.dp.toPx()))
+                )
+                drawLine(
+                    color = cancelledColor,
+                    strokeWidth = 4.dp.toPx(),
+                    start = Offset(x = (baseXOffset - 12.dp).toPx(), y = (yCenter + 12.dp.toPx())),
+                    end = Offset(x = (baseXOffset + 12.dp).toPx(), y = (yCenter - 12.dp.toPx()))
                 )
             }
         }
@@ -89,7 +115,22 @@ private fun TrainStopEntry(stop: TrainStop, isLineStart: Boolean, isFirst: Boole
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Text(stop.time)
+            Text(
+                if(delay == Int.MIN_VALUE) {
+                    StringRes.get("cancelled")
+                } else if(delay == Int.MAX_VALUE) {
+                    stop.time + " - " + StringRes.get("delayed")
+                } else if(delay != 0) {
+                    val formatter = DateTimeFormatter.ofPattern("H:mm")
+                    val newTime = LocalTime
+                        .parse(stop.time, formatter)
+                        .plusMinutes(delay.toLong())
+                        .format(formatter)
+                    StringRes.format("detail_stop_delayed_string", newTime, stop.time)
+                } else {
+                    stop.time
+                }
+            )
         }
     }
 }
@@ -98,7 +139,8 @@ private fun TrainStopEntry(stop: TrainStop, isLineStart: Boolean, isFirst: Boole
 @Composable
 fun TrainStopList(
     stationType: CurrentStationType,
-    stops: List<TrainStop>
+    stops: List<TrainStop>,
+    delay: Int
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -107,6 +149,7 @@ fun TrainStopList(
             stops.forEach { stop ->
                 TrainStopEntry(
                     stop = stop,
+                    delay = delay,
                     isLineStart = stationType == CurrentStationType.STOP && stops.indexOf(stop) == 0,
                     isFirst = stops.indexOf(stop) == 0,
                     isLast = stops.indexOf(stop) == stops.size -1

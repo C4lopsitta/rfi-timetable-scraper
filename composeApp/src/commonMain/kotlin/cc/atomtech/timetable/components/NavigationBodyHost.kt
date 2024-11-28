@@ -85,6 +85,7 @@ fun NavigationBodyHost(
             arrivesAt = arrivalData.time ?: "--:--",
             stops = stops.toList(),
             delay = departureData.getDelayString(addSpace = false),
+            delayMinutes = departureData.delay,
             operator = departureData.operator.toString(),
             category = departureData.category.toString(),
             platform = pick.platform,

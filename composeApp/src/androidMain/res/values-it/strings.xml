@@ -57,4 +57,5 @@
     <string name="offline">Sei offline</string>
     <string name="from">In arrivo da</string>
     <string name="on_time">In Orario</string>
+    <string name="detail_stop_delayed_string">%1$s - (Senza ritardo %2$s)</string>
 </resources>

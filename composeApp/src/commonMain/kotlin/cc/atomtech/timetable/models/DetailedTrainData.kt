@@ -14,5 +14,6 @@ data class DetailedTrainData(
     val category: String,
     val platform: String?,
     val details: String?,
-    val number: String
+    val number: String,
+    val delayMinutes: Int
 )

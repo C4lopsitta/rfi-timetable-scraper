@@ -14,15 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.components.TrainStopList
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.models.DetailedTrainData
-import kotlinx.coroutines.delay
 
 @Composable
 fun DataPairRow(
@@ -139,11 +136,12 @@ fun TrainDetails(trainData: DetailedTrainData,
             }
         }
 
-        if(trainData.stops.isNotEmpty()) {
+        if(trainData.stops.size > 1) {
             HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
             Text(StringRes.get("next_stops"))
             TrainStopList(
                 stops = trainData.stops,
+                delay = trainData.delayMinutes,
                 stationType = trainData.currentStationType
             )
         }

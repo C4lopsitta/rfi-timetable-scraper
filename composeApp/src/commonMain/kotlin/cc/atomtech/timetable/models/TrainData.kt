@@ -43,17 +43,11 @@ class TrainData(
 
     fun getDelayString(addSpace: Boolean = true): String? {
         if (time != null) {
-            when (delay) {
-                Int.MAX_VALUE -> {
-                    return "${if(addSpace) " " else ""}${StringRes.get("delayed")}"
-                }
-                Int.MIN_VALUE -> {
-                    return StringRes.get("cancelled")
-                }
-                0 -> { return if (addSpace) "" else null }
-                else -> {
-                    return "${if(addSpace) " " else ""}+$delay ${StringRes.get("minutes")}"
-                }
+            return when (delay) {
+                Int.MAX_VALUE -> { "${if(addSpace) " " else ""}${StringRes.get("delayed")}" }
+                Int.MIN_VALUE -> { StringRes.get("cancelled") }
+                0 -> { if (addSpace) "" else null }
+                else -> { "${if(addSpace) " " else ""}+$delay ${StringRes.get("minutes")}" }
             }
         }
         return null
