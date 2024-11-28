@@ -1,13 +1,8 @@
 package cc.atomtech.timetable.views
 
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -15,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.RailwayAlert
 import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +34,7 @@ import cc.atomtech.timetable.models.TrenitaliaInfo
 import cc.atomtech.timetable.scrapers.TrenitaliaScraper
 import io.ktor.utils.io.CancellationException
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.components.TrenitaliaEventDetails
+import cc.atomtech.timetable.models.TrenitaliaEventDetails
 import cc.atomtech.timetable.components.TrenitaliaEventRow
 import cc.atomtech.timetable.components.TrenitaliaRegionCard
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
@@ -117,8 +110,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(vertical = 12.dp)
                     )
-                    LazyRow(
-                    ) {
+                    LazyRow {
                         items(info!!.infoLavori) { regionInfo ->
                             TrenitaliaRegionCard(
                                 name = regionInfo.regionName,

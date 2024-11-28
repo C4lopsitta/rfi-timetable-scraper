@@ -71,9 +71,9 @@ android {
         applicationId = "cc.atomtech.timetable"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 11
-        versionName = "1.3.7"
-        versionNameSuffix = "play"
+        versionCode = 12
+        versionName = "1.4.0"
+        versionNameSuffix = "-play"
         resourceConfigurations.add("en")
         resourceConfigurations.add("it")
         multiDexEnabled = true

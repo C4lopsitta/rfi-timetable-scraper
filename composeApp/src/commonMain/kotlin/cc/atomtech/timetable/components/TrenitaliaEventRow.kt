@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.models.TrenitaliaEventDetails
 
 @Composable
 fun TrenitaliaEventRow(

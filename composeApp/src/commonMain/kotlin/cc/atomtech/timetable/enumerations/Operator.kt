@@ -1,6 +1,6 @@
 package cc.atomtech.timetable.enumerations
 
-enum class Operator() {
+enum class Operator {
     UNDEFINED,
     TRENITALIA,
     TRENORD,

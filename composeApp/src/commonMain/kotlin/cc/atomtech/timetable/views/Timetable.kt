@@ -59,7 +59,7 @@ fun Timetable(trainList: List<TrainData>?,
                 )
             }
         } else {
-            LazyColumn() {
+            LazyColumn {
                 items(trainList ?: listOf()) { train ->
                     if (isDesktop) {
                         train.desktopRow(onTrainSelected)

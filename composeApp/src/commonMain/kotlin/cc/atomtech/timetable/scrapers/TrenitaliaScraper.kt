@@ -6,7 +6,7 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
 import java.util.Locale
-import cc.atomtech.timetable.components.TrenitaliaEventDetails
+import cc.atomtech.timetable.models.TrenitaliaEventDetails
 
 private object ElementIds {
     const val REGULAR_TRAFFIC = "CIRCOLAZIONE_REGOLARE"
@@ -140,10 +140,12 @@ object TrenitaliaScraper {
                     irregularTrafficBody.add(p.text())
                 }
 
-                irregularTrafficEvents.add(TrenitaliaEventDetails(
+                irregularTrafficEvents.add(
+                    TrenitaliaEventDetails(
                     title = item.getElementsByTag("a")[0].text(),
                     details = irregularTrafficBody.toList()
-                ))
+                )
+                )
             }
         }
 

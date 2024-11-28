@@ -135,7 +135,7 @@ fun TrainDetails(trainData: DetailedTrainData,
             if(trainData.details.isNotEmpty()) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
                 Text(StringRes.get("details"))
-                Text(trainData.details ?: "")
+                Text(trainData.details)
             }
         }
 

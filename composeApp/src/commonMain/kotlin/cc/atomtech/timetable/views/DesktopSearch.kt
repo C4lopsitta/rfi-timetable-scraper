@@ -79,7 +79,7 @@ fun DesktopSearch(stations: Stations?,
             item {
                 Text(StringRes.get("search_results"), modifier = Modifier.padding( top = 16.dp ))
             }
-            items(searchSuggestions ?: listOf()) { suggestion ->
+            items(searchSuggestions) { suggestion ->
                 Text(suggestion.name,
                     fontSize = 24.sp,
                     lineHeight = 56.sp,
