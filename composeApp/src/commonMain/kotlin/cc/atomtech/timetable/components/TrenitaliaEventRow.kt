@@ -4,6 +4,7 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,14 +42,19 @@ fun TrenitaliaEventRow(
         Text(
             event.title,
             fontSize = 20.sp,
-//            fontWeight = FontWeight.SemiBold,
+            fontWeight = if(event.title.contains("sciopero", ignoreCase = true)) FontWeight.SemiBold else FontWeight.Normal,
             modifier = Modifier
                 .padding(bottom = 12.dp)
                 .fillMaxWidth(0.9f)
         )
-        Icon(
-            Icons.AutoMirrored.Rounded.ArrowForward,
-            contentDescription = StringRes.get("view_issue_details")
-        )
+        Column {
+            Icon(
+                Icons.AutoMirrored.Rounded.ArrowForward,
+                contentDescription = StringRes.get("view_issue_details")
+            )
+            if(event.title.contains("sciopero", ignoreCase = true)) {
+                
+            }
+        }
     }
 }

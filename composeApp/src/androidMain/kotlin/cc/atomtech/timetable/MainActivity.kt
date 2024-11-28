@@ -1,6 +1,8 @@
 package cc.atomtech.timetable
 
+import android.content.Context
 import android.content.res.Configuration
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +24,16 @@ actual fun storePreferences(): DataStore<Preferences> {
             },
         )
     }
+}
+
+@Composable
+actual fun isNetworkAvailable(): Boolean {
+    val context = LocalContext.current
+
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = connectivityManager.activeNetworkInfo
+    return networkInfo != null && networkInfo.isConnected
 }
 
 class MainActivity : ComponentActivity() {

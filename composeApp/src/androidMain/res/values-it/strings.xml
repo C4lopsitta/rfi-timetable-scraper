@@ -54,4 +54,7 @@
     <string name="no_announcements">Nessun annuncio</string>
     <string name="no_announcements_desc">Non ci sono problemi al momento in %1$s!</string>
     <string name="past_future_events">Eventi Passati e Futuri</string>
+    <string name="offline">Sei offline</string>
+    <string name="from">In arrivo da</string>
+    <string name="on_time">In Orario</string>
 </resources>

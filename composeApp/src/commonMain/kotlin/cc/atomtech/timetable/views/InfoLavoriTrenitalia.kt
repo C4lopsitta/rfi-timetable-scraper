@@ -126,7 +126,6 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                             ) { navigateToRegionDetails(regionInfo) }
                         }
                     }
-                    HorizontalDivider(modifier = Modifier.padding( top = 12.dp ))
                 }
 
                 // past/future events
@@ -135,7 +134,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                         StringRes.get("past_future_events"),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(vertical = 12.dp)
+                        modifier = Modifier.padding( bottom = 12.dp, top = 48.dp )
                     )
                 }
                 items (info!!.extraEvents) {
@@ -143,6 +142,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                         chosenEvent = it
                         showSheet = true
                     }
+                    HorizontalDivider( modifier = Modifier.padding( bottom = 12.dp ) )
                 }
             }
             if (showSheet) {

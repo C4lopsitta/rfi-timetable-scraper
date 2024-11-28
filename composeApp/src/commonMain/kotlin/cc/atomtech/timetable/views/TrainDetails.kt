@@ -18,74 +18,130 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.components.TrainStopList
+import cc.atomtech.timetable.enumerations.CurrentStationType
+import cc.atomtech.timetable.models.DetailedTrainData
+import kotlinx.coroutines.delay
 
 @Composable
-fun TrainDetails(trainData: TrainData?,
+fun DataPairRow(
+    labelLeft: String,
+    dataLeft: String,
+    labelRight: String,
+    datRight: String
+) {
+    Row (
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column {
+            Text( labelLeft )
+            Text(dataLeft, fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
+        }
+        Column (
+            horizontalAlignment = Alignment.End
+        ) {
+            Text( labelRight )
+            Text( datRight, fontSize = 24.sp, fontWeight = FontWeight.SemiBold )
+        }
+    }
+}
+
+
+@Composable
+fun TrainDetails(trainData: DetailedTrainData,
                  isArrival: Boolean) {
     Column (
         modifier = Modifier.fillMaxSize().padding( end = 12.dp ).verticalScroll(rememberScrollState())
     ) {
-        Text(StringRes.format("details_number", "${trainData?.number}"))
-        Text(trainData?.station ?: StringRes.get("undefined"), fontSize = 32.sp, fontWeight = FontWeight.SemiBold, lineHeight = 38.sp)
+        // number with "to" text
+        Text(StringRes.format("details_number", trainData.number))
+        Text(
+            trainData.arrival,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.SemiBold,
+            lineHeight = 38.sp
+        )
+
+        // "from" text if not line start
+        if(trainData.currentStationType != CurrentStationType.LINE_START) {
+            Text(StringRes.get("from"), modifier = Modifier.padding( top = 12.dp ))
+            Text(
+                trainData.departure,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.SemiBold,
+                lineHeight = 38.sp
+            )
+        }
+
         HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
-        Row (
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                Text(if (isArrival) StringRes.get("details_arrives") else StringRes.get("details_departs"))
-                Text(trainData?.time ?: "--:--", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
-            }
-            Column (
-                horizontalAlignment = Alignment.End
-            ) {
-                Text( StringRes.get("details_from_platform"))
-                Text( trainData?.platform ?: StringRes.get("platform_to_be_announced"),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.SemiBold )
+
+        if(trainData.currentStationType == CurrentStationType.STOP) {
+            // show times, then delay plus platform
+            DataPairRow(
+                StringRes.get("details_arrives"),
+                trainData.arrivesAt,
+                StringRes.get("details_departs"),
+                trainData.departsAt
+            )
+
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+
+            DataPairRow(
+                StringRes.get("delay"),
+                trainData.delay ?: StringRes.get("on_time"),
+                StringRes.get("details_from_platform"),
+                trainData.platform ?: StringRes.get("platform_to_be_announced")
+            )
+        } else {
+            val isBeginning = trainData.currentStationType == CurrentStationType.LINE_START
+
+            // show time plus platform, then delay
+            DataPairRow(
+                if(isBeginning) StringRes.get("details_departs") else StringRes.get("details_arrives"),
+                if(isBeginning) trainData.departsAt else trainData.arrivesAt,
+                StringRes.get("details_from_platform"),
+                trainData.platform ?: StringRes.get("platform_to_be_announced")
+            )
+
+            if(trainData.delay != null) {
+                DataPairRow(
+                    StringRes.get("delay"),
+                    trainData.delay,
+                    "", ""
+                )
             }
         }
-        if(trainData?.getDelayString(addSpace = false) != null) {
-            Text(StringRes.get("delay"), modifier = Modifier.padding( top = 12.dp ) )
-            Text(trainData.getDelayString(addSpace = false) ?: "",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold)
-        }
+
         HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
-        Row (
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                Text(StringRes.get("operator"))
-                Text(trainData?.operator.toString(),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.SemiBold)
-            }
-            Column (
-                horizontalAlignment = Alignment.End
-            ) {
-                Text( StringRes.get("service") )
-                Text( trainData?.category.toString(),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.SemiBold )
-            }
-        }
-        if(trainData?.details != null) {
+
+        DataPairRow(
+            StringRes.get("operator"),
+            trainData.operator,
+            StringRes.get("service"),
+            trainData.category
+        )
+
+
+        if(trainData.details != null) {
             if(trainData.details.isNotEmpty()) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
                 Text(StringRes.get("details"))
                 Text(trainData.details ?: "")
             }
         }
-        if(trainData?.stops != null) {
-            if(trainData.stops.isNotEmpty()) {
-                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                Text(if (isArrival) StringRes.get("previous_stops") else StringRes.get("next_stops"))
-                trainData.stops.forEach { stop -> stop.build() }
-            }
-        }
+
+
+//        if(trainData.stops != null) {
+//            if(trainData.stops.isNotEmpty()) {
+//                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+//                TrainStopList(trainData.stops)
+//            /*
+//                Text(if (isArrival) StringRes.get("previous_stops") else StringRes.get("next_stops"))
+//                trainData.stops.forEach { stop -> stop.build() }
+//            */
+//            }
+//        }
     }
 }

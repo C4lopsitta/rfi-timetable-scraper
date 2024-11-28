@@ -28,6 +28,9 @@ import cc.atomtech.timetable.views.FavouriteStations
 import cc.atomtech.timetable.views.InfoLavori
 import cc.atomtech.timetable.views.MobileSearch
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.enumerations.CurrentStationType
+import cc.atomtech.timetable.models.DetailedTrainData
+import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import cc.atomtech.timetable.views.TrenitaliaRegionInfo
 
@@ -42,9 +45,62 @@ fun NavigationBodyHost(
     favouriteStations: Stations,
     searchSuggestions: List<Station>?,
     setStationId: (Int) -> Unit,
-    updateFavourites: (String) -> Unit) {
-    var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
+    updateFavourites: (String) -> Unit
+) {
+    var detailViewSelectedTrain by remember { mutableStateOf<DetailedTrainData?>(null) }
     var selectedRegionInfo by remember { mutableStateOf<TrenitaliaInfoLavori?>(null) }
+
+    fun viewTrainDetails(pick: TrainData, pickedFromArrival: Boolean) {
+        if(timetable == null) return
+        val pickTwin = (if(pickedFromArrival) timetable.arrivals else timetable.departures).find {
+            it.number == pick.number
+        }
+
+        val arrivalData = if(pickTwin != null) (if(!pickedFromArrival) pickTwin else pick) else pick
+        val departureData = if(pickTwin != null) (if(pickedFromArrival) pickTwin else pick) else pick
+
+        val stops = arrayListOf<TrainStop>()
+
+        if(pickTwin != null) {
+            (if(pickedFromArrival) pick.stops else pickTwin.stops).forEach{ stop -> stops.add(stop) }
+
+            stops.add(
+                TrainStop(
+                    name = pick.station ?: StringRes.get("undefined"),
+                    time = pick.time ?: StringRes.get("undefined"),
+                    isCurrentStop = true
+                )
+            )
+
+            (if(pickedFromArrival) pickTwin.stops else pick.stops).forEach{ stop -> stops.add(stop) }
+        } else {
+            // this means the train either ends its run here or starts from here
+            pick.stops.forEach { stop -> stops.add(stop) }
+        }
+
+        detailViewSelectedTrain = DetailedTrainData(
+            currentStationType = if(pickTwin != null) {
+                CurrentStationType.STOP
+            } else if(pickedFromArrival) {
+                CurrentStationType.LINE_END
+            } else {
+                CurrentStationType.LINE_START
+            },
+            departure = departureData.station ?: StringRes.get("undefined"),
+            arrival = arrivalData.station ?: StringRes.get("undefined"),
+            departsAt = departureData.time ?: "--:--",
+            arrivesAt = arrivalData.time ?: "--:--",
+            stops = stops.toList(),
+            delay = departureData.getDelayString(addSpace = false),
+            operator = departureData.operator.toString(),
+            category = departureData.category.toString(),
+            platform = pick.platform,
+            details = pick.details,
+            number = pick.number ?: StringRes.get("undefined"),
+        )
+
+        navController.navigate("details/${if(pickedFromArrival) "true" else "false"}")
+    }
 
     Column {
         if(isDesktop) {
@@ -66,10 +122,7 @@ fun NavigationBodyHost(
             composable("departures") {
                 Timetable(
                     trainList = timetable?.uiState?.value?.departures,
-                    onTrainSelected = { selectedTrain: TrainData ->
-                        detailViewSelectedTrain = selectedTrain
-                        navController.navigate("details/false")
-                    },
+                    onTrainSelected = { selectedTrain: TrainData -> viewTrainDetails(selectedTrain, false) },
                     stationInfo = timetable?.uiState?.value?.stationInfo,
                     lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
                     isDesktop = isDesktop
@@ -78,10 +131,7 @@ fun NavigationBodyHost(
             composable("arrivals") {
                 Timetable(
                     trainList = timetable?.uiState?.value?.arrivals,
-                    onTrainSelected = { selectedTrain: TrainData ->
-                        detailViewSelectedTrain = selectedTrain
-                        navController.navigate("details/true")
-                    },
+                    onTrainSelected = { selectedTrain: TrainData -> viewTrainDetails(selectedTrain, true) },
                     stationInfo = timetable?.uiState?.value?.stationInfo,
                     lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
                     isDesktop = isDesktop
@@ -128,7 +178,7 @@ fun NavigationBodyHost(
             }
             composable("details/{isArrival}") {
                 val isArrival = it.arguments?.getString("isArrival") == "true"
-                TrainDetails(detailViewSelectedTrain, isArrival)
+                TrainDetails(detailViewSelectedTrain!!, isArrival)
             }
             composable("info") { AppInfo() }
         }

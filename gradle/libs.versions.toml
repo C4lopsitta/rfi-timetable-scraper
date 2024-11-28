@@ -30,6 +30,7 @@ uiUnitDesktop = "1.7.0"
 navigationCompose = "2.8.3"
 databindingCompilerCommon = "8.7.2"
 datastore = "1.1.1"
+uiDesktop = "1.7.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -64,6 +65,7 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 androidx-databinding-compiler-common = { group = "androidx.databinding", name = "databinding-compiler-common", version.ref = "databindingCompilerCommon" }
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-ui-desktop = { group = "androidx.compose.ui", name = "ui-desktop", version.ref = "uiDesktop" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
