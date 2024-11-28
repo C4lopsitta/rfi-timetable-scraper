@@ -5,8 +5,10 @@ import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.components.LargeIconText
 
 @Composable
 fun DeviceOffline(reload: () -> Unit) {
@@ -18,7 +20,7 @@ fun DeviceOffline(reload: () -> Unit) {
                 content = {Icon(
                     Icons.Rounded.Refresh,
                     contentDescription = "Reload",
-                    tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+                    tint = MaterialTheme.colorScheme.onSurface
                 ) },
                 onClick = { reload() }
             )

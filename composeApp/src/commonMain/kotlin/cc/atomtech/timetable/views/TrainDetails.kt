@@ -139,16 +139,13 @@ fun TrainDetails(trainData: DetailedTrainData,
             }
         }
 
-
-//        if(trainData.stops != null) {
-//            if(trainData.stops.isNotEmpty()) {
-//                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-//                TrainStopList(trainData.stops)
-//            /*
-//                Text(if (isArrival) StringRes.get("previous_stops") else StringRes.get("next_stops"))
-//                trainData.stops.forEach { stop -> stop.build() }
-//            */
-//            }
-//        }
+        if(trainData.stops.isNotEmpty()) {
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+            Text(StringRes.get("next_stops"))
+            TrainStopList(
+                stops = trainData.stops,
+                stationType = trainData.currentStationType
+            )
+        }
     }
 }

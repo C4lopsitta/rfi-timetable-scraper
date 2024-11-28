@@ -1,4 +1,4 @@
-package cc.atomtech.timetable.views
+package cc.atomtech.timetable.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

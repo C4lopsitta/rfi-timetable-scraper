@@ -30,6 +30,6 @@ fun main() = application {
         title = "Timetables"
     ) {
         val navController = rememberNavController()
-        Main(navController, isDesktop = true, androidContext = this)
+        Main(navController, isDesktop = true)
     }
 }

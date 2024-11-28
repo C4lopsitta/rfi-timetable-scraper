@@ -61,22 +61,15 @@ fun NavigationBodyHost(
 
         val stops = arrayListOf<TrainStop>()
 
-        if(pickTwin != null) {
-            (if(pickedFromArrival) pick.stops else pickTwin.stops).forEach{ stop -> stops.add(stop) }
-
-            stops.add(
-                TrainStop(
-                    name = pick.station ?: StringRes.get("undefined"),
-                    time = pick.time ?: StringRes.get("undefined"),
-                    isCurrentStop = true
-                )
+        stops.add(
+            TrainStop(
+                name = timetable.stationName,
+                time = pick.time ?: StringRes.get("undefined"),
+                isCurrentStop = true
             )
+        )
 
-            (if(pickedFromArrival) pickTwin.stops else pick.stops).forEach{ stop -> stops.add(stop) }
-        } else {
-            // this means the train either ends its run here or starts from here
-            pick.stops.forEach { stop -> stops.add(stop) }
-        }
+        pick.stops.forEach { stop -> stops.add(stop) }
 
         detailViewSelectedTrain = DetailedTrainData(
             currentStationType = if(pickTwin != null) {
