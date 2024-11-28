@@ -41,7 +41,8 @@ import cc.atomtech.timetable.models.TrenitaliaInfo
 import cc.atomtech.timetable.scrapers.TrenitaliaScraper
 import io.ktor.utils.io.CancellationException
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.components.TrenitaliaIrregularTrafficDetails
+import cc.atomtech.timetable.components.TrenitaliaEventDetails
+import cc.atomtech.timetable.components.TrenitaliaEventRow
 import cc.atomtech.timetable.components.TrenitaliaRegionCard
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 
@@ -50,7 +51,7 @@ import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit) {
     var info by remember { mutableStateOf<TrenitaliaInfo?>(null) }
     var showSheet by remember { mutableStateOf(false) }
-    var chosenEvent by remember { mutableStateOf<TrenitaliaIrregularTrafficDetails?>(null) }
+    var chosenEvent by remember { mutableStateOf<TrenitaliaEventDetails?>(null) }
     val sheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(Unit) {
@@ -95,45 +96,24 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                 )
             }
             LazyColumn {
+                // headline events
                 item {
                     if (!info!!.isTrafficRegular) {
                         for (event in info!!.irregularTrafficEvents) {
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.Top,
-                                modifier = Modifier.clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = LocalIndication.current,
-                                    role = Role.Button,
-                                    onClickLabel = StringRes.get("view_issue_details"),
-                                    onClick = {
-                                        chosenEvent = event
-                                        showSheet = true
-                                    }
-                                )
-                                    .fillMaxWidth()
-                            ) {
-                                Text(
-                                    event.title,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier
-                                        .padding(bottom = 12.dp)
-                                        .fillMaxWidth(0.9f)
-                                )
-                                Icon(
-                                    Icons.AutoMirrored.Rounded.ArrowForward,
-                                    contentDescription = StringRes.get("view_issue_details")
-                                )
+                            TrenitaliaEventRow(event) {
+                                chosenEvent = event
+                                showSheet = true
                             }
                             HorizontalDivider(modifier = Modifier.padding(bottom = 12.dp))
                         }
                     }
                 }
+
+                // region list
                 item {
                     Text(
                         StringRes.get("regions"),
-                        fontSize = 20.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(vertical = 12.dp)
                     )
@@ -146,6 +126,23 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                             ) { navigateToRegionDetails(regionInfo) }
                         }
                     }
+                }
+
+                // past/future events
+                item {
+                    Text(
+                        StringRes.get("past_future_events"),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding( bottom = 12.dp, top = 48.dp )
+                    )
+                }
+                items (info!!.extraEvents) {
+                    TrenitaliaEventRow(it) {
+                        chosenEvent = it
+                        showSheet = true
+                    }
+                    HorizontalDivider( modifier = Modifier.padding( bottom = 12.dp ) )
                 }
             }
             if (showSheet) {
@@ -161,11 +158,20 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                             fontSize = 24.sp,
                             fontWeight = FontWeight.SemiBold
                         )
+                        if(chosenEvent?.date != null) {
+                            Text(
+                                chosenEvent?.date ?: "",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Light,
+                                modifier = Modifier.padding( vertical = 8.dp )
+                            )
+                        }
                         HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
                         LazyColumn {
                             items(chosenEvent?.details ?: listOf()) { detail ->
                                 if (detail.contains("Aggiornamento - ore") ||
-                                    detail.contains("Inizio evento - ore")
+                                    detail.contains("Inizio evento - ore") ||
+                                    detail.contains("Fine evento - ore")
                                 ) {
                                     Text(
                                         detail,

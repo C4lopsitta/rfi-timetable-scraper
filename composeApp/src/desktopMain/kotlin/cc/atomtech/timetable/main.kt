@@ -20,6 +20,9 @@ actual fun storePreferences(): DataStore<Preferences> {
     }
 }
 
+@Composable actual fun isNetworkAvailable(): Boolean {
+    return true
+}
 
 fun main() = application {
     Window(
@@ -27,6 +30,6 @@ fun main() = application {
         title = "Timetables"
     ) {
         val navController = rememberNavController()
-        Main(navController, isDesktop = true)
+        Main(navController, isDesktop = true, androidContext = this)
     }
 }

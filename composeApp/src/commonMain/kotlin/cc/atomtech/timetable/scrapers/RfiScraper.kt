@@ -3,10 +3,10 @@ package cc.atomtech.timetable.scrapers
 import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.models.Station
-import cc.atomtech.timetable.models.Stop
 import cc.atomtech.timetable.models.TimetableData
 import cc.atomtech.timetable.models.TimetableState
 import cc.atomtech.timetable.models.TrainData
+import cc.atomtech.timetable.models.TrainStop
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.select.Elements
@@ -107,7 +107,7 @@ object RfiScraper {
                     val delay =
                         tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
 
-                    val stops = arrayListOf<Stop>()
+                    val stops = arrayListOf<TrainStop>()
                     var moreInformationString = ""
 
                     if(tr.getElementById(HtmlTagsIdNames.DETAILS_BUTTON_FIELD)?.children()?.size != 0) {
@@ -125,7 +125,13 @@ object RfiScraper {
                         if(nextStationsString.isNotEmpty()) {
                             nextStationsString.split("FERMA A: ")[1]
                             nextStationsString.split(" - ").forEach { stop ->
-                                stops.add(Stop(stop.split(" (")[0].removePrefix("FERMA A: ").stationName(), stop.split("(")[1].removeSuffix(")")))
+                                stops.add(
+                                    TrainStop(
+                                        name = stop.split(" (")[0].removePrefix("FERMA A: ").stationName(),
+                                        time = stop.split("(")[1].removeSuffix(")"),
+                                        isCurrentStop = false
+                                    )
+                                )
                             }
                         }
                     }

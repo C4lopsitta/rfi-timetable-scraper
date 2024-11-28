@@ -36,12 +36,14 @@ import cc.atomtech.timetable.components.AppBar
 import cc.atomtech.timetable.components.InfoLavoriTabBar
 import cc.atomtech.timetable.scrapers.RfiScraper
 import cc.atomtech.timetable.scrapers.RssFeeds
+import cc.atomtech.timetable.views.DeviceOffline
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
 
-@Composable
-expect fun storePreferences(): DataStore<Preferences>
+@Composable expect fun storePreferences(): DataStore<Preferences>
+
+@Composable expect fun isNetworkAvailable(): Boolean
 
 
 fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
@@ -89,7 +91,6 @@ fun Main(navController: NavHostController,
         try {
             loading = true
             if(isNewStationSet) {
-                println("Full reload")
                 timetable = null
                 timetable = RfiScraper.getStationTimetable(stationId)
             } else {
@@ -99,9 +100,6 @@ fun Main(navController: NavHostController,
             isNewStationSet = false
 
             val feed = RssFeeds.fetchRss(RssFeeds.allRegionsLive)
-            for (item in RssFeeds.parseFeed(feed)) {
-                println(item)
-            }
 
         } catch (_: CancellationException) {
         } catch (e: Exception) {
@@ -133,28 +131,6 @@ fun Main(navController: NavHostController,
 
     val colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
 
-//    if(error != null) {
-//        BasicAlertDialog(
-//            onDismissRequest = {
-//                error = null
-//            },
-//        ) {
-//            Card () {
-//                Column (
-//                    modifier = Modifier.padding( 16.dp )
-//                ) {
-//                    Text(Strings.get("error_data_fetch"), fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-//                    Text(error.toString())
-//                    ElevatedButton(
-//                        content = { Text("Ok") },
-//                        onClick = {
-//                            error = null
-//                        }
-//                    )
-//                }
-//            }
-//        }
-//    }
     MaterialTheme (
         colorScheme = colorScheme
     ) {
@@ -200,30 +176,36 @@ fun Main(navController: NavHostController,
                         NavRail(navController = navController) { reloadTrigger = !reloadTrigger }
                     }
                 }) {
-                NavigationBodyHost(
-                    navController = navController,
-                    isDesktop = isDesktop,
-                    isLoading = loading,
-                    timetable = timetable,
-                    stations = stations,
-                    tabIndex = tabIndex,
-                    favouriteStations = favouriteStations,
-                    searchSuggestions = searchSuggestions,
-                    setStationId = { newId ->
-                        stationId = newId
-                        navController.popBackStack()
-                        isNewStationSet = true
-                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                            preferences.setStationId(newId)
+//                if(isNetworkAvailable()) {
+//                    DeviceOffline {
+//                        reloadTrigger = !reloadTrigger
+//                    }
+//                } else {
+                    NavigationBodyHost(
+                        navController = navController,
+                        isDesktop = isDesktop,
+                        isLoading = loading,
+                        timetable = timetable,
+                        stations = stations,
+                        tabIndex = tabIndex,
+                        favouriteStations = favouriteStations,
+                        searchSuggestions = searchSuggestions,
+                        setStationId = { newId ->
+                            stationId = newId
+                            navController.popBackStack()
+                            isNewStationSet = true
+                            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                                preferences.setStationId(newId)
+                            }
+                        },
+                        updateFavourites = { favourites: String ->
+                            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                                preferences.setFavouriteStations(favourites)
+                            }
                         }
-                    },
-                    updateFavourites = { favourites: String ->
-                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                            preferences.setFavouriteStations(favourites)
-                        }
-                    }
-                )
-            }
+                    )
+                }
+//            }
         }
     }
 }

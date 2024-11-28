@@ -28,17 +28,6 @@ import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.StringRes
 
-data class Stop(val stationName: String, val time: String?) {
-    @Composable
-    fun build() {
-        Column (
-            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
-        ) {
-            Text(stationName, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-            Text(time ?: "")
-        }
-    }
-}
 
 class TrainData(
     val operator: Operator,
@@ -49,7 +38,7 @@ class TrainData(
     val delay: Int,
     val station: String? = null,
     val time: String? = null,
-    val stops: List<Stop>,
+    val stops: List<TrainStop>,
     val details: String? = null) {
 
     fun getDelayString(addSpace: Boolean = true): String? {
