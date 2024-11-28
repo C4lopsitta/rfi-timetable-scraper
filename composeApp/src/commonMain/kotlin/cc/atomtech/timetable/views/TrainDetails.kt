@@ -1,5 +1,8 @@
 package cc.atomtech.timetable.views
 
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,18 +11,30 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.components.TrainStopList
 import cc.atomtech.timetable.enumerations.CurrentStationType
+import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.models.DetailedTrainData
+import cc.atomtech.timetable.scrapers.TrenitaliaScraper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 @Composable
 fun DataPairRow(
@@ -66,7 +81,7 @@ fun TrainDetails(trainData: DetailedTrainData,
         if(trainData.currentStationType == CurrentStationType.STOP) {
             Text(
                 StringRes.get("from"),
-                modifier = Modifier.padding( top = 12.dp ).fillMaxWidth(),
+                modifier = Modifier.padding( top = 4.dp ).fillMaxWidth(),
 //                textAlign = TextAlign.End
             )
             Text(
@@ -122,11 +137,10 @@ fun TrainDetails(trainData: DetailedTrainData,
 
         DataPairRow(
             StringRes.get("operator"),
-            trainData.operator,
+            trainData.operator.toString(),
             StringRes.get("service"),
-            trainData.category
+            trainData.category.toString()
         )
-
 
         if(trainData.details != null) {
             if(trainData.details.isNotEmpty()) {
@@ -136,7 +150,47 @@ fun TrainDetails(trainData: DetailedTrainData,
             }
         }
 
+        if(trainData.operator == Operator.TRENITALIA) {
+            val urlHandler = LocalUriHandler.current
+
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = LocalIndication.current,
+                        role  = Role.Button,
+                        onClickLabel = StringRes.get("click_for_details"),
+                        onClick = {
+                            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                                val availableTrains = TrenitaliaScraper.fetchTrainByNumber(trainData.number)
+                                var url = "https://www.viaggiatreno.it/"
+
+                                if(availableTrains.size == 1) {
+                                    url = TrenitaliaScraper.getViaggiaTrenoUrl(availableTrains.first())
+                                } else {
+                                    var train = availableTrains.first()
+                                    availableTrains.forEach { t ->
+                                        if(t.departureTime.toLong() > train.departureTime.toLong()) train = t
+                                    }
+                                    url = TrenitaliaScraper.getViaggiaTrenoUrl(train)
+                                }
+
+                                urlHandler.openUri(url)
+                            }
+                        }
+                    )
+            ) {
+                Text(StringRes.get("open_in_viaggiatreno"))
+                Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = StringRes.get("open_in_browser"))
+            }
+        }
+
         if(trainData.stops.size > 1) {
+
             HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
             Text(StringRes.get("next_stops"))
             TrainStopList(
