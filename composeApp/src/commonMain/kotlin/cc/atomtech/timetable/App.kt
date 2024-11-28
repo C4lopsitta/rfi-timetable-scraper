@@ -1,6 +1,7 @@
 package cc.atomtech.timetable
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -54,7 +55,8 @@ fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
 @Composable
 @Preview
 fun Main(navController: NavHostController,
-         isDesktop: Boolean = false) {
+         isDesktop: Boolean = false,
+         colorScheme: ColorScheme? = null) {
     val preferences = AppPreferences(storePreferences())
 
     var stationId by remember { mutableStateOf(1728) }
@@ -129,10 +131,13 @@ fun Main(navController: NavHostController,
         }
     }
 
-    val colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
+    val actualColorScheme = if(colorScheme == null) {
+        if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
+    } else colorScheme
+
 
     MaterialTheme (
-        colorScheme = colorScheme
+        colorScheme = actualColorScheme
     ) {
         Scaffold (
             topBar = {
