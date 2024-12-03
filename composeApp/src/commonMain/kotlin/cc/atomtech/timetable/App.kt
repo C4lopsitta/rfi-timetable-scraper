@@ -197,10 +197,10 @@ fun Main(navController: NavHostController,
                         searchSuggestions = searchSuggestions,
                         setStationId = { newId ->
                             stationId = newId
-                            navController.popBackStack()
                             isNewStationSet = true
-                            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                            CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
                                 preferences.setStationId(newId)
+                                navController.navigate("departures")
                             }
                         },
                         updateFavourites = { favourites: String ->
