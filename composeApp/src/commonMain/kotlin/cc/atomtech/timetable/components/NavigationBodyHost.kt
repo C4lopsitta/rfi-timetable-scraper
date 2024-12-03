@@ -22,6 +22,8 @@ import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.compose.navigation
+import cc.atomtech.timetable.Routes
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.DesktopSearch
 import cc.atomtech.timetable.views.FavouriteStations
@@ -109,10 +111,20 @@ fun NavigationBodyHost(
         }
         NavHost(
             navController = navController,
-            startDestination = "departures",
+            startDestination = Routes.DEPARTURES,
             modifier = Modifier.padding(start = 12.dp)
         ) {
+            //region newRoutes
+            navigation(
+                route = Routes.STATION,
+                startDestination = Routes.DEPARTURES
+            ) {
+                composable( route = Routes.DEPARTURES ) {  }
+            }
 
+            //endregion newRoutes
+
+            //region oldRoutes
             composable("departures") {
                 Timetable(
                     trainList = timetable?.uiState?.value?.departures,
@@ -175,6 +187,7 @@ fun NavigationBodyHost(
                 TrainDetails(detailViewSelectedTrain!!, isArrival)
             }
             composable("info") { AppInfo() }
+            //endregion oldRoutes
         }
     }
 }
