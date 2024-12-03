@@ -22,7 +22,7 @@ import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.compose.navigation
+import androidx.navigation.navigation
 import cc.atomtech.timetable.Routes
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.DesktopSearch
@@ -120,7 +120,26 @@ fun NavigationBodyHost(
                 startDestination = Routes.DEPARTURES
             ) {
                 composable( route = Routes.DEPARTURES ) {  }
+                composable( route = Routes.ARRIVALS ) {  }
+                composable( route = Routes.STATION_INFO ) {  }
+                composable( route = Routes.SCHEDULE ) {  }
+                composable( route = Routes.TRAIN_DETAILS ) {  }
             }
+
+            navigation(
+                route = Routes.INFOLAVORI,
+                startDestination = Routes.TRENITALIA
+            ) {
+                composable( route = Routes.TRENITALIA ) {  }
+                composable( route = Routes.LIVE ) {  }
+                composable( route = Routes.NOTICES ) {  }
+            }
+
+            composable( route = Routes.SEARCH ) {  }
+            composable( route = Routes.FAVOURITES ) {  }
+            composable( route = Routes.SETTINGS ) {  }
+            composable( route = Routes.APP_INFO )  {  }
+
 
             //endregion newRoutes
 

@@ -5,6 +5,7 @@ object Routes {
     const val ARRIVALS = "station/arrivals"
     const val SCHEDULE = "station/schedule"
     const val STATION_INFO = "station/info"
+    const val TRAIN_DETAILS = "station/train"
     const val STATION = "station"
     const val TRENITALIA = "infolavori/trenitalia"
     const val LIVE = "infolavori/live"
@@ -12,6 +13,6 @@ object Routes {
     const val INFOLAVORI = "infolavori"
     const val SEARCH = "search"
     const val FAVOURITES = "favourites"
-    const val ROOT = "settings"
-    const val APP_INFO = "settings/info"
+    const val SETTINGS = "settings"
+    const val APP_INFO = "info"
 }
