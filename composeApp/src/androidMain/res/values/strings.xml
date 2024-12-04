@@ -50,7 +50,7 @@
     <string name="works_and_service_modifications">View Works and Service Modifications</string>
     <string name="no_announcements">No announcements</string>
     <string name="no_announcements_desc">There are no issues currently in %1$s!</string>
-    <string name="past_future_events">Future and Past Events</string>
+    <string name="past_future_events">All Events</string>
     <string name="offline">You are offline</string>
     <string name="from">From</string>
     <string name="on_time">On Time</string>
@@ -77,5 +77,6 @@
     <string name="setting_preload_notices">Preload Notices</string>
     <string name="setting_preload_notices_desc">Immediately load Notices, before opening the Notices tab, to have them immediately ready.</string>
     <string name="setting_cache_search_results">Cache Search Results</string>
-    <string name="setting_cache_search_results_desc">When enabled, the app keeps a local copy of the search options to provide a faster searching experience.\\nIf disabled, expect to wait a couple of seconds before being able to search.</string>
+    <string name="setting_cache_search_results_desc">When enabled, the app keeps a local copy of the search options to provide a faster searching experience.\nIf disabled, expect to wait a couple of seconds before being able to search.</string>
+    <string name="feature_not_available">Not Available</string>
 </resources>

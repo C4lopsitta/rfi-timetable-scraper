@@ -22,6 +22,26 @@ class AppPreferences(
         private const val STATION_LIST_JSON = "STATION_LIST_JSON"
         private const val RELOAD_DELAY = "RELOAD_DELAY"
         private const val USE_NEW_UI = "USE_NEW_UI"
+        private const val PRELOAD_NOTICES = "PRELOAD_NOTICES"
+    }
+
+    fun getPreloadNotices(): Flow<Boolean> {
+        return preferences.data.map {
+            it[booleanPreferencesKey(PRELOAD_NOTICES)] ?: true
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setPreloadNotices(value: Boolean) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[booleanPreferencesKey(PRELOAD_NOTICES)] = value
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getUseNewUi(): Flow<Boolean> {

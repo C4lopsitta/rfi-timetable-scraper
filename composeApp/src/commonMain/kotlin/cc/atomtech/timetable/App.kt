@@ -1,5 +1,6 @@
 package cc.atomtech.timetable
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +46,6 @@ const val preferencesFile = "timetables-prefs.preferences_pb"
 @Composable expect fun storePreferences(): DataStore<Preferences>
 
 @Composable expect fun isNetworkAvailable(): Boolean
-
 
 fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
     PreferenceDataStoreFactory.createWithPath(
@@ -216,4 +216,3 @@ fun Main(navController: NavHostController,
         }
     }
 }
-

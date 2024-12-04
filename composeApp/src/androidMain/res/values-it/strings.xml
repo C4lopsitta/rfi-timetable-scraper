@@ -49,7 +49,7 @@
     <string name="works_and_service_modifications">Visualizza Lavori e Modifiche al Servizio</string>
     <string name="no_announcements">Nessun annuncio</string>
     <string name="no_announcements_desc">Non ci sono problemi al momento in %1$s!</string>
-    <string name="past_future_events">Eventi Passati e Futuri</string>
+    <string name="past_future_events">Tutti gli Eventi</string>
     <string name="offline">Sei offline</string>
     <string name="from">In arrivo da</string>
     <string name="on_time">In Orario</string>
@@ -68,7 +68,7 @@
     <string name="nav_favourites">Preferiti</string>
     <string name="nav_home">Home</string>
     <string name="nav_icon_home">Icona Home</string>
-    <string name="setting_refresh">Auto aggiornamento dati</string>
+    <string name="setting_refresh">Aggiornamento dati automatico</string>
     <string name="setting_refresh_desc">Imposta il tempo (in minuti) tra ogni aggiornamento automatico dei dati di stazione.</string>
     <string name="never">Mai</string>
     <string name="setting_new_ui">Usa la nuova UI</string>
@@ -77,4 +77,5 @@
     <string name="setting_preload_notices_desc">Carica gli Avvisi immediatamente all\'avvio dell\'app, prima dell\'apertura della sezione \"Avvisi\".</string>
     <string name="setting_cache_search_results">Salva i Risultati di Ricerca</string>
     <string name="setting_cache_search_results_desc">Se abilitato, l\'app salva una copia locale dei risultati di ricerca per offirire un\'esperienza migliore. Quando è disabilitato, bisognerà attendere il completo caricamento dei risultati prima di poter cercare una stazione.</string>
+    <string name="feature_not_available">Non Disponibile</string>
 </resources>
