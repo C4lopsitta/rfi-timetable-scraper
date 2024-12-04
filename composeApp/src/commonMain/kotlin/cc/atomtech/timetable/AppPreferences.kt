@@ -19,6 +19,26 @@ class AppPreferences(
         private const val STATION_ID = "STATION_ID"
         private const val FAVOURITE_STATIONS = "FAVOURITE_STATIONS"
         private const val STATION_LIST_JSON = "STATION_LIST_JSON"
+        private const val RELOAD_DELAY = "RELOAD_DELAY"
+    }
+
+    fun getReloadDelay(): Flow<Int> {
+        return preferences.data.map {
+            it[intPreferencesKey(RELOAD_DELAY)] ?: 1
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setReloadDelay(reloadDelay: Int) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[intPreferencesKey(RELOAD_DELAY)] = reloadDelay
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getStationId(): Flow<Int> {

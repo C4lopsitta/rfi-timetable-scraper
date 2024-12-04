@@ -70,7 +70,7 @@ fun Main(navController: NavHostController,
     var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
-    val reloaderMinutes = 5
+    var reloaderMinutes by remember { mutableStateOf(5) }
     var isNewStationSet by remember { mutableStateOf(true) }
     var timetableRefresher: Job? = null
 
@@ -122,6 +122,8 @@ fun Main(navController: NavHostController,
             }
         } finally {
             timetableRefresher?.cancel()
+            // stores how many 5 minutes it has to wait, so multiply by 5 to get actual value, if 0 skip reload
+            reloaderMinutes = preferences.getReloadDelay().first() * 5
             if(reloaderMinutes > 0) {
                 timetableRefresher = CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
                     delay((reloaderMinutes * 60 * 1000).toLong())
@@ -195,6 +197,7 @@ fun Main(navController: NavHostController,
                         tabIndex = tabIndex,
                         favouriteStations = favouriteStations,
                         searchSuggestions = searchSuggestions,
+                        preferences = preferences,
                         setStationId = { newId ->
                             stationId = newId
                             isNewStationSet = true

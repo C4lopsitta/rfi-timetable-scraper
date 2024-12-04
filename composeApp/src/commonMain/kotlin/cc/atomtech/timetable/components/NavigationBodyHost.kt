@@ -38,6 +38,7 @@ import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.navigation
+import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.Routes
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.DesktopSearch
@@ -60,6 +61,7 @@ fun NavigationBodyHost(
     tabIndex: Int,
     timetable: TimetableState?,
     stations: Stations,
+    preferences: AppPreferences,
     favouriteStations: Stations,
     searchSuggestions: List<Station>?,
     setStationId: (Int) -> Unit,
@@ -220,7 +222,7 @@ fun NavigationBodyHost(
             }
 
             composable("settings") {
-                Settings()
+                Settings(preferences = preferences)
             }
 
             composable("details/{isArrival}") {

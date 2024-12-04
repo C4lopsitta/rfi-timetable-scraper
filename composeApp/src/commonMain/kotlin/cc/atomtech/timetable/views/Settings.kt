@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +19,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +30,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.AppPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,11 +45,10 @@ private fun SettingSliderItem(
     subTitle: String? = null,
     steps: Int,
     range: ClosedFloatingPointRange<Float>,
-    initialValue: Float,
+    value: Float,
     stringValues: List<String>? = null,
     onValueChange: (Float) -> Unit
 ) {
-    var localValue by remember { mutableStateOf(initialValue) }
     Column (
         modifier = Modifier.fillMaxWidth().padding( vertical = 8.dp )
     ) {
@@ -57,15 +60,14 @@ private fun SettingSliderItem(
         ) {
             Text(
                 if(stringValues != null) {
-                    stringValues[localValue.roundToInt()]
-                } else { "${localValue.roundToInt()}" },
+                    stringValues[value.roundToInt()]
+                } else { "${value.roundToInt()}" },
                 modifier = Modifier.padding( horizontal = 8.dp )
             )
             Slider(
                 modifier = Modifier.fillMaxWidth(),
-                value = localValue,
+                value = value,
                 onValueChange = {
-                    localValue = it
                     onValueChange(it)
                 },
                 steps = steps,
@@ -132,9 +134,23 @@ private fun SettingToggleItem(
 
 }
 
+fun updateValue(lambda: suspend () -> Unit) {
+    CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+        lambda()
+    }
+}
 
 @Composable
-fun Settings() {
+fun Settings(
+    preferences: AppPreferences
+) {
+    var reloadDelayValue by remember { mutableStateOf(1f) }
+
+    LaunchedEffect(Unit) {
+        reloadDelayValue = preferences.getReloadDelay().first().toFloat()
+    }
+
+
     LazyColumn (
         modifier = Modifier.fillMaxSize().padding( end = 12.dp )
     ) {
@@ -152,10 +168,11 @@ fun Settings() {
                 steps = 6,
                 range = 0f..6f,
                 stringValues = listOf("Never", "5min", "10min", "15min", "20min", "25min", "30min"),
-                initialValue = 1f
-            ) {
-
-            }
+                value = reloadDelayValue
+            ) { updateValue {
+                reloadDelayValue = it
+                preferences.setReloadDelay(it.roundToInt())
+            } }
             HorizontalDivider()
         }
         item {
