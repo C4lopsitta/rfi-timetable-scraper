@@ -1,14 +1,22 @@
 package cc.atomtech.timetable.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Campaign
+import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Campaign
+import androidx.compose.material.icons.rounded.Engineering
 import androidx.compose.material.icons.rounded.LocationCity
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -40,139 +48,87 @@ private fun HighlightedIcon(icon: @Composable () -> Unit, highlighed: @Composabl
 @Composable
 fun NavBar(navController: NavHostController) {
     NavigationBar {
-        // region newRoutes
-        NavigationBarItem(
-            label = { Text(StringRes.get("nav_station")) },
+        // region oldRoutes
+        NavigationBarItem(label = { Text(StringRes.get("nav_departures")) },
             icon = {
-                val isCurrentRoute = isCurrentRoute(navController, Routes.STATION)
+                val isCurrentRoute = isCurrentRoute(navController, "departures")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.LocationCity, contentDescription = StringRes.get("nav_icon_station")) },
-                    { Icon(Icons.Filled.LocationCity, contentDescription = StringRes.get("nav_icon_station")) },
+                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
+                    { Icon(Icons.Filled.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
                     isCurrentRoute
                 )
             },
-            selected = isCurrentRoute(navController, Routes.STATION),
+            selected = isCurrentRoute(navController, "departures"),
             onClick = {
-                navController.navigate(Routes.STATION) {
+                navController.navigate("departures")  {
                     popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                 }
-            }
-        )
-        NavigationBarItem(
-            label = { Text(StringRes.get("nav_notices")) },
+            })
+        NavigationBarItem(label = { Text(StringRes.get("nav_arrivals")) },
             icon = {
-                val isCurrentRoute = isCurrentRoute(navController, Routes.INFOLAVORI)
+                val isCurrentRoute = isCurrentRoute(navController, "arrivals")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Campaign, contentDescription = StringRes.get("nav_icon_notices")) },
-                    { Icon(Icons.Filled.Campaign, contentDescription = StringRes.get("nav_icon_notices")) },
+                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
+                    { Icon(Icons.Filled.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
                     isCurrentRoute
                 )
             },
-            selected = isCurrentRoute(navController, Routes.INFOLAVORI),
+            selected = isCurrentRoute(navController, "arrivals"),
             onClick = {
-                navController.navigate(Routes.INFOLAVORI)  {
+                navController.navigate("arrivals") {
                     popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                 }
-            }
-        )
-        NavigationBarItem(
-            label = { Text(StringRes.get("nav_search")) },
+            })
+        NavigationBarItem(label = { Text(StringRes.get("nav_favourites")) },
             icon = {
-                val isCurrentRoute = isCurrentRoute(navController, Routes.SEARCH)
+                val isCurrentRoute = isCurrentRoute(navController, "favourites")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Search, contentDescription = StringRes.get("nav_icon_search")) },
-                    { Icon(Icons.Filled.Search, contentDescription = StringRes.get("nav_icon_search")) },
+                    { Icon(Icons.Rounded.Star, contentDescription = StringRes.get("nav_favourites")) },
+                    { Icon(Icons.Filled.Star, contentDescription = StringRes.get("nav_favourites")) },
                     isCurrentRoute
                 )
             },
-            selected = isCurrentRoute(navController, Routes.SEARCH),
+            selected = isCurrentRoute(navController, "favourites"),
             onClick = {
-                navController.navigate(Routes.SEARCH) {
+                navController.navigate("favourites") {
                     popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                 }
-            }
-        )
+            })
+        NavigationBarItem(label = { Text(StringRes.get("nav_notices")) },
+            icon = {
+                val isCurrentRoute = isCurrentRoute(navController, "infolavori")
+                HighlightedIcon(
+                    { Icon(Icons.Rounded.Engineering, contentDescription = StringRes.get("nav_icon_notices")) },
+                    { Icon(Icons.Filled.Engineering, contentDescription = StringRes.get("nav_icon_notices")) },
+                    isCurrentRoute
+                )
+            },
+            selected = isCurrentRoute(navController, "infolavori"),
+            onClick = {
+                navController.navigate("infolavori") {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            })
         NavigationBarItem(
             label = { Text(StringRes.get("nav_settings")) },
-            icon = {
-                val isCurrentRoute = isCurrentRoute(navController, Routes.SETTINGS)
-                HighlightedIcon(
-                    { Icon(Icons.Rounded.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
-                    { Icon(Icons.Filled.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
-                    isCurrentRoute
-                )
-            },
-            selected = isCurrentRoute(navController, Routes.SETTINGS),
+            icon = { Icon(Icons.Rounded.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
+            selected = isCurrentRoute(navController, "settings"),
             onClick = {
-                navController.navigate(Routes.SETTINGS) {
+                navController.navigate("settings") {
                     popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                 }
             }
         )
-
-        // endregion newRoutes
-
-        // region oldRoutes
-//        NavigationBarItem(label = { Text(StringRes.get("nav_departures")) },
-//            icon = {
-//                val isCurrentRoute = isCurrentRoute(navController, "departures")
-//                HighlightedIcon(
-//                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
-//                    { Icon(Icons.Filled.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
-//                    isCurrentRoute
-//                )
-//            },
-//            selected = isCurrentRoute(navController, "departures"),
-//            onClick = {
-//                navController.navigate("departures")
-//            })
-//        NavigationBarItem(label = { Text(StringRes.get("nav_arrivals")) },
-//            icon = {
-//                val isCurrentRoute = isCurrentRoute(navController, "arrivals")
-//                HighlightedIcon(
-//                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
-//                    { Icon(Icons.Filled.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
-//                    isCurrentRoute
-//                )
-//            },
-//            selected = isCurrentRoute(navController, "arrivals"),
-//            onClick = {
-//                navController.navigate("arrivals")
-//            })
-//        NavigationBarItem(label = { Text(StringRes.get("nav_favourites")) },
-//            icon = {
-//                val isCurrentRoute = isCurrentRoute(navController, "favourites")
-//                HighlightedIcon(
-//                    { Icon(Icons.Rounded.Star, contentDescription = StringRes.get("nav_favourites")) },
-//                    { Icon(Icons.Filled.Star, contentDescription = StringRes.get("nav_favourites")) },
-//                    isCurrentRoute
-//                )
-//            },
-//            selected = isCurrentRoute(navController, "favourites"),
-//            onClick = {
-//                navController.navigate("favourites")
-//            })
-//        NavigationBarItem(label = { Text(StringRes.get("nav_works")) },
-//            icon = {
-//                val isCurrentRoute = isCurrentRoute(navController, "infolavori")
-//                HighlightedIcon(
-//                    { Icon(Icons.Rounded.Engineering, contentDescription = StringRes.get("nav_works")) },
-//                    { Icon(Icons.Filled.Engineering, contentDescription = StringRes.get("nav_works")) },
-//                    isCurrentRoute
-//                )
-//            },
-//            selected = isCurrentRoute(navController, "infolavori"),
-//            onClick = {
-//                navController.navigate("infolavori")
-//            })
         // endregion oldRoutes
     }
 }

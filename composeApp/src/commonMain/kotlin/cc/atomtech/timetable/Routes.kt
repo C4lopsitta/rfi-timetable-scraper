@@ -1,6 +1,7 @@
 package cc.atomtech.timetable
 
 object Routes {
+    const val HOME = "home"
     const val DEPARTURES = "departures"
     const val ARRIVALS = "arrivals"
     const val SCHEDULE = "schedule"

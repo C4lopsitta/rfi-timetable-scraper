@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -19,6 +18,7 @@ class AppPreferences(
     companion object {
         private const val STATION_ID = "STATION_ID"
         private const val FAVOURITE_STATIONS = "FAVOURITE_STATIONS"
+        private const val STATION_LIST_JSON = "STATION_LIST_JSON"
     }
 
     fun getStationId(): Flow<Int> {
