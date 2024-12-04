@@ -68,4 +68,13 @@
     <string name="nav_favourites">Preferiti</string>
     <string name="nav_home">Home</string>
     <string name="nav_icon_home">Icona Home</string>
+    <string name="setting_refresh">Auto aggiornamento dati</string>
+    <string name="setting_refresh_desc">Imposta il tempo (in minuti) tra ogni aggiornamento automatico dei dati di stazione.</string>
+    <string name="never">Mai</string>
+    <string name="setting_new_ui">Usa la nuova UI</string>
+    <string name="setting_new_ui_desc">Usa la nuova UI in fase di sviluppo. Richiede la riapertura completa dell\'app per essere applicata.</string>
+    <string name="setting_preload_notices">Carica Avvisi all\'Avvio</string>
+    <string name="setting_preload_notices_desc">Carica gli Avvisi immediatamente all\'avvio dell\'app, prima dell\'apertura della sezione \"Avvisi\".</string>
+    <string name="setting_cache_search_results">Salva i Risultati di Ricerca</string>
+    <string name="setting_cache_search_results_desc">Se abilitato, l\'app salva una copia locale dei risultati di ricerca per offirire un\'esperienza migliore. Quando è disabilitato, bisognerà attendere il completo caricamento dei risultati prima di poter cercare una stazione.</string>
 </resources>

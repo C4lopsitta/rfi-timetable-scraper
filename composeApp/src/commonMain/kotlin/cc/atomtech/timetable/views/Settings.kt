@@ -18,6 +18,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.AppPreferences
@@ -37,6 +37,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import cc.atomtech.timetable.StringRes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -145,9 +146,11 @@ fun Settings(
     preferences: AppPreferences
 ) {
     var reloadDelayValue by remember { mutableStateOf(1f) }
+    var useNewUi by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         reloadDelayValue = preferences.getReloadDelay().first().toFloat()
+        useNewUi = preferences.getUseNewUi().first()
     }
 
 
@@ -155,19 +158,12 @@ fun Settings(
         modifier = Modifier.fillMaxSize().padding( end = 12.dp )
     ) {
         item {
-            Text(
-                "Bear in mind, these settings are dummies right now!\nRicorda che queste impostazioni non funzionano per ora!",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-        item {
             SettingSliderItem(
-                title = "Refresh time",
-                subTitle = "Set the time (in minutes) between each refresh",
+                title = StringRes.get("setting_refresh"),
+                subTitle = StringRes.get("setting_refresh_desc"),
                 steps = 6,
                 range = 0f..6f,
-                stringValues = listOf("Never", "5min", "10min", "15min", "20min", "25min", "30min"),
+                stringValues = listOf(StringRes.get("never"), "5min", "10min", "15min", "20min", "25min", "30min"),
                 value = reloadDelayValue
             ) { updateValue {
                 reloadDelayValue = it
@@ -177,9 +173,20 @@ fun Settings(
         }
         item {
             SettingToggleItem(
-                title = "Use new UI",
+                title = StringRes.get("setting_new_ui"),
                 isBetaFeature = true,
-                subTitle = "Use the new UI. Requires restart to be applied.",
+                subTitle = StringRes.get("setting_new_ui_desc"),
+                initialValue = useNewUi
+            ) { updateValue {
+                useNewUi = it
+                preferences.setUseNewUi(it)
+            } }
+            HorizontalDivider()
+        }
+        item {
+            SettingToggleItem(
+                title = StringRes.get("setting_preload_notices"),
+                subTitle = StringRes.get("setting_preload_notices_desc"),
                 initialValue = false
             ) {
 
@@ -188,18 +195,8 @@ fun Settings(
         }
         item {
             SettingToggleItem(
-                title = "Preload Notices",
-                subTitle = "Immediately load Notices, before opening the Notices tab, to have them immediately ready",
-                initialValue = false
-            ) {
-
-            }
-            HorizontalDivider()
-        }
-        item {
-            SettingToggleItem(
-                title = "Cache search results",
-                subTitle = "When enabled, the app keeps a local copy of the search options to provide a faster searching experience.\nIf disabled, expect to wait a couple of seconds before being able to search.",
+                title = StringRes.get("setting_cache_search_results"),
+                subTitle = StringRes.get("setting_cache_search_results_desc"),
                 initialValue = true
             ) {
 

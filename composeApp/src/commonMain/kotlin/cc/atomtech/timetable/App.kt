@@ -56,9 +56,8 @@ fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
 @Preview
 fun Main(navController: NavHostController,
          isDesktop: Boolean = false,
+         preferences: AppPreferences,
          colorScheme: ColorScheme? = null) {
-    val preferences = AppPreferences(storePreferences())
-
     var stationId by remember { mutableStateOf(1728) }
     var favouriteStations by remember { mutableStateOf<Stations>(Stations(arrayListOf())) }
 

@@ -2,6 +2,7 @@ package cc.atomtech.timetable
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -20,6 +21,26 @@ class AppPreferences(
         private const val FAVOURITE_STATIONS = "FAVOURITE_STATIONS"
         private const val STATION_LIST_JSON = "STATION_LIST_JSON"
         private const val RELOAD_DELAY = "RELOAD_DELAY"
+        private const val USE_NEW_UI = "USE_NEW_UI"
+    }
+
+    fun getUseNewUi(): Flow<Boolean> {
+        return preferences.data.map {
+            it[booleanPreferencesKey(USE_NEW_UI)] ?: false
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setUseNewUi(value: Boolean) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[booleanPreferencesKey(USE_NEW_UI)] = value
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getReloadDelay(): Flow<Int> {
