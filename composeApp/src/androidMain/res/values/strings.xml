@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Timetables</string>
-    <string name="nav_departures">Departures</string>
-    <string name="nav_arrivals">Arrivals</string>
-    <string name="nav_favourites">Favourites</string>
-    <string name="nav_works">Rail Works</string>
     <string name="error_data_fetch">Error fetching data</string>
     <string name="top_strikes_maintenances">Strikes and Works</string>
     <string name="station_search_placeholder">Search a Station…</string>
@@ -60,4 +56,12 @@
     <string name="on_time">On Time</string>
     <string name="detail_stop_delayed_string">%1$s - (Scheduled was %2$s)</string>
     <string name="open_in_viaggiatreno">Open In ViaggiaTreno</string>
+    <string name="nav_station">Station</string>
+    <string name="nav_icon_station">Station Icon</string>
+    <string name="nav_notices">Notices</string>
+    <string name="nav_icon_notices">Notices Icon</string>
+    <string name="nav_icon_search">Search Icon</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_icon_settings">Settings Icon</string>
+    <string name="nav_search">Search</string>
 </resources>
