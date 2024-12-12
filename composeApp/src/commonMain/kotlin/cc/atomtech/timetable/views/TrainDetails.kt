@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.components.TrainStopList
+import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.models.DetailedTrainData
@@ -151,7 +152,7 @@ fun TrainDetails(trainData: DetailedTrainData,
             }
         }
 
-        if(trainData.operator == Operator.TRENITALIA) {
+        if(trainData.operator == Operator.TRENITALIA && trainData.category != Category.BUS) {
             val urlHandler = LocalUriHandler.current
 
             HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
