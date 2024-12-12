@@ -35,7 +35,8 @@ enum class Category {
     FR,
     FAG,
     FB,
-    ITALO;
+    ITALO,
+    STORICO;
 
     companion object {
         fun fromString(category: String?, operatorName: String?): Category {
@@ -93,6 +94,8 @@ enum class Category {
                 return MALP_EXP
             if(category.contains("EUROCITY"))
                 return EUROCITY
+            if(category.contains("TRENO STORICO"))
+                return STORICO
             if(operatorName == "FRECCIAROSSA")
                 return FR
             if(operatorName == "FRECCIARGENTO")
@@ -141,6 +144,7 @@ enum class Category {
             SFS_MI_12 -> "S12"
             SFS_MI_13 -> "S13"
             SFS_MI_14 -> "S14"
+            STORICO -> "ST"
             else -> ""
         }
     }
@@ -181,6 +185,7 @@ enum class Category {
             SFS_MI_12 -> "Suburbano 12"
             SFS_MI_13 -> "Suburbano 13"
             SFS_MI_14 -> "Suburbano 14"
+            STORICO -> "Storico"
             else -> "Undefined"
         }
     }

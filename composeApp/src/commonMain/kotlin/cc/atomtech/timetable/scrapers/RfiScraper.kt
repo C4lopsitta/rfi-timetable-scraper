@@ -88,6 +88,7 @@ object RfiScraper {
                     } catch (e: Exception) {
                         operator = "UNDEFINED"
                     }
+
                     try {
                         category =
                             tr.getElementById(HtmlTagsIdNames.CATEGORY_FIELD)!!
