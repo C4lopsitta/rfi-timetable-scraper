@@ -1,6 +1,5 @@
 package cc.atomtech.timetable.views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,13 +18,11 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -93,10 +89,9 @@ private fun SettingToggleItem(
     subTitle: String? = null,
     isBetaFeature: Boolean = false,
     isNotAvailableFeature: Boolean = false,
-    initialValue: Boolean,
+    value: Boolean,
     onValueChange: (Boolean) -> Unit
 ) {
-    var localValue by remember { mutableStateOf(initialValue) }
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -106,8 +101,7 @@ private fun SettingToggleItem(
                 indication = LocalIndication.current,
                 role  = Role.Switch,
                 onClick =  {
-                    localValue = !localValue
-                    onValueChange(localValue)
+                    onValueChange(!value)
                 }
             )
     ) {
@@ -145,11 +139,10 @@ private fun SettingToggleItem(
             if (subTitle != null) Text(subTitle)
         }
         Switch(
-            checked = localValue,
+            checked = value,
             modifier = Modifier.width(64.dp),
             onCheckedChange = {
-                localValue = !localValue
-                onValueChange(localValue)
+                onValueChange(!value)
             }
         )
     }
@@ -176,7 +169,7 @@ fun Settings(
 
 
     LazyColumn (
-        modifier = Modifier.fillMaxSize().padding( end = 12.dp )
+        modifier = Modifier.fillMaxSize().padding( 12.dp )
     ) {
         item {
             SettingSliderItem(
@@ -197,7 +190,7 @@ fun Settings(
                 title = StringRes.get("setting_new_ui"),
                 isBetaFeature = true,
                 subTitle = StringRes.get("setting_new_ui_desc"),
-                initialValue = useNewUi
+                value = useNewUi
             ) { updateValue {
                 useNewUi = it
                 preferences.setUseNewUi(it)
@@ -209,7 +202,7 @@ fun Settings(
                 title = StringRes.get("setting_preload_notices"),
                 subTitle = StringRes.get("setting_preload_notices_desc"),
                 isNotAvailableFeature = true,
-                initialValue = false
+                value = false
             ) {
 
             }
@@ -220,7 +213,7 @@ fun Settings(
                 title = StringRes.get("setting_cache_search_results"),
                 subTitle = StringRes.get("setting_cache_search_results_desc"),
                 isNotAvailableFeature = true,
-                initialValue = true
+                value = true
             ) {
 
             }

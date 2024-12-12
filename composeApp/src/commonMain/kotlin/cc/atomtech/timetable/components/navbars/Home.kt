@@ -1,10 +1,16 @@
 package cc.atomtech.timetable.components.navbars
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Announcement
+import androidx.compose.material.icons.automirrored.rounded.Announcement
+import androidx.compose.material.icons.filled.Announcement
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationCity
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.Announcement
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LocationCity
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,30 +30,33 @@ fun HomeNavBar(navController: NavHostController) {
     val navItems = listOf(
         NavItem(
             StringRes.get("nav_home"),
-            { Icon(Icons.Rounded.Home, StringRes.get("nav_icon_home")) },
-            { Icon(Icons.Filled.Home, StringRes.get("nav_icon_home")) },
+            Icons.Rounded.Home,
+            Icons.Filled.Home,
+            StringRes.get("nav_icon_home"),
             Routes.HOME
         ),
         NavItem(
             StringRes.get("nav_station"),
-            { Icon( Icons.Rounded.LocationCity, StringRes.get("nav_icon_station") ) },
-            { Icon( Icons.Filled.LocationCity, StringRes.get("nav_icon_station") ) },
+            Icons.Rounded.LocationCity,
+            Icons.Filled.LocationCity,
+            StringRes.get("nav_icon_station"),
             Routes.STATION
         ),
         NavItem(
             StringRes.get("nav_notices"),
-            { Icon( Icons.Rounded.LocationCity, StringRes.get("nav_icon_station") ) },
-            { Icon( Icons.Filled.LocationCity, StringRes.get("nav_icon_station") ) },
+            Icons.AutoMirrored.Rounded.Announcement,
+            Icons.AutoMirrored.Filled.Announcement,
+            StringRes.get("nav_icon_station"),
             Routes.NOTICES
         ),
         NavItem(
             StringRes.get("nav_settings"),
-            { Icon( Icons.Rounded.LocationCity, StringRes.get("nav_icon_station") ) },
-            { Icon( Icons.Filled.LocationCity, StringRes.get("nav_icon_station") ) },
+            Icons.Rounded.Settings,
+            Icons.Filled.Settings,
+            StringRes.get("nav_icon_station"),
             Routes.SETTINGS
         )
     )
-
 
     NavigationBar {
         navItems.forEach { item ->
@@ -55,7 +64,12 @@ fun HomeNavBar(navController: NavHostController) {
 
             NavigationBarItem (
                 label = { Text(item.label) },
-                icon = { if(isSelected) item.selectedIcon else item.unselectedIcon },
+                icon = {
+                    if(isSelected)
+                        Icon( item.selectedIcon, contentDescription = item.iconDescriptor )
+                    else
+                        Icon( item.unselectedIcon, contentDescription = item.iconDescriptor )
+               },
                 selected = isSelected,
                 onClick = {
                     isSelected = !isSelected
