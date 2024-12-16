@@ -169,10 +169,11 @@ fun TrainDetails(trainData: DetailedTrainData,
                         onClickLabel = StringRes.get("click_for_details"),
                         onClick = {
                             CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                                val availableTrains = TrenitaliaScraper.fetchTrainByNumber(trainData.number)
                                 var url = "https://www.viaggiatreno.it/"
 
                                 try {
+                                    val availableTrains = TrenitaliaScraper.fetchTrainByNumber(trainData.number)
+
                                     if (availableTrains.size == 1) {
                                         url =
                                             TrenitaliaScraper.getViaggiaTrenoUrl(availableTrains.first())
