@@ -171,7 +171,7 @@ fun Settings(
 
 
     LazyColumn (
-        modifier = Modifier.fillMaxSize().padding( 12.dp )
+        modifier = Modifier.fillMaxSize().padding( end = 12.dp )
     ) {
         item {
             SettingSliderItem(

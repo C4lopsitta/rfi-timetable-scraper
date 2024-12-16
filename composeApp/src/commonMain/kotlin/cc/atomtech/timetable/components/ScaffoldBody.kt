@@ -39,7 +39,10 @@ fun ScaffoldBody(isLoading: Boolean,
             ).fillMaxWidth()
         ) {
             if(isLoading)
-                LinearProgressIndicator( modifier = Modifier.fillMaxWidth() )
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary
+                )
             content()
         }
     }
