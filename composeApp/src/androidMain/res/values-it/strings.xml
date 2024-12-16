@@ -72,7 +72,7 @@
     <string name="setting_refresh_desc">Imposta il tempo (in minuti) tra ogni aggiornamento automatico dei dati di stazione.</string>
     <string name="never">Mai</string>
     <string name="setting_new_ui">Usa la nuova UI</string>
-    <string name="setting_new_ui_desc">Usa la nuova UI in fase di sviluppo. Richiede la riapertura completa dell\'app per essere applicata.</string>
+    <string name="setting_new_ui_desc">Usa la nuova UI in fase di sviluppo. Richiede la riapertura completa dell\'app per essere applicata. Ricorda che la nuova UI è instabile e non ancora pronta per il rilascio, quindi portebbe crashare o non contenere tutte le parti necessarie. In ogni caso, se non riesci a tornare alla UI attuale, cancella i dati dell\'app dalle impostazioni del dispositivo.</string>
     <string name="setting_preload_notices">Carica Avvisi all\'Avvio</string>
     <string name="setting_preload_notices_desc">Carica gli Avvisi immediatamente all\'avvio dell\'app, prima dell\'apertura della sezione \"Avvisi\".</string>
     <string name="setting_cache_search_results">Salva i Risultati di Ricerca</string>

@@ -18,7 +18,7 @@
     <string name="undefined">Undefined</string>
     <string name="platform">Platform</string>
     <string name="open_in_browser">Open in Browser</string>
-    <string name="app_version" translatable="false">1.4.2a (15)</string>
+    <string name="app_version" translatable="false">1.4.3 (16)</string>
     <string name="details_number">Train number %1$s to</string>
     <string name="details_arrives">Arrives at</string>
     <string name="details_departs">Departs at</string>
@@ -73,7 +73,7 @@
     <string name="setting_refresh_desc">Set the time (in minutes) between each refresh</string>
     <string name="never">Never</string>
     <string name="setting_new_ui">Use new UI</string>
-    <string name="setting_new_ui_desc">Use the new UI that is being developed. Requires app restart to be applied.</string>
+    <string name="setting_new_ui_desc">Use the new UI that is being developed. Requires app restart to be applied. Be warned, the UI is unstable and may crash, if unable to go back to the current UI, clear the Application\'s data.</string>
     <string name="setting_preload_notices">Preload Notices</string>
     <string name="setting_preload_notices_desc">Immediately load Notices, before opening the Notices tab, to have them immediately ready.</string>
     <string name="setting_cache_search_results">Cache Search Results</string>

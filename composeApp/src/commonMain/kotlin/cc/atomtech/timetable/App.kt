@@ -70,7 +70,7 @@ fun Main(navController: NavHostController,
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
     var reloaderMinutes by remember { mutableStateOf(5) }
-    var stationsLoadingRetryCount = 0;
+    var stationsLoadingRetryCount by remember { mutableStateOf(0) };
     var isNewStationSet by remember { mutableStateOf(true) }
     var timetableRefresher: Job? = null
 

@@ -4,6 +4,7 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -123,6 +124,7 @@ private fun SettingToggleItem(
                 ) {
                     Text("Beta", modifier = Modifier.padding( horizontal = 8.dp ))
                 }
+                if(isBetaFeature && isNotAvailableFeature) Box( modifier = Modifier.width(2.dp) )
                 if(isNotAvailableFeature) Card (
                     modifier = Modifier.padding( vertical = 4.dp ),
                     colors = CardColors(
@@ -141,6 +143,7 @@ private fun SettingToggleItem(
         Switch(
             checked = value,
             modifier = Modifier.width(64.dp),
+            enabled = !isNotAvailableFeature,
             onCheckedChange = {
                 onValueChange(!value)
             }
