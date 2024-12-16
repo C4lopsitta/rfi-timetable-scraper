@@ -70,6 +70,7 @@ fun Main(navController: NavHostController,
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
     var reloaderMinutes by remember { mutableStateOf(5) }
+    var stationsLoadingRetryCount = 0;
     var isNewStationSet by remember { mutableStateOf(true) }
     var timetableRefresher: Job? = null
 
@@ -77,14 +78,29 @@ fun Main(navController: NavHostController,
 
     val snackbarHostState = SnackbarHostState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(Unit, stationsLoadingRetryCount) {
+        if(stationsLoadingRetryCount > 5) return@LaunchedEffect
+
         try {
             stationId = preferences.getStationId().first()
-            stations.stations = RfiScraper.getStations()
+            val storeStations = preferences.getStoreStations().first()
+            val stationCacheJson = preferences.getStationCache().first()
+
+            if(storeStations && stationCacheJson.isNotEmpty()) {
+                stations.stations = Stations.fromJson(stationCacheJson)
+            } else {
+                stations.stations = RfiScraper.getStations()
+
+                if(storeStations) {
+                    preferences.setStationCache(stations.toJson())
+                }
+            }
+
             favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stations)
         } catch (e: Exception) {
             println(e.printStackTrace())
             error = e.toString()
+            stationsLoadingRetryCount++
         }
     }
 

@@ -19,10 +19,49 @@ class AppPreferences(
     companion object {
         private const val STATION_ID = "STATION_ID"
         private const val FAVOURITE_STATIONS = "FAVOURITE_STATIONS"
+        private const val ALLOW_STORAGE_STATIONS = "ALLOW_STORAGE_STATIONS"
         private const val STATION_LIST_JSON = "STATION_LIST_JSON"
         private const val RELOAD_DELAY = "RELOAD_DELAY"
         private const val USE_NEW_UI = "USE_NEW_UI"
         private const val PRELOAD_NOTICES = "PRELOAD_NOTICES"
+    }
+
+    fun getStoreStations(): Flow<Boolean> {
+        return preferences.data.map {
+            it[booleanPreferencesKey(ALLOW_STORAGE_STATIONS)] ?: true
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setStoreStations(value: Boolean) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[booleanPreferencesKey(ALLOW_STORAGE_STATIONS)] = value
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getStationCache(): Flow<String> {
+        return preferences.data.map {
+            it[stringPreferencesKey(STATION_LIST_JSON)] ?: ""
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setStationCache(newStationJson: String) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[stringPreferencesKey(STATION_LIST_JSON)] = newStationJson
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getPreloadNotices(): Flow<Boolean> {

@@ -22,7 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
+@Serializable
 data class Station(val name: String, val id: Int) {
     @Composable
     fun toFavouritesRow(setAsStation: (Int) -> Unit) {

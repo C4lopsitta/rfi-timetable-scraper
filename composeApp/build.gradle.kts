@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    kotlin("plugin.serialization") version "2.1.0"
 }
 
 kotlin {
@@ -55,6 +56,7 @@ kotlin {
             implementation(libs.ktor.client.cio)
             implementation(libs.datastore)
             implementation(libs.datastore.preferences)
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.3")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

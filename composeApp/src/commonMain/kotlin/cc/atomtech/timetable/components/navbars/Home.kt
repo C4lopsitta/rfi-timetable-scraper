@@ -61,8 +61,6 @@ fun HomeNavBar(navController: NavHostController) {
         navItems.forEach { item ->
             val isSelected = item.route == navController.currentBackStackEntryAsState().value?.destination?.route
 
-
-
             NavigationBarItem (
                 label = { Text(item.label) },
                 icon = {

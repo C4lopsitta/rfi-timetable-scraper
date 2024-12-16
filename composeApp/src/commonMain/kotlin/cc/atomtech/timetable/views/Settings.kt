@@ -161,10 +161,12 @@ fun Settings(
 ) {
     var reloadDelayValue by remember { mutableStateOf(1f) }
     var useNewUi by remember { mutableStateOf(false) }
+    var allowStationCaching by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         reloadDelayValue = preferences.getReloadDelay().first().toFloat()
         useNewUi = preferences.getUseNewUi().first()
+        allowStationCaching = preferences.getStoreStations().first()
     }
 
 
@@ -199,21 +201,24 @@ fun Settings(
         }
         item {
             SettingToggleItem(
-                title = StringRes.get("setting_preload_notices"),
-                subTitle = StringRes.get("setting_preload_notices_desc"),
-                isNotAvailableFeature = true,
-                value = false
+                title = StringRes.get("setting_cache_search_results"),
+                subTitle = StringRes.get("setting_cache_search_results_desc"),
+                value = allowStationCaching
             ) {
-
+                allowStationCaching = it
+                updateValue {
+                    preferences.setStoreStations(it)
+                    if(!allowStationCaching) preferences.setStationCache("")
+                }
             }
             HorizontalDivider()
         }
         item {
             SettingToggleItem(
-                title = StringRes.get("setting_cache_search_results"),
-                subTitle = StringRes.get("setting_cache_search_results_desc"),
+                title = StringRes.get("setting_preload_notices"),
+                subTitle = StringRes.get("setting_preload_notices_desc"),
                 isNotAvailableFeature = true,
-                value = true
+                value = false
             ) {
 
             }

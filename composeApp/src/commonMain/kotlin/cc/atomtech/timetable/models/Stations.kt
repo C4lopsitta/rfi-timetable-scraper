@@ -1,5 +1,11 @@
 package cc.atomtech.timetable.models
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.*
+
+@Serializable
 class Stations(var stations: ArrayList<Station>) {
     companion object {
         fun fromFavourites(favourites: String,
@@ -16,6 +22,10 @@ class Stations(var stations: ArrayList<Station>) {
 
             return Stations(favouriteStations)
         }
+
+        fun fromJson(json: String): ArrayList<Station> {
+            return Json.decodeFromString<Stations>(json).stations
+        }
     }
 
     fun search(query: String): List<Station> {
@@ -27,5 +37,9 @@ class Stations(var stations: ArrayList<Station>) {
 
     override fun toString(): String {
         return stations.joinToString(";")
+    }
+
+    fun toJson(): String {
+        return Json.encodeToString(this)
     }
 }
