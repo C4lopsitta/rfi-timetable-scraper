@@ -1,11 +1,17 @@
 package cc.atomtech.timetable.components.navbars
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Announcement
 import androidx.compose.material.icons.automirrored.outlined.Announcement
 import androidx.compose.material.icons.automirrored.rounded.Announcement
+import androidx.compose.material.icons.filled.Announcement
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LocationCity
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocationCity
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.rounded.Announcement
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LocationCity
 import androidx.compose.material.icons.rounded.Settings
@@ -19,13 +25,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.Routes
 import cc.atomtech.timetable.StringRes
 
 
 @Composable
-fun HomeNavBar(navController: NavHostController) {
+fun InfoLavoriNavBar(navController: NavHostController) {
     val navItems = listOf(
         NavItem(
             StringRes.get("nav_home"),
@@ -59,9 +64,7 @@ fun HomeNavBar(navController: NavHostController) {
 
     NavigationBar {
         navItems.forEach { item ->
-            val isSelected = item.route == navController.currentBackStackEntryAsState().value?.destination?.route
-
-
+            var isSelected by remember { mutableStateOf(false) }
 
             NavigationBarItem (
                 label = { Text(item.label) },
@@ -73,6 +76,7 @@ fun HomeNavBar(navController: NavHostController) {
                },
                 selected = isSelected,
                 onClick = {
+                    isSelected = !isSelected
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.id) {
                             inclusive = true

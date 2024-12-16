@@ -78,4 +78,10 @@
     <string name="setting_cache_search_results">Salva i Risultati di Ricerca</string>
     <string name="setting_cache_search_results_desc">Se abilitato, l\'app salva una copia locale dei risultati di ricerca per offirire un\'esperienza migliore. Quando è disabilitato, bisognerà attendere il completo caricamento dei risultati prima di poter cercare una stazione.</string>
     <string name="feature_not_available">Non Disponibile</string>
+    <string name="nav_icon_departures">Icona Partenze</string>
+    <string name="nav_icon_arrivals">Icona Arrivi</string>
+    <string name="nav_station_info">Info</string>
+    <string name="nav_icon_station_info">Icona Info</string>
+    <string name="nav_schedule">Orari</string>
+    <string name="nav_icon_schedule">Icona Orari</string>
 </resources>

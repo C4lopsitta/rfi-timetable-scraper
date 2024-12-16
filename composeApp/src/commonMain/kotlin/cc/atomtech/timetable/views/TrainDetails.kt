@@ -172,14 +172,20 @@ fun TrainDetails(trainData: DetailedTrainData,
                                 val availableTrains = TrenitaliaScraper.fetchTrainByNumber(trainData.number)
                                 var url = "https://www.viaggiatreno.it/"
 
-                                if(availableTrains.size == 1) {
-                                    url = TrenitaliaScraper.getViaggiaTrenoUrl(availableTrains.first())
-                                } else {
-                                    var train = availableTrains.first()
-                                    availableTrains.forEach { t ->
-                                        if(t.departureTime.toLong() > train.departureTime.toLong()) train = t
+                                try {
+                                    if (availableTrains.size == 1) {
+                                        url =
+                                            TrenitaliaScraper.getViaggiaTrenoUrl(availableTrains.first())
+                                    } else {
+                                        var train = availableTrains.first()
+                                        availableTrains.forEach { t ->
+                                            if (t.departureTime.toLong() > train.departureTime.toLong()) train =
+                                                t
+                                        }
+                                        url = TrenitaliaScraper.getViaggiaTrenoUrl(train)
                                     }
-                                    url = TrenitaliaScraper.getViaggiaTrenoUrl(train)
+                                } catch (_: Exception) {
+
                                 }
 
                                 urlHandler.openUri(url)

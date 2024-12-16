@@ -18,7 +18,7 @@
     <string name="undefined">Undefined</string>
     <string name="platform">Platform</string>
     <string name="open_in_browser">Open in Browser</string>
-    <string name="app_version" translatable="false">1.4.1</string>
+    <string name="app_version" translatable="false">1.4.2a (15)</string>
     <string name="details_number">Train number %1$s to</string>
     <string name="details_arrives">Arrives at</string>
     <string name="details_departs">Departs at</string>
@@ -79,4 +79,10 @@
     <string name="setting_cache_search_results">Cache Search Results</string>
     <string name="setting_cache_search_results_desc">When enabled, the app keeps a local copy of the search options to provide a faster searching experience.\nIf disabled, expect to wait a couple of seconds before being able to search.</string>
     <string name="feature_not_available">Not Available</string>
+    <string name="nav_icon_departures">Departures Icon</string>
+    <string name="nav_icon_arrivals">Arrivals Icon</string>
+    <string name="nav_station_info">Info</string>
+    <string name="nav_icon_station_info">Info Icon</string>
+    <string name="nav_schedule">Schedule</string>
+    <string name="nav_icon_schedule">Schedule Icon</string>
 </resources>

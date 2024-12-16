@@ -17,11 +17,14 @@ import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.navigation
 import cc.atomtech.timetable.components.navbars.HomeNavBar
+import cc.atomtech.timetable.components.navbars.NavSwitcher
 import cc.atomtech.timetable.views.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,49 +44,49 @@ fun NewMain(navController: NavHostController,
     MaterialTheme(
         colorScheme = actualColorScheme
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = Routes.HOME
+        Scaffold (
+            topBar = {
+
+            },
+            bottomBar = {
+                NavSwitcher( navController = navController )
+            }
         ) {
-            composable (
-                route = Routes.HOME,
-//                startDestination = Routes.DEPARTURES
+            NavHost(
+                navController = navController,
+                startDestination = Routes.HOME_DEPARTURES
             ) {
-                Scaffold(
-                    bottomBar = { HomeNavBar(navController = navController) }
+                composable(route = Routes.HOME_DEPARTURES) {  }
+                composable(route = Routes.SEARCH) {  }
+                composable(route = Routes.SETTINGS) {  }
+                composable(route = Routes.FAVOURITES) {  }
+                navigation(
+                    route = Routes.STATION,
+                    startDestination = Routes.DEPARTURES
                 ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = Routes.DEPARTURES
-                    ) {
-                        composable(route = Routes.DEPARTURES) {
-                            Column(
-                                modifier = Modifier.padding(all = 12.dp)
-                            ) {
-                                Text("Hello, World!", fontSize = 24.sp)
-                                Text("As we stated before, the new UI is being developed! Come back on the next update and check out what's new!")
-                                OutlinedButton(
-                                    content = { Text("Go back to previous UI") },
-                                    onClick = {
-                                        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
-                                            preferences.setUseNewUi(false)
-                                            exitProcess(0)
-                                        }
-                                    }
-                                )
-                                Text("Click the button above, then restart the app to go back.")
-                            }
-                        }
+                    composable(route = Routes.DEPARTURES) {
+                        Text("DEPARTURES")
                     }
-                    composable(route = Routes.SETTINGS) {
-                        Settings(preferences = preferences)
+                    composable(route = Routes.ARRIVALS) {
+                        Text("ARRIVALS")
                     }
+                    composable(route = Routes.STATION_INFO) {
+                        Text("INFO")
+                    }
+                    composable(route = Routes.SCHEDULE) {
+                        Text("SCHEDULE")
+                    }
+                    composable(route = Routes.TRAIN_DETAILS) {  }
+                }
+                navigation(
+                    route = Routes.INFOLAVORI,
+                    startDestination = Routes.TRENITALIA
+                ) {
+                    composable(route = Routes.TRENITALIA) {  }
+                    composable(route = Routes.LIVE) {  }
+                    composable(route = Routes.NOTICES) {  }
                 }
             }
-
-            composable( route = Routes.STATION ) {  }
-            composable( route = Routes.NOTICES ) {  }
-
         }
     }
 }
