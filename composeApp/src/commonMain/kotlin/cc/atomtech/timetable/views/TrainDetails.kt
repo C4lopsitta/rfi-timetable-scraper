@@ -18,7 +18,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -32,6 +36,8 @@ import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.models.DetailedTrainData
+import cc.atomtech.timetable.models.TrenitaliaTrainData
+import cc.atomtech.timetable.models.TrenitaliaTrainDetails
 import cc.atomtech.timetable.scrapers.TrenitaliaScraper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +73,27 @@ fun DataPairRow(
 @Composable
 fun TrainDetails(trainData: DetailedTrainData,
                  isArrival: Boolean) {
+    var availableTrains by remember { mutableStateOf<List<TrenitaliaTrainData>?>(null) }
+    var trenitaliaAdvancedTrainData by remember { mutableStateOf<TrenitaliaTrainData?>(null) }
+    var specificTrenitaliaDetails by remember { mutableStateOf<TrenitaliaTrainDetails?>(null) }
+
+    LaunchedEffect(Unit) {
+        try {
+            availableTrains = if(trainData.operator == Operator.TRENITALIA && trainData.category != Category.BUS)
+                TrenitaliaScraper.fetchTrainByNumber(trainData.number)
+                else listOf()
+
+            if(availableTrains?.isNotEmpty() == true) {
+                specificTrenitaliaDetails = TrenitaliaScraper.getAndamentoTreno(availableTrains!![0])
+
+                println(specificTrenitaliaDetails)
+            }
+        } catch (e: Exception) {
+            println(e.printStackTrace())
+            println("Failed fetching Trenitalia specific train data")
+        }
+    }
+
     Column (
         modifier = Modifier.fillMaxSize().padding( end = 12.dp ).verticalScroll(rememberScrollState())
     ) {
@@ -172,14 +199,12 @@ fun TrainDetails(trainData: DetailedTrainData,
                                 var url = "https://www.viaggiatreno.it/"
 
                                 try {
-                                    val availableTrains = TrenitaliaScraper.fetchTrainByNumber(trainData.number)
-
-                                    if (availableTrains.size == 1) {
+                                    if (availableTrains != null && availableTrains?.size == 1) {
                                         url =
-                                            TrenitaliaScraper.getViaggiaTrenoUrl(availableTrains.first())
+                                            TrenitaliaScraper.getViaggiaTrenoUrl(availableTrains!!.first())
                                     } else {
-                                        var train = availableTrains.first()
-                                        availableTrains.forEach { t ->
+                                        var train = availableTrains!!.first()
+                                        availableTrains!!.forEach { t ->
                                             if (t.departureTime.toLong() > train.departureTime.toLong()) train =
                                                 t
                                         }

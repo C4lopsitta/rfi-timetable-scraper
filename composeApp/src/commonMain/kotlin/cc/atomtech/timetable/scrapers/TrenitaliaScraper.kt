@@ -8,9 +8,11 @@ import com.fleeksoft.ksoup.nodes.Element
 import java.util.Locale
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
 import cc.atomtech.timetable.models.TrenitaliaTrainData
+import cc.atomtech.timetable.models.TrenitaliaTrainDetails
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import kotlinx.serialization.json.Json
 
 private object ElementIds {
     const val REGULAR_TRAFFIC = "CIRCOLAZIONE_REGOLARE"
@@ -23,6 +25,9 @@ object TrenitaliaScraper {
     private const val baseUrl = "https://www.trenitalia.com/it/informazioni/Infomobilita/notizie-infomobilita.html"
     private const val cercaTrenoFinderUrl = "http://www.viaggiatreno.it/infomobilitamobile/resteasy/viaggiatreno/cercaNumeroTrenoTrenoAutocomplete/"
 
+    private fun getAndamentoTrenoUrl(trainData: TrenitaliaTrainData): String {
+        return "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/andamentoTreno/${trainData.originStationId}/${trainData.number}/${trainData.departureTime}"
+    }
 
     private fun String.stationName(): String {
         return this.lowercase(Locale.getDefault())
@@ -175,7 +180,9 @@ object TrenitaliaScraper {
 
         val extraEvents: ArrayList<TrenitaliaEventDetails> = arrayListOf()
 
-        items.forEach { it -> extraEvents.add(getExtraEvent(it)) }
+        items.forEach { it ->
+            extraEvents.add(getExtraEvent(it))
+        }
 
         return TrenitaliaInfo(
             isTrafficRegular = regularTraffic != null,
@@ -196,7 +203,7 @@ object TrenitaliaScraper {
             if(fields.size >= 2) {
                 entries.add(TrenitaliaTrainData(
                     number = fields[0].split(" - ")[0],
-                    departureId = fields[1].split("-")[1],
+                    originStationId = fields[1].split("-")[1],
                     departureTime = fields[1].split("-")[2]
             ))
             }
@@ -206,6 +213,13 @@ object TrenitaliaScraper {
     }
 
     fun getViaggiaTrenoUrl(train: TrenitaliaTrainData): String {
-        return "http://www.viaggiatreno.it/infomobilitamobile/pages/cercaTreno/cercaTreno.jsp?treno=${train.number}&origine=${train.departureId}&datapartenza=${train.departureTime}"
+        return "http://www.viaggiatreno.it/infomobilitamobile/pages/cercaTreno/cercaTreno.jsp?treno=${train.number}&origine=${train.originStationId}&datapartenza=${train.departureTime}"
+    }
+
+    suspend fun getAndamentoTreno(train: TrenitaliaTrainData): TrenitaliaTrainDetails {
+        val trenitaliaWebResponse = HttpClient().get(getAndamentoTrenoUrl(train))
+        val jsonBody = trenitaliaWebResponse.bodyAsText()
+
+        return Json.decodeFromString<TrenitaliaTrainDetails>(jsonBody)
     }
 }
