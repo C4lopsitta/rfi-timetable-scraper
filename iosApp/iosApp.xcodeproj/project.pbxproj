@@ -12,7 +12,7 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		B701848C2D136DAD0092A7B2 /* composeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B70184892D136D720092A7B2 /* composeApp.xcframework */; };
-		B701848D2D136DAD0092A7B2 /* composeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B70184892D136D720092A7B2 /* composeApp.xcframework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B701848D2D136DAD0092A7B2 /* composeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B70184892D136D720092A7B2 /* composeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */

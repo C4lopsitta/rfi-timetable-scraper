@@ -40,7 +40,6 @@ fun MainViewController() = ComposeUIViewController {
     } catch (e: Exception) {
         println(e.printStackTrace())
     }
-    throw Exception("Banana")
 
     Main(
         navController = navController,
