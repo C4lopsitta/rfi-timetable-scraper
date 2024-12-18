@@ -10,7 +10,6 @@ import cc.atomtech.timetable.models.TrainStop
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.select.Elements
-import java.util.Locale
 
 object HtmlTagsIdNames {
     const val STATION_NAME = "nomeStazioneId"
@@ -36,7 +35,7 @@ object RfiScraper {
     private const val baseQueryArrivals = "?Arrivals=True&PlaceId="
 
     private fun String.stationName(): String {
-        return this.lowercase(Locale.getDefault())
+        return this.lowercase()
             .replace("''''", "'")
             .split(" ")
             .joinToString(" ") { word ->

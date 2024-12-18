@@ -2,25 +2,50 @@ import org.gradle.internal.declarativedsl.dom.resolution.resolutionContainer
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 kotlin {
+    jvm("desktop")
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    
-    jvm("desktop")
-    
+
+    val xcf = XCFramework()
+
+    iosArm64(){
+        binaries.framework (
+
+        ) {
+            baseName = "ComposeApp"
+            isStatic = true
+            embedBitcode("bitcode")
+            xcf.add(this)
+        }
+    }
+
+    iosSimulatorArm64 {
+        binaries.framework (
+
+        ) {
+            baseName = "ComposeApp"
+            isStatic = true
+            embedBitcode("bitcode")
+            xcf.add(this)
+        }
+    }
+
     sourceSets {
         val desktopMain by getting
 
@@ -56,7 +81,8 @@ kotlin {
             implementation(libs.ktor.client.cio)
             implementation(libs.datastore)
             implementation(libs.datastore.preferences)
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.3")
+            implementation(libs.kotlinx.serialization.json.jvm)
+            implementation(libs.kotlinx.datetime)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -106,7 +132,7 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "cc.atomtech.timetable.MainKt"
+        mainClass = "cc.atomtech.timetable"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Pkg, TargetFormat.Rpm, TargetFormat.Exe)

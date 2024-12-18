@@ -5,7 +5,6 @@ import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
-import java.util.Locale
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
 import cc.atomtech.timetable.models.TrenitaliaTrainData
 import cc.atomtech.timetable.models.TrenitaliaTrainDetails
@@ -30,7 +29,7 @@ object TrenitaliaScraper {
     }
 
     private fun String.stationName(): String {
-        return this.lowercase(Locale.getDefault())
+        return this.lowercase()
             .replace("''''", "'")
             .split(" ")
             .joinToString(" ") { word ->

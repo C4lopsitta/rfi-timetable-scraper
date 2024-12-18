@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.time.Instant
+import kotlinx.datetime.Clock
 
 data class TimetableData(
     val stationName: String,
     val departures: List<TrainData>,
     val arrivals: List<TrainData>,
     val stationInfo: String?,
-    var lastUptade: Long = Instant.now().toEpochMilli()
+    var lastUptade: Long = Clock.System.now().toEpochMilliseconds()
 )
 
 class TimetableState(val stationName: String,
@@ -23,6 +23,6 @@ class TimetableState(val stationName: String,
 
     fun setNewTimetable(timeTable: TimetableData) {
         this._uiState.value = timeTable
-        this._uiState.value.lastUptade = Instant.now().toEpochMilli()
+        this._uiState.value.lastUptade = Clock.System.now().toEpochMilliseconds()
     }
 }

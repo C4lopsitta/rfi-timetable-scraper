@@ -49,15 +49,16 @@ actual fun storePreferences(): DataStore<Preferences> {
     }
 }
 
-@Composable
-actual fun isNetworkAvailable(): Boolean {
-    val context = LocalContext.current
-
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkInfo = connectivityManager.activeNetworkInfo
-    return networkInfo != null && networkInfo.isConnected
-}
+//
+//@Composable
+//actual fun isNetworkAvailable(): Boolean {
+//    val context = LocalContext.current
+//
+//    val connectivityManager =
+//        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//    val networkInfo = connectivityManager.activeNetworkInfo
+//    return networkInfo != null && networkInfo.isConnected
+//}
 
 class MainActivity : ComponentActivity() {
     @Composable

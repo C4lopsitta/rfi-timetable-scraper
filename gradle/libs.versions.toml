@@ -16,6 +16,8 @@ compose-multiplatform = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
+kotlinxDatetime = "0.6.1"
+kotlinxSerializationJsonJvm = "1.7.3"
 ksoupLite = "0.2.0"
 ktor = "3.0.1"
 ktorClientCore = "3.0.1"
@@ -48,6 +50,8 @@ androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle
 androidx-lifecycle-runtime-ktx = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-ktx" }
 androidx-lifecycle-runtime = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-serialization-json-jvm = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonJvm" }
 ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoupLite" }
 ksoup-network = { module = "com.fleeksoft.ksoup:ksoup-network", version.ref = "ksoupLite" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktorClientCore" }

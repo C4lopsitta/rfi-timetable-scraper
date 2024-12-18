@@ -1,6 +1,5 @@
 package cc.atomtech.timetable
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -39,17 +38,21 @@ import cc.atomtech.timetable.components.InfoLavoriTabBar
 import cc.atomtech.timetable.scrapers.RfiScraper
 import cc.atomtech.timetable.scrapers.RssFeeds
 import cc.atomtech.timetable.views.DeviceOffline
+import kotlinx.coroutines.IO
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
 
 @Composable expect fun storePreferences(): DataStore<Preferences>
 
-@Composable expect fun isNetworkAvailable(): Boolean
+//@Composable expect fun isNetworkAvailable(): Boolean
 
 fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
     PreferenceDataStoreFactory.createWithPath(
-        produceFile = { createPath().toPath() }
+        produceFile = {
+            val path = createPath().toPath()
+            return@createWithPath path
+        }
     )
 
 @Composable

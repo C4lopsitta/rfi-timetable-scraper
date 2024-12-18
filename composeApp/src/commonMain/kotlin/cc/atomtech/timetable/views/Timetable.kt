@@ -22,10 +22,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrainData
-import java.time.Instant
-import java.time.ZoneId
-import java.util.Locale
 import cc.atomtech.timetable.StringRes
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun Timetable(trainList: List<TrainData>?,
@@ -51,7 +52,7 @@ fun Timetable(trainList: List<TrainData>?,
                     modifier = Modifier.width(92.dp).height(92.dp)
                 )
                 Text(
-                    StringRes.format("no_trains_details", Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault()).toLocalDateTime()),
+                    StringRes.format("no_trains_details", Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                     fontSize = 18.sp,
@@ -79,18 +80,17 @@ fun Timetable(trainList: List<TrainData>?,
                             stationInfo
                                 .trim()
                                 .replace(Regex("\\s+"), " ")
-                                .lowercase(Locale.getDefault())
+                                .lowercase()
                                 .replaceFirstChar {
                                     if (it.isLowerCase())
-                                        it.titlecase(Locale.getDefault())
+                                        it.titlecase()
                                     else
                                         it.toString()
                                 }
                         )
                         Text(
                             "${StringRes.get("last_update")}: ${
-                                Instant.ofEpochMilli(lastUpdate).atZone(ZoneId.systemDefault())
-                                    .toLocalDateTime()
+                                Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                             }",
                             modifier = Modifier.padding(vertical = 12.dp)
                         )

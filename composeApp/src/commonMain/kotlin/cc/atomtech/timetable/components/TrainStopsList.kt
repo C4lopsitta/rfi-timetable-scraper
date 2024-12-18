@@ -22,9 +22,25 @@ import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.StringRes
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.UtcOffset
+import kotlinx.datetime.atDate
+import kotlinx.datetime.format
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.format.DateTimeFormatBuilder
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayAt
+import kotlinx.datetime.todayIn
+import kotlin.time.Duration
 
+@OptIn(FormatStringsInDatetimeFormats::class)
 @Composable
 private fun TrainStopEntry(
     stop: TrainStop,
@@ -121,12 +137,21 @@ private fun TrainStopEntry(
                 } else if(delay == Int.MAX_VALUE) {
                     stop.time + " - " + StringRes.get("delayed")
                 } else if(delay != 0) {
-                    val formatter = DateTimeFormatter.ofPattern("H:mm")
+                    var delayHM = ""
+                    if(delay < 60) {
+                        delayHM = "${delay}m"
+                    } else {
+                        val hours = delay % 60
+                        delayHM = "${hours}h ${delay - hours * 60}m"
+                    }
+
                     val newTime = LocalTime
-                        .parse(stop.time, formatter)
-                        .plusMinutes(delay.toLong())
-                        .format(formatter)
-                    StringRes.format("detail_stop_delayed_string", newTime, stop.time)
+                        .parse(stop.time, format = LocalTime.Format { byUnicodePattern("H:mm") })
+                        .atDate(Clock.System.todayIn(TimeZone.currentSystemDefault()))
+                        .toInstant(TimeZone.currentSystemDefault())
+                        .plus(Duration.parse(delayHM))
+                        .toLocalDateTime(TimeZone.currentSystemDefault())
+                    StringRes.format("detail_stop_delayed_string", "${newTime.hour}:${newTime.minute}", stop.time)
                 } else {
                     stop.time
                 }
