@@ -10,7 +10,8 @@ enum class Operator {
     SAD,
     SNCF,
     TRENINO_TRASPORTI,
-    FONDAZIONE_FS;
+    FONDAZIONE_FS,
+    FERROVIE_GARGANO;
 
     companion object {
         fun fromString(operatorName: String?): Operator {
@@ -34,6 +35,8 @@ enum class Operator {
                 return TRENINO_TRASPORTI
             if(operatorName.contains("FONDAZIONE FS"))
                 return FONDAZIONE_FS
+            if(operatorName.contains("Ferrovie del Gargano"))
+                return FERROVIE_GARGANO
             return UNDEFINED
         }
     }
@@ -50,6 +53,7 @@ enum class Operator {
             SNCF -> "SNCF"
             TRENINO_TRASPORTI -> "Trentino Trasporti"
             FONDAZIONE_FS -> "Fondazione FS"
+            FERROVIE_GARGANO -> "Ferrovie del Gargano"
         }
     }
 

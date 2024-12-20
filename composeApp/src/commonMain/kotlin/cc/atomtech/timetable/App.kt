@@ -50,8 +50,7 @@ const val preferencesFile = "timetables-prefs.preferences_pb"
 fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
     PreferenceDataStoreFactory.createWithPath(
         produceFile = {
-            val path = createPath().toPath()
-            return@createWithPath path
+            createPath().toPath()
         }
     )
 

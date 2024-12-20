@@ -30,9 +30,11 @@ fun main() = application {
         title = "Timetables"
     ) {
         val navController = rememberNavController()
+        val preferences = AppPreferences(storePreferences())
+
         Main(
             navController, isDesktop = true,
-            preferences = ,
+            preferences = preferences,
         )
     }
 }

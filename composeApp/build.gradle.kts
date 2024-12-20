@@ -85,8 +85,13 @@ kotlin {
             implementation(libs.kotlinx.datetime)
         }
         desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
+            implementation(compose.material3)
+            implementation(compose.desktop.currentOs) {
+                exclude("org.jetbrains.compose.material")
+                exclude("io.ktor.client.engine.okhttp")
+            }
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.kotlinx.serialization.core)
         }
     }
 }
@@ -139,6 +144,11 @@ compose.desktop {
             packageName = "Timetable"
             packageVersion = "1.3.8"
             description = "Scraper app that uses RFI's Arrivi&Partenze website to visualize departures and arrivals for any RFI-Managed railway station"
+        }
+
+        buildTypes.release.proguard {
+            version.set("7.5.0")
+            configurationFiles.from("proguard.pro")
         }
     }
 }
