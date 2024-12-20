@@ -137,13 +137,14 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "cc.atomtech.timetable"
+        mainClass = "cc.atomtech.timetable.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Pkg, TargetFormat.Rpm, TargetFormat.Exe)
             packageName = "Timetable"
             packageVersion = "1.3.8"
             description = "Scraper app that uses RFI's Arrivi&Partenze website to visualize departures and arrivals for any RFI-Managed railway station"
+            modules("jdk.unsupported")
         }
 
         buildTypes.release.proguard {
