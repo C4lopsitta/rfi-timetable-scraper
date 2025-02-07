@@ -55,6 +55,7 @@ kotlin {
             implementation(compose.ui) {
                 exclude (group = "androidx.compose.ui", module = "ui-unit-desktop")
             }
+            implementation(libs.androidx.appcompat)
         }
 
         commonMain {

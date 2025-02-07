@@ -49,7 +49,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
 
     LaunchedEffect(Unit) {
         try {
-            info = TrenitaliaScraper.scrape()
+            info = TrenitaliaScraper.scrapePassengernInformation()
         } catch (_: CancellationException) {
         } catch (e: Exception) {
             println(e.printStackTrace())

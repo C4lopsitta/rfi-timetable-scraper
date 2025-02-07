@@ -127,7 +127,7 @@ object TrenitaliaScraper {
         )
     }
 
-    suspend fun scrape(): TrenitaliaInfo {
+    suspend fun scrapePassengernInformation(): TrenitaliaInfo {
         val page = Ksoup.parseGetRequest(baseUrl)
 
         val dataBody = page.getElementById("accordionGenericInfomob")

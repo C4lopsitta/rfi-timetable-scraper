@@ -1,5 +1,24 @@
 package cc.atomtech.timetable
 
+sealed class Page( val route: String ) {
+    data object Home: Page("home")
+    data object Station: Page("station") {
+        data object Departures: Page("departures")
+        data object Arrivals: Page("arrivals")
+        data object Schedule: Page("schedule")
+        data object Info: Page("info")
+        data object TrainDetails: Page("train/{number}") {
+            fun createRoute(number: String) = "train/$number"
+        }
+    }
+    data object Notices: Page("notices") {
+        data object Trenitalia: Page("trenitalia")
+        data object Live: Page("live")
+        data object Announcements: Page("announcements")
+    }
+    data object Settings: Page("settings")
+}
+
 object Routes {
     const val HOME_DEPARTURES = "home"
     const val FAVOURITES = "favourites"
