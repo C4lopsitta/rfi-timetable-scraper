@@ -18,7 +18,7 @@
     <string name="undefined">Undefined</string>
     <string name="platform">Platform</string>
     <string name="open_in_browser">Open in Browser</string>
-    <string name="app_version" translatable="false">1.4.3 (16)</string>
+    <string name="app_version" translatable="false">1.4.3-aw (17)</string>
     <string name="details_number">Train number %1$s to</string>
     <string name="details_arrives">Arrives at</string>
     <string name="details_departs">Departs at</string>

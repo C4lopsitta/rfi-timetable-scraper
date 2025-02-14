@@ -95,6 +95,7 @@ private fun SettingToggleItem(
 ) {
     Row (
         modifier = Modifier
+
             .fillMaxWidth()
             .padding( vertical = 8.dp )
             .clickable(
