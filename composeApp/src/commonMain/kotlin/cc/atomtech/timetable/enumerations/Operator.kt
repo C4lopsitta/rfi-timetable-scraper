@@ -37,6 +37,8 @@ enum class Operator {
                 return FONDAZIONE_FS
             if(operatorName.contains("Ferrovie del Gargano"))
                 return FERROVIE_GARGANO
+            if(operatorName.contains("ArenaWays", ignoreCase = true))
+                return ARENAWAYS
             return UNDEFINED
         }
     }
