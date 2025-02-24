@@ -85,4 +85,9 @@
     <string name="nav_icon_station_info">Info Icon</string>
     <string name="nav_schedule">Schedule</string>
     <string name="nav_icon_schedule">Schedule Icon</string>
+    <string name="int_mins" translatable="false">%1$s min</string>
+    <string name="int_hour">%1$s hour</string>
+    <string name="int_hours">%1$s hours</string>
+    <string name="setting_strike_notification_service">Get notifications for Strikes</string>
+    <string name="setting_strike_notification_service_desc">Enables a background service that will automatically notify you if any strikes have been announced.</string>
 </resources>

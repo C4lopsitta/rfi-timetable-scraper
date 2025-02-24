@@ -84,4 +84,8 @@
     <string name="nav_icon_station_info">Icona Info</string>
     <string name="nav_schedule">Orari</string>
     <string name="nav_icon_schedule">Icona Orari</string>
+    <string name="int_hour">%1$s ora</string>
+    <string name="int_hours">%1$s ore</string>
+    <string name="setting_strike_notification_service">Ricevi avvisi per gli Scioperi</string>
+    <string name="setting_strike_notification_service_desc">Abilita un servizio in background che avviserà automaticamente quando saranno annunciati degli scioperi.</string>
 </resources>

@@ -54,6 +54,7 @@ private fun SettingSliderItem(
     range: ClosedFloatingPointRange<Float>,
     value: Float,
     stringValues: List<String>? = null,
+    isNotAvailableFeature: Boolean = false,
     onValueChange: (Float) -> Unit
 ) {
     Column (
@@ -72,6 +73,7 @@ private fun SettingSliderItem(
                 modifier = Modifier.padding( horizontal = 8.dp )
             )
             Slider(
+                enabled = !isNotAvailableFeature,
                 modifier = Modifier.fillMaxWidth(),
                 value = value,
                 onValueChange = {
@@ -183,13 +185,21 @@ fun Settings(
                 subTitle = StringRes.get("setting_refresh_desc"),
                 steps = 6,
                 range = 0f..6f,
-                stringValues = listOf(StringRes.get("never"), "5min", "10min", "15min", "20min", "25min", "30min"),
+                stringValues = listOf(
+                    StringRes.get("never"),
+                    StringRes.format("int_mins", "5"),
+                    StringRes.format("int_mins", "10"),
+                    StringRes.format("int_mins", "15"),
+                    StringRes.format("int_mins", "20"),
+                    StringRes.format("int_mins", "25"),
+                    StringRes.format("int_mins", "30")
+                ),
                 value = reloadDelayValue
             ) { updateValue {
                 reloadDelayValue = it
                 preferences.setReloadDelay(it.roundToInt())
             } }
-            HorizontalDivider()
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
         item {
             SettingToggleItem(
@@ -201,7 +211,7 @@ fun Settings(
                 useNewUi = it
                 preferences.setUseNewUi(it)
             } }
-            HorizontalDivider()
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
         item {
             SettingToggleItem(
@@ -215,7 +225,7 @@ fun Settings(
                     if(!allowStationCaching) preferences.setStationCache("")
                 }
             }
-            HorizontalDivider()
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
         item {
             SettingToggleItem(
@@ -226,8 +236,22 @@ fun Settings(
             ) {
 
             }
-            HorizontalDivider()
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
+
+        item {
+            SettingToggleItem(
+                title = StringRes.get("setting_strike_notification_service"),
+                subTitle = StringRes.get("setting_strike_notification_service_desc"),
+                value = false,
+                isNotAvailableFeature = true
+            ) {
+
+            }
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+        }
+
+
         item {
             Column (
                 modifier = Modifier.fillMaxWidth().padding( vertical = 12.dp ),

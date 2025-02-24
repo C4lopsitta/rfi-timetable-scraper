@@ -133,6 +133,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.databinding.compiler.common)
+    implementation(libs.androidx.work.runtime.ktx)
     debugImplementation(compose.uiTooling)
 }
 
