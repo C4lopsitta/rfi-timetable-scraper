@@ -45,7 +45,7 @@ fun MobileSearch(stations: Stations,
                  favouriteStations: Stations,
                  updateFavourites: (String) -> Unit,
                  setStationId: (Int) -> Unit) {
-    val localFavourites by remember { mutableStateOf(favouriteStations) }
+    favouriteStations.stations.forEach { println("${it.name} is favourite") }
 
 
     if (stations.stations.isNotEmpty() && searchSuggestions?.isNotEmpty() == true) {
@@ -55,8 +55,7 @@ fun MobileSearch(stations: Stations,
                 .padding(horizontal = 12.dp)
         ) {
             items(searchSuggestions) { suggestion ->
-                var isFavourite by remember { mutableStateOf(localFavourites.search(suggestion.name).isNotEmpty()) }
-                val icon by remember { derivedStateOf { if(isFavourite) Icons.Rounded.Star else Icons.Outlined.Star } }
+                val isFavourite by remember { derivedStateOf { favouriteStations.searchById(suggestion.id) != null } }
 
                 Row (
                     modifier = Modifier.fillMaxWidth()
@@ -76,20 +75,21 @@ fun MobileSearch(stations: Stations,
                     Text(suggestion.name, fontSize = 24.sp)
                     IconButton(
                         onClick = {
-                            if(localFavourites.search(suggestion.name).isEmpty()) {
-                                localFavourites.stations.add(suggestion)
+                            if(favouriteStations.searchById(suggestion.id) == null) {
+                                favouriteStations.stations.add(suggestion)
                             } else {
-                                localFavourites.stations.remove(
-                                    localFavourites.search(suggestion.name)[0]
+                                favouriteStations.stations.remove(
+                                    favouriteStations.searchById(suggestion.id)
                                 )
                             }
-                            updateFavourites(localFavourites.toString())
-                            favouriteStations.stations = localFavourites.stations
-                            isFavourite = !isFavourite
+                            updateFavourites(favouriteStations.toString())
+                            favouriteStations.stations = favouriteStations.stations
                         },
                         content = {
-                            println("${suggestion.name}.isFavourite($isFavourite)")
-                            Icon(icon, contentDescription = StringRes.get("favourite_station"))
+                            Icon(
+                                if(isFavourite) Icons.Rounded.Star else Icons.Outlined.Star,
+                                contentDescription = StringRes.get("favourite_station")
+                            )
                         }
                     )
                 }
@@ -117,3 +117,4 @@ fun MobileSearch(stations: Stations,
             )
         }    }
 }
+

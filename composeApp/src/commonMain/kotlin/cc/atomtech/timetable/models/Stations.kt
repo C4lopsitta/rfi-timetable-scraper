@@ -35,6 +35,16 @@ class Stations(var stations: ArrayList<Station>) {
         return stations.filter { it.name.contains(query, ignoreCase = true) }
     }
 
+    fun searchById(query: Int): Station? {
+        return try {
+            stations.first {
+                it.id == query
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
     override fun toString(): String {
         return stations.joinToString(";")
     }
