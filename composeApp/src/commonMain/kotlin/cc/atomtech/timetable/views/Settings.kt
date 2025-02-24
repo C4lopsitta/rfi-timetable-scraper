@@ -44,6 +44,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.enumerations.Platform
+import cc.atomtech.timetable.platform
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -168,11 +170,13 @@ fun Settings(
     var reloadDelayValue by remember { mutableStateOf(1f) }
     var useNewUi by remember { mutableStateOf(false) }
     var allowStationCaching by remember { mutableStateOf(true) }
+    var useStrikesNotificationService by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         reloadDelayValue = preferences.getReloadDelay().first().toFloat()
         useNewUi = preferences.getUseNewUi().first()
         allowStationCaching = preferences.getStoreStations().first()
+        useStrikesNotificationService = preferences.getUseStrikesNotificationService().first()
     }
 
 
@@ -204,12 +208,13 @@ fun Settings(
         item {
             SettingToggleItem(
                 title = StringRes.get("setting_new_ui"),
-                isBetaFeature = true,
+//                isBetaFeature = true,
                 subTitle = StringRes.get("setting_new_ui_desc"),
-                value = useNewUi
+                value = useNewUi,
+                isNotAvailableFeature = true
             ) { updateValue {
-                useNewUi = it
-                preferences.setUseNewUi(it)
+//                useNewUi = it
+//                preferences.setUseNewUi(it)
             } }
             HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
@@ -227,6 +232,24 @@ fun Settings(
             }
             HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
+
+        if(platform == Platform.ANDROID) {
+            item {
+                SettingToggleItem(
+                    title = StringRes.get("setting_strike_notification_service"),
+                    subTitle = StringRes.get("setting_strike_notification_service_desc"),
+                    value = useStrikesNotificationService
+                ) {
+                    updateValue {
+                        useStrikesNotificationService = !useStrikesNotificationService
+                        preferences.setUseStrikesNotificationService(useStrikesNotificationService)
+                    }
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+            }
+        }
+
         item {
             SettingToggleItem(
                 title = StringRes.get("setting_preload_notices"),
@@ -238,19 +261,6 @@ fun Settings(
             }
             HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
-
-        item {
-            SettingToggleItem(
-                title = StringRes.get("setting_strike_notification_service"),
-                subTitle = StringRes.get("setting_strike_notification_service_desc"),
-                value = false,
-                isNotAvailableFeature = true
-            ) {
-
-            }
-            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
-        }
-
 
         item {
             Column (

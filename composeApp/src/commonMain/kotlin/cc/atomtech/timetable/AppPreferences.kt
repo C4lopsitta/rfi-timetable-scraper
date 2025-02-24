@@ -25,6 +25,8 @@ class AppPreferences(
         private const val RELOAD_DELAY = "RELOAD_DELAY"
         private const val USE_NEW_UI = "USE_NEW_UI"
         private const val PRELOAD_NOTICES = "PRELOAD_NOTICES"
+        private const val USE_STRIKES_NOTIFICATION_SERVICE = "use_strikes_notification_service"
+        private const val STRIKES_NOTIFICATION_TIME = "time_strikes_notification_service"
     }
 
     fun getStoreStations(): Flow<Boolean> {
@@ -38,6 +40,25 @@ class AppPreferences(
             try {
                 preferences.edit {
                     it[booleanPreferencesKey(ALLOW_STORAGE_STATIONS)] = value
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getUseStrikesNotificationService(): Flow<Boolean> {
+        return preferences.data.map {
+            it[booleanPreferencesKey(USE_STRIKES_NOTIFICATION_SERVICE)] ?: true
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setUseStrikesNotificationService(value: Boolean) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[booleanPreferencesKey(USE_STRIKES_NOTIFICATION_SERVICE)] = value
                 }
             } catch (e: Exception) {
                 if (e is CancellationException) throw e

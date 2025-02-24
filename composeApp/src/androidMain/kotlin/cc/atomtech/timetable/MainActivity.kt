@@ -1,8 +1,6 @@
 package cc.atomtech.timetable
 
-import android.content.Context
 import android.content.res.Configuration
-import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +34,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.first
+
+
 
 @Composable
 actual fun storePreferences(): DataStore<Preferences> {

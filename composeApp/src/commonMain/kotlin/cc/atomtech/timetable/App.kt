@@ -35,6 +35,7 @@ import okio.Path.Companion.toPath
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import cc.atomtech.timetable.components.AppBar
 import cc.atomtech.timetable.components.InfoLavoriTabBar
+import cc.atomtech.timetable.enumerations.Platform
 import cc.atomtech.timetable.scrapers.RfiScraper
 import cc.atomtech.timetable.scrapers.RssFeeds
 import cc.atomtech.timetable.views.DeviceOffline
@@ -42,6 +43,8 @@ import kotlinx.coroutines.IO
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
+
+expect val platform: Platform;
 
 @Composable expect fun storePreferences(): DataStore<Preferences>
 
