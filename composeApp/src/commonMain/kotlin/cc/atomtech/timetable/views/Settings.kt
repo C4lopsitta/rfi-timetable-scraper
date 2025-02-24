@@ -44,8 +44,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.debugRunStrikesNotificationService
 import cc.atomtech.timetable.enumerations.Platform
 import cc.atomtech.timetable.platform
+import cc.atomtech.timetable.toggleStrikesNotificationService
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -243,8 +245,15 @@ fun Settings(
                     updateValue {
                         useStrikesNotificationService = !useStrikesNotificationService
                         preferences.setUseStrikesNotificationService(useStrikesNotificationService)
+
+                        toggleStrikesNotificationService(useStrikesNotificationService)
                     }
                 }
+
+                OutlinedButton(
+                    content = { Text("Run") },
+                    onClick = { debugRunStrikesNotificationService() }
+                )
 
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
             }

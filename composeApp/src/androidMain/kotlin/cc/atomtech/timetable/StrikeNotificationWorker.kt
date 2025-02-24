@@ -52,7 +52,7 @@ class StrikeNotificationWorker (
 
         val channel = NotificationChannel(
             notificationChannel,
-            "TEMPORARY_ADD_TRANSLATION",
+            applicationContext.getString(R.string.strikes_notification_channel),
             NotificationManager.IMPORTANCE_HIGH
         )
         notificationManager.createNotificationChannel(channel)
@@ -67,10 +67,10 @@ class StrikeNotificationWorker (
 
         val notificationBuilder = NotificationCompat.Builder(applicationContext, notificationChannel)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("TODO_ADD_TRANSLATION")
+            .setContentTitle(applicationContext.getString(R.string.strikes_notification_title))
             .setContentText(eventDetail.title)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .addAction(R.drawable.ic_launcher_foreground, "OPEN_APP_TODO_TRANSLATION", openAppPendingIntent)
+            .addAction(R.drawable.ic_launcher_foreground, applicationContext.getString(R.string.open_app), openAppPendingIntent)
             .setAutoCancel(true)
 
         eventDetail.link?.let {
@@ -82,7 +82,7 @@ class StrikeNotificationWorker (
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            notificationBuilder.addAction(R.drawable.ic_launcher_foreground, "OPEN_LINK_TODO_TRANSLATION", openLinkPendingIntent)
+            notificationBuilder.addAction(R.drawable.ic_launcher_foreground, applicationContext.getString(R.string.open_in_browser), openLinkPendingIntent)
         }
 
 

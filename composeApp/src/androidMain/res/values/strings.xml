@@ -90,4 +90,7 @@
     <string name="int_hours">%1$s hours</string>
     <string name="setting_strike_notification_service">Get notifications for Strikes</string>
     <string name="setting_strike_notification_service_desc">Enables a background service that will automatically notify you if any strikes have been announced.</string>
+    <string name="strikes_notification_channel">Strikes Alerts</string>
+    <string name="strikes_notification_title">Strike Alert</string>
+    <string name="open_app">Open App</string>
 </resources>

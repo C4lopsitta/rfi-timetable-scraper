@@ -88,4 +88,7 @@
     <string name="int_hours">%1$s ore</string>
     <string name="setting_strike_notification_service">Ricevi avvisi per gli Scioperi</string>
     <string name="setting_strike_notification_service_desc">Abilita un servizio in background che avviserà automaticamente quando saranno annunciati degli scioperi.</string>
+    <string name="strikes_notification_channel">Avvisi Scioperi</string>
+    <string name="strikes_notification_title">Avviso Sciopero</string>
+    <string name="open_app">Apri l\'App</string>
 </resources>

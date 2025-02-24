@@ -73,8 +73,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    companion object {
+        lateinit var instance: MainActivity
+            private set
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        instance = this
 
         setContent {
             val navController = rememberNavController()
