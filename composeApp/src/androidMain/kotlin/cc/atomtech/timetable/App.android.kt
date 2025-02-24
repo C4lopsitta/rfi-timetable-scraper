@@ -1,7 +1,10 @@
 package cc.atomtech.timetable
 
 import android.icu.util.Calendar
+import android.util.Log
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -62,6 +65,11 @@ actual fun toggleStrikesNotificationService(
     // Create a PeriodicWorkRequest to run daily
     val workRequest = PeriodicWorkRequestBuilder<StrikeNotificationWorker>(1, TimeUnit.DAYS)
         .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED) // Ensures network access
+                .build()
+        )
         .build()
 
     WorkManager.getInstance(context).enqueueUniquePeriodicWork(
@@ -75,6 +83,42 @@ actual fun toggleStrikesNotificationService(
 actual fun debugRunStrikesNotificationService() {
     val context = MainActivity.instance
 
-    val workRequest = OneTimeWorkRequestBuilder<StrikeNotificationWorker>().build()
+    // Calculate the initial delay until the next occurrence of the specified hour
+//    val now = Calendar.getInstance()
+//    val scheduledTime = Calendar.getInstance().apply {
+//        set(Calendar.HOUR_OF_DAY, 17)
+//        set(Calendar.MINUTE, 58)
+//        set(Calendar.SECOND, 0)
+//        set(Calendar.MILLISECOND, 0)
+//    }
+//    // If the scheduled time has already passed today, schedule for tomorrow
+//    if (now.after(scheduledTime)) {
+//        scheduledTime.add(Calendar.DAY_OF_MONTH, 1)
+//    }
+//    val initialDelay = scheduledTime.timeInMillis - now.timeInMillis
+//
+//    // Create a PeriodicWorkRequest to run daily
+//    val workRequest = PeriodicWorkRequestBuilder<StrikeNotificationWorker>(1, TimeUnit.DAYS)
+//        .setInitialDelay(10000, TimeUnit.MILLISECONDS)
+//        .setConstraints(Constraints.NONE)
+//        .build()
+//
+//    val operation = WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+//        "StrikeNotificationWorker",
+//        ExistingPeriodicWorkPolicy.UPDATE,
+//        workRequest
+//    )
+//
+//    Log.i("STRIKES_WORKER", "Scheduled Worker for ${scheduledTime.time}")
+
+
+    val workRequest = OneTimeWorkRequestBuilder<StrikeNotificationWorker>()
+        .setInitialDelay(60, TimeUnit.SECONDS)
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED) // Ensures network access
+                .build()
+        )
+        .build()
     WorkManager.getInstance(context).enqueue(workRequest)
 }

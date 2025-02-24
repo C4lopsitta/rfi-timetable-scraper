@@ -21,6 +21,8 @@ class StrikeNotificationWorker (
 
 
     override suspend fun doWork(): Result {
+        println("Running Worker for Strikes Notification Service")
+
         val trenitaliaNotices: TrenitaliaInfo
         val notificationManager: NotificationManager
 
@@ -28,7 +30,8 @@ class StrikeNotificationWorker (
             trenitaliaNotices = TrenitaliaScraper.scrapePassengernInformation()
             notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         } catch (ex: Exception) {
-            return Result.failure()
+            println("Notification fetching has failed!\n${ex.printStackTrace()}")
+            return Result.retry()
         }
 
         trenitaliaNotices.irregularTrafficEvents.forEachIndexed { index, trenitaliaEventDetails ->
@@ -53,7 +56,7 @@ class StrikeNotificationWorker (
         val channel = NotificationChannel(
             notificationChannel,
             applicationContext.getString(R.string.strikes_notification_channel),
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_DEFAULT
         )
         notificationManager.createNotificationChannel(channel)
 
@@ -72,6 +75,7 @@ class StrikeNotificationWorker (
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .addAction(R.drawable.ic_launcher_foreground, applicationContext.getString(R.string.open_app), openAppPendingIntent)
             .setAutoCancel(true)
+            .setSilent(true)
 
         eventDetail.link?.let {
             val openLinkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(eventDetail.link))
