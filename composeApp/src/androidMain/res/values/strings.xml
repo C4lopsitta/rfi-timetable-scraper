@@ -97,4 +97,8 @@
     <string name="nav_cerca_treno">Search a Train</string>
     <string name="nav_icon_cerca_treno" translatable="false">Cerca treno Icon</string>
     <string name="nav_other">Other</string>
+    <string name="txt_train_number">Train Number</string>
+    <string name="cerca_treno_title">Search for a Train</string>
+    <string name="cerca_treno_notice">Right now only train run by Trenitalia are available.</string>
+    <string name="icon_notice">Notice</string>
 </resources>

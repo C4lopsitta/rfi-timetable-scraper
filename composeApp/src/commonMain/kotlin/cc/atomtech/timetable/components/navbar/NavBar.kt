@@ -184,7 +184,7 @@ fun NavBar(
             OverflowNavItem(
                 icon = { Icon(Icons.Rounded.Train, contentDescription = StringRes.get("nav_icon_station_info")) },
                 text = if(station != null) StringRes.format("nav_station_info", station.name) else StringRes.get("nav_station_info_nostation"),
-                isDisabled = station == null
+                isDisabled = true// station == null
             ) {
                 navController.navigate("station_info") {
                     popUpTo(navController.graph.id) {
@@ -196,7 +196,6 @@ fun NavBar(
             OverflowNavItem(
                 icon = { Icon(Icons.Rounded.Route, contentDescription = StringRes.get("nav_icon_cerca_treno")) },
                 text = StringRes.get("nav_cerca_treno"),
-                isDisabled = true
             ) {
                 navController.navigate("cerca_treno") {
                     popUpTo(navController.graph.id) {

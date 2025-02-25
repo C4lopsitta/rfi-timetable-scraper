@@ -105,8 +105,8 @@ android {
         applicationId = "cc.atomtech.timetable"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 17
-        versionName = "1.4.3-aw"
+        versionCode = 18
+        versionName = "1.4.4"
         versionNameSuffix = "-play"
         resourceConfigurations.add("en")
         resourceConfigurations.add("it")

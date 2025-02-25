@@ -50,6 +50,7 @@ import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.models.DetailedTrainData
 import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
+import cc.atomtech.timetable.views.CercaTreno
 import cc.atomtech.timetable.views.Settings
 import cc.atomtech.timetable.views.TrenitaliaRegionInfo
 
@@ -193,6 +194,10 @@ fun NavigationBodyHost(
 
             composable("settings") {
                 Settings(preferences = preferences)
+            }
+
+            composable("cerca_treno") {
+                CercaTreno()
             }
 
             composable("details/{isArrival}") {

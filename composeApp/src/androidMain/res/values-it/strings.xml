@@ -94,4 +94,8 @@
     <string name="nav_station_info_nostation">Informazione sulla Stazione</string>
     <string name="nav_cerca_treno">Cerca un Treno</string>
     <string name="nav_other">Altro</string>
+    <string name="txt_train_number">Numero Treno</string>
+    <string name="cerca_treno_title">Cerca un Treno</string>
+    <string name="cerca_treno_notice">Al momento solamente i treni di Trenitalia sono disponibili.</string>
+    <string name="icon_notice">Avviso</string>
 </resources>
