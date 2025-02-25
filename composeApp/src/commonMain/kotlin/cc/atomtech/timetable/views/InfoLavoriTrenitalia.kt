@@ -129,12 +129,18 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                         modifier = Modifier.padding( bottom = 12.dp, top = 48.dp )
                     )
                 }
+                val liveNoticesTitles = List<String>(info!!.irregularTrafficEvents.size) { index ->
+                    info!!.irregularTrafficEvents[index].title
+                }
+
                 items (info!!.extraEvents) {
-                    TrenitaliaEventRow(it) {
-                        chosenEvent = it
-                        showSheet = true
+                    if(!liveNoticesTitles.contains(it.title)) {
+                        TrenitaliaEventRow(it) {
+                            chosenEvent = it
+                            showSheet = true
+                        }
+                        HorizontalDivider( modifier = Modifier.padding( bottom = 12.dp ) )
                     }
-                    HorizontalDivider( modifier = Modifier.padding( bottom = 12.dp ) )
                 }
             }
             if (showSheet) {
