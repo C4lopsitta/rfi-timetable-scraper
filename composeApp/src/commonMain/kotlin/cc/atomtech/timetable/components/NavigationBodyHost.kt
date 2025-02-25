@@ -132,36 +132,6 @@ fun NavigationBodyHost(
             startDestination = "departures",
             modifier = Modifier.padding(start = 12.dp)
         ) {
-            //region newRoutes
-//            navigation(
-//                route = Routes.STATION,
-//                startDestination = Routes.DEPARTURES
-//            ) {
-//                composable( route = Routes.DEPARTURES ) { LargeIconText(Icons.Rounded.NorthEast, text = "New Departures") }
-//                composable( route = Routes.ARRIVALS ) { LargeIconText(Icons.Rounded.SouthWest, text = "New Arrivals") }
-//                composable( route = Routes.STATION_INFO ) { LargeIconText(Icons.Rounded.Info, text = "Station Info") }
-//                composable( route = Routes.SCHEDULE ) { LargeIconText(Icons.Rounded.Schedule, text = "Station Schedule") }
-//                composable( route = Routes.TRAIN_DETAILS ) { LargeIconText(Icons.Rounded.RailwayAlert, text = "Train Details") }
-//            }
-//
-//            navigation(
-//                route = Routes.INFOLAVORI,
-//                startDestination = Routes.TRENITALIA
-//            ) {
-//                composable( route = Routes.TRENITALIA ) { LargeIconText(Icons.Rounded.Train, text = "Trenitalia") }
-//                composable( route = Routes.LIVE ) { LargeIconText(Icons.Rounded.Timer, text = "New Live Issues") }
-//                composable( route = Routes.NOTICES ) { LargeIconText(Icons.AutoMirrored.Rounded.Announcement, text = "New Notices") }
-//            }
-//
-//            composable( route = Routes.SEARCH ) { LargeIconText(Icons.Rounded.Search, text = "Search") }
-//            composable( route = Routes.FAVOURITES ) { LargeIconText(Icons.Rounded.Star, text = "Favourites") }
-//            composable( route = Routes.SETTINGS ) { LargeIconText(Icons.Rounded.Settings, text = "Settings") }
-//            composable( route = Routes.APP_INFO )  { LargeIconText(Icons.Rounded.Info, text = "App Info") }
-//
-
-            //endregion newRoutes
-
-            //region oldRoutes
             composable("departures") {
                 Timetable(
                     trainList = timetable?.uiState?.value?.departures,
@@ -230,7 +200,6 @@ fun NavigationBodyHost(
                 TrainDetails(detailViewSelectedTrain!!, isArrival)
             }
             composable("info") { AppInfo() }
-            //endregion oldRoutes
         }
     }
 }

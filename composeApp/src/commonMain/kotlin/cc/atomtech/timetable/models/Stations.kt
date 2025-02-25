@@ -28,9 +28,9 @@ class Stations(var stations: ArrayList<Station>) {
         }
     }
 
-    fun search(query: String): List<Station> {
+    fun search(query: String, favouriteStations: List<Station>? = null): List<Station> {
         if (query.isEmpty() && stations.isNotEmpty()) {
-            return stations.subList(0, 10)
+            return favouriteStations ?: stations.subList(0, 10)
         }
         return stations.filter { it.name.contains(query, ignoreCase = true) }
     }

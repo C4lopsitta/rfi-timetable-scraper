@@ -1,33 +1,41 @@
-package cc.atomtech.timetable.components
+package cc.atomtech.timetable.components.navbar
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.MenuOpen
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Engineering
-import androidx.compose.material.icons.filled.LocationCity
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material.icons.rounded.Campaign
 import androidx.compose.material.icons.rounded.Engineering
-import androidx.compose.material.icons.rounded.LocationCity
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Route
+import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Train
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
-import cc.atomtech.timetable.Routes
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.models.Station
 
 @Composable
 private fun isCurrentRoute(navController: NavHostController, route: String): Boolean {
@@ -45,8 +53,18 @@ private fun HighlightedIcon(icon: @Composable () -> Unit, highlighed: @Composabl
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavBar(navController: NavHostController) {
+fun NavBar(
+    navController: NavHostController,
+    station: Station? = null
+) {
+    var showOverflow by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false
+    )
+
+
     NavigationBar {
         // region oldRoutes
         NavigationBarItem(label = { Text(StringRes.get("nav_departures")) },
@@ -117,18 +135,88 @@ fun NavBar(navController: NavHostController) {
                     }
                 }
             })
+//        NavigationBarItem(
+//            label = { Text(StringRes.get("nav_settings")) },
+//            icon = { Icon(Icons.Rounded.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
+//            selected = isCurrentRoute(navController, "settings"),
+//            onClick = {
+
+//            }
+//        )
+
         NavigationBarItem(
-            label = { Text(StringRes.get("nav_settings")) },
-            icon = { Icon(Icons.Rounded.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
-            selected = isCurrentRoute(navController, "settings"),
+            label = { Text(StringRes.get("nav_other")) },
+            icon = {
+                Icon(
+                    Icons.AutoMirrored.Rounded.MenuOpen,
+                    contentDescription = StringRes.get("nav_icon_other")
+                )
+            },
+            selected = showOverflow,
             onClick = {
+                showOverflow = true
+            }
+        )
+        // endregion oldRoutes
+    }
+
+    if(showOverflow) ModalBottomSheet(
+        sheetState = sheetState,
+        onDismissRequest = {
+            showOverflow = false
+        }
+    ) {
+        Column (
+            modifier = Modifier.padding( horizontal = 12.dp )
+        ) {
+            OverflowNavItem(
+                icon = { Icon(Icons.Rounded.Schedule, contentDescription = StringRes.get("nav_icon_schedule")) },
+                text = StringRes.get("nav_schedule"),
+                isDisabled = true
+            ) {
+                navController.navigate("schedule") {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+                showOverflow = false
+            }
+            OverflowNavItem(
+                icon = { Icon(Icons.Rounded.Train, contentDescription = StringRes.get("nav_icon_station_info")) },
+                text = if(station != null) StringRes.format("nav_station_info", station.name) else StringRes.get("nav_station_info_nostation"),
+                isDisabled = station == null
+            ) {
+                navController.navigate("station_info") {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+                showOverflow = false
+            }
+            OverflowNavItem(
+                icon = { Icon(Icons.Rounded.Route, contentDescription = StringRes.get("nav_icon_cerca_treno")) },
+                text = StringRes.get("nav_cerca_treno"),
+                isDisabled = true
+            ) {
+                navController.navigate("cerca_treno") {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+                showOverflow = false
+            }
+            OverflowNavItem(
+                icon = { Icon(Icons.Rounded.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
+                text = StringRes.get("nav_settings"),
+            ) {
                 navController.navigate("settings") {
                     popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                 }
+                showOverflow = false
             }
-        )
-        // endregion oldRoutes
+            Box( modifier = Modifier.height( 64.dp ) )
+        }
     }
 }

@@ -80,7 +80,7 @@
     <string name="feature_not_available">Non Disponibile</string>
     <string name="nav_icon_departures">Icona Partenze</string>
     <string name="nav_icon_arrivals">Icona Arrivi</string>
-    <string name="nav_station_info">Info</string>
+    <string name="nav_station_info">Info Stazione di %1$s</string>
     <string name="nav_icon_station_info">Icona Info</string>
     <string name="nav_schedule">Orari</string>
     <string name="nav_icon_schedule">Icona Orari</string>
@@ -91,4 +91,7 @@
     <string name="strikes_notification_channel">Avvisi Scioperi</string>
     <string name="strikes_notification_title">Avviso Sciopero</string>
     <string name="open_app">Apri l\'App</string>
+    <string name="nav_station_info_nostation">Informazione sulla Stazione</string>
+    <string name="nav_cerca_treno">Cerca un Treno</string>
+    <string name="nav_other">Altro</string>
 </resources>

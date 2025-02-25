@@ -16,7 +16,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.*
 import androidx.navigation.compose.currentBackStackEntryAsState
-import cc.atomtech.timetable.components.NavBar
+import cc.atomtech.timetable.components.navbar.NavBar
 import cc.atomtech.timetable.components.NavRail
 import cc.atomtech.timetable.components.NavigationBodyHost
 import cc.atomtech.timetable.components.ScaffoldBody
@@ -38,7 +38,6 @@ import cc.atomtech.timetable.components.InfoLavoriTabBar
 import cc.atomtech.timetable.enumerations.Platform
 import cc.atomtech.timetable.scrapers.RfiScraper
 import cc.atomtech.timetable.scrapers.RssFeeds
-import cc.atomtech.timetable.views.DeviceOffline
 import kotlinx.coroutines.IO
 
 
@@ -74,7 +73,7 @@ fun Main(navController: NavHostController,
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
     var searchQuery by remember { mutableStateOf("") }
-    var searchSuggestions by remember { mutableStateOf<List<Station>?>(null) }
+    var searchSuggestions by remember { mutableStateOf<List<Station>?>(favouriteStations.stations) }
     val stations by remember { mutableStateOf(Stations(arrayListOf())) }
     var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
@@ -181,7 +180,7 @@ fun Main(navController: NavHostController,
                             updateSearchQuery = { query: String ->
                                 searchQuery = query
                                 if (stations.stations.isNotEmpty())
-                                    searchSuggestions = stations.search(query)
+                                    searchSuggestions = stations.search(query, favouriteStations.stations)
                             },
                             resetSearchSuggestions = {
                                 navController.popBackStack()
@@ -195,7 +194,7 @@ fun Main(navController: NavHostController,
             snackbarHost = {
                 SnackbarHost( snackbarHostState )
             },
-            bottomBar = { if(!isDesktop) NavBar(navController) },
+            bottomBar = { if(!isDesktop) NavBar(navController, station = stations.searchById(stationId)) },
             floatingActionButton = {
 
             }

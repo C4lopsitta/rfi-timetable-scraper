@@ -50,19 +50,19 @@ fun InfoLavori(tabIndex: Int,
         modifier = Modifier.fillMaxSize().padding( end = 12.dp ),
     ) {
         when(tabIndex) {
-            0 -> LazyColumn {
+            1 -> LazyColumn {
                 items(baseFeed) { item ->
                     item.toMobileRow()
                     HorizontalDivider()
                 }
             }
-            1 -> LazyColumn {
+            2 -> LazyColumn {
                 items(baseFeedAnnouncements) { item ->
                     item.toMobileRow()
                     HorizontalDivider()
                 }
             }
-            2 -> InfoLavoriTrenitalia(navigateToRegionDetails = { navigateToRegionDetails(it) })
+            0 -> InfoLavoriTrenitalia(navigateToRegionDetails = { navigateToRegionDetails(it) })
             else -> Column (
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -85,7 +85,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val isTablet = isTablet()
-            var useNewUi by remember { mutableStateOf<Boolean?>(null) }
 
             val context = LocalContext.current
             val colorScheme = if (isSystemInDarkTheme()) {
@@ -94,44 +93,12 @@ class MainActivity : ComponentActivity() {
 
             val preferences = AppPreferences(storePreferences())
 
-            LaunchedEffect(Unit) {
-                useNewUi = preferences.getUseNewUi().first()
-            }
-
-            if(useNewUi == true) {
-                NewMain(
-                    navController = navController,
-                    colorScheme = colorScheme,
-                    preferences = preferences
-                )
-            } else if (useNewUi == false) {
-                Main(
-                    navController = navController,
-                    preferences = preferences,
-                    isDesktop = isTablet,
-                    colorScheme = colorScheme
-                )
-            } else {
-                Column (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background( color = androidx.compose.material3.MaterialTheme.colorScheme.background ),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Icon(
-                        Icons.Outlined.Train,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width( 148.dp )
-                            .height( 148.dp ),
-                        tint = Color( 0xFF40334F )
-                    )
-                    LinearProgressIndicator(
-                        modifier = Modifier.fillMaxWidth( 0.7f )
-                    )
-                }
-            }
+            Main(
+                navController = navController,
+                preferences = preferences,
+                isDesktop = isTablet,
+                colorScheme = colorScheme
+            )
         }
     }
 }

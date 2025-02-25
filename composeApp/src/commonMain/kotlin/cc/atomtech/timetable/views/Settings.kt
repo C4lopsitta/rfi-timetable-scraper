@@ -170,13 +170,11 @@ fun Settings(
     preferences: AppPreferences
 ) {
     var reloadDelayValue by remember { mutableStateOf(1f) }
-    var useNewUi by remember { mutableStateOf(false) }
     var allowStationCaching by remember { mutableStateOf(true) }
     var useStrikesNotificationService by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         reloadDelayValue = preferences.getReloadDelay().first().toFloat()
-        useNewUi = preferences.getUseNewUi().first()
         allowStationCaching = preferences.getStoreStations().first()
         useStrikesNotificationService = preferences.getUseStrikesNotificationService().first()
     }
@@ -209,19 +207,6 @@ fun Settings(
         }
         item {
             SettingToggleItem(
-                title = StringRes.get("setting_new_ui"),
-//                isBetaFeature = true,
-                subTitle = StringRes.get("setting_new_ui_desc"),
-                value = useNewUi,
-                isNotAvailableFeature = true
-            ) { updateValue {
-//                useNewUi = it
-//                preferences.setUseNewUi(it)
-            } }
-            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
-        }
-        item {
-            SettingToggleItem(
                 title = StringRes.get("setting_cache_search_results"),
                 subTitle = StringRes.get("setting_cache_search_results_desc"),
                 value = allowStationCaching
@@ -240,6 +225,7 @@ fun Settings(
                 SettingToggleItem(
                     title = StringRes.get("setting_strike_notification_service"),
                     subTitle = StringRes.get("setting_strike_notification_service_desc"),
+                    isBetaFeature = true,
                     value = useStrikesNotificationService
                 ) {
                     updateValue {

@@ -1,5 +1,6 @@
 package cc.atomtech.timetable.scrapers
 
+import androidx.compose.ui.text.capitalize
 import cc.atomtech.timetable.models.FeedItem
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
@@ -52,10 +53,16 @@ object RssFeeds {
                     )
                 )
             } else {
+                val parts = item.getElementsByTag("title")[0].text().split(":", ",")
+
                 items.add(
                     FeedItem(
-                        title = item.getElementsByTag("title")[0].text().split(":")[0],
-                        description = item.getElementsByTag("title")[0].text().split(": ")[1],
+                        title = parts[0],
+                        description = item.getElementsByTag("title")[0].text()
+                            .removePrefix(parts[0])
+                            .removeRange(0..0)
+                            .trimStart()
+                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
                         url = item.getElementsByTag("link")[0].text(),
                         pubDate = item.getElementsByTag("pubDate")[0].text()
                     )

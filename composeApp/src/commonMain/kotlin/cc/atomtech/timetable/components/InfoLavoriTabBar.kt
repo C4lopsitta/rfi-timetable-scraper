@@ -20,20 +20,20 @@ fun InfoLavoriTabBar(tabIndex: Int,
         Tab(
             selected = true,
             onClick = { setIndex(0) },
+            text = { Text(StringRes.get("trenitalia")) },
+            icon = { Icon(Icons.Rounded.Train, contentDescription = StringRes.get("trenitalia")) }
+        )
+        Tab(
+            selected = true,
+            onClick = { setIndex(1) },
             text = { Text(StringRes.get("real_time")) },
             icon = { Icon(Icons.Rounded.Timelapse, contentDescription = StringRes.get("real_time")) }
         )
         Tab(
             selected = true,
-            onClick = { setIndex(1) },
+            onClick = { setIndex(2) },
             text = { Text(StringRes.get("announcements")) },
             icon = { Icon(Icons.AutoMirrored.Rounded.Announcement, contentDescription = StringRes.get("announcements")) }
-        )
-        Tab(
-            selected = true,
-            onClick = { setIndex(2) },
-            text = { Text(StringRes.get("trenitalia")) },
-            icon = { Icon(Icons.Rounded.Train, contentDescription = StringRes.get("trenitalia")) }
         )
     }
 }

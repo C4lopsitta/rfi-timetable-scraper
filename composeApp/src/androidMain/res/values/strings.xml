@@ -81,7 +81,7 @@
     <string name="feature_not_available">Not Available</string>
     <string name="nav_icon_departures">Departures Icon</string>
     <string name="nav_icon_arrivals">Arrivals Icon</string>
-    <string name="nav_station_info">Info</string>
+    <string name="nav_station_info">%1$s Station Information</string>
     <string name="nav_icon_station_info">Info Icon</string>
     <string name="nav_schedule">Schedule</string>
     <string name="nav_icon_schedule">Schedule Icon</string>
@@ -93,4 +93,8 @@
     <string name="strikes_notification_channel">Strikes Alerts</string>
     <string name="strikes_notification_title">Strike Alert</string>
     <string name="open_app">Open App</string>
+    <string name="nav_station_info_nostation">Station Information</string>
+    <string name="nav_cerca_treno">Search a Train</string>
+    <string name="nav_icon_cerca_treno" translatable="false">Cerca treno Icon</string>
+    <string name="nav_other">Other</string>
 </resources>
