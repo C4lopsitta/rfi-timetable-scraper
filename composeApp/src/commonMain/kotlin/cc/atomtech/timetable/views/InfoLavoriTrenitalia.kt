@@ -1,5 +1,6 @@
 package cc.atomtech.timetable.views
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -178,7 +181,27 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                                         modifier = Modifier.padding(vertical = 12.dp)
                                     )
                                 } else {
-                                    Text(detail, modifier = Modifier.padding(bottom = 12.dp))
+                                    if(detail.contains("•")) {
+                                        detail.split("•").forEach {
+                                            if(it.isNotBlank()) Text("\u2022 $it")
+                                        }
+                                        Box( modifier = Modifier.padding( vertical = 6.dp ) )
+                                    } else {
+                                        Text(detail, modifier = Modifier.padding(bottom = 12.dp))
+                                    }
+                                }
+                            }
+                            if(chosenEvent?.link != null) {
+                                item {
+                                    val uriHandler = LocalUriHandler.current
+                                    OutlinedButton(
+                                        content = {
+                                            Text(StringRes.get("open_in_browser"))
+                                        },
+                                        onClick = {
+                                            chosenEvent!!.link?.let { uriHandler.openUri(it) }
+                                        }
+                                    )
                                 }
                             }
                         }
