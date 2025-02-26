@@ -101,4 +101,5 @@
     <string name="cerca_treno_title">Search for a Train</string>
     <string name="cerca_treno_notice">Right now only train run by Trenitalia are available.</string>
     <string name="icon_notice">Notice</string>
+    <string name="error_train_number">The train number cannot contain any letters or other characters.</string>
 </resources>

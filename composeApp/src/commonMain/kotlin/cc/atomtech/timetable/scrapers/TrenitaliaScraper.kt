@@ -7,7 +7,7 @@ import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
 import cc.atomtech.timetable.models.TrenitaliaTrainData
-import cc.atomtech.timetable.models.TrenitaliaTrainDetails
+import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -215,10 +215,11 @@ object TrenitaliaScraper {
         return "http://www.viaggiatreno.it/infomobilitamobile/pages/cercaTreno/cercaTreno.jsp?treno=${train.number}&origine=${train.originStationId}&datapartenza=${train.departureTime}"
     }
 
-    suspend fun getAndamentoTreno(train: TrenitaliaTrainData): TrenitaliaTrainDetails {
+    suspend fun getAndamentoTreno(train: TrenitaliaTrainData): RestEasyTrainData {
         val trenitaliaWebResponse = HttpClient().get(getAndamentoTrenoUrl(train))
         val jsonBody = trenitaliaWebResponse.bodyAsText()
 
-        return Json.decodeFromString<TrenitaliaTrainDetails>(jsonBody)
+        val json = Json { ignoreUnknownKeys =  true }
+        return json.decodeFromString<RestEasyTrainData>(jsonBody)
     }
 }

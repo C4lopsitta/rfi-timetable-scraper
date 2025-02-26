@@ -37,7 +37,7 @@ import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.models.DetailedTrainData
 import cc.atomtech.timetable.models.TrenitaliaTrainData
-import cc.atomtech.timetable.models.TrenitaliaTrainDetails
+import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 import cc.atomtech.timetable.scrapers.TrenitaliaScraper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +76,7 @@ fun TrainDetails(trainData: DetailedTrainData,
                  isArrival: Boolean) {
     var availableTrains by remember { mutableStateOf<List<TrenitaliaTrainData>?>(null) }
     var trenitaliaAdvancedTrainData by remember { mutableStateOf<TrenitaliaTrainData?>(null) }
-    var specificTrenitaliaDetails by remember { mutableStateOf<TrenitaliaTrainDetails?>(null) }
+    var specificTrenitaliaDetails by remember { mutableStateOf<RestEasyTrainData?>(null) }
 
     LaunchedEffect(Unit) {
         try {

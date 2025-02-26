@@ -18,15 +18,34 @@ class AppPreferences(
     private val preferences: DataStore<Preferences>
 ) {
     companion object {
+        private const val LAST_APP_VERSION = "LAST_APP_VERSION"
         private const val STATION_ID = "STATION_ID"
         private const val FAVOURITE_STATIONS = "FAVOURITE_STATIONS"
         private const val ALLOW_STORAGE_STATIONS = "ALLOW_STORAGE_STATIONS"
         private const val STATION_LIST_JSON = "STATION_LIST_JSON"
         private const val RELOAD_DELAY = "RELOAD_DELAY"
-        private const val USE_NEW_UI = "USE_NEW_UI"
         private const val PRELOAD_NOTICES = "PRELOAD_NOTICES"
         private const val USE_STRIKES_NOTIFICATION_SERVICE = "use_strikes_notification_service"
         private const val STRIKES_NOTIFICATION_TIME = "time_strikes_notification_service"
+    }
+
+    fun getLastAppVersion(): Flow<Int> {
+        return preferences.data.map {
+            it[intPreferencesKey(LAST_APP_VERSION)] ?: 0
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setLastAppVersion(version: Int) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[intPreferencesKey(LAST_APP_VERSION)] = version
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getStoreStations(): Flow<Boolean> {
@@ -97,25 +116,6 @@ class AppPreferences(
             try {
                 preferences.edit {
                     it[booleanPreferencesKey(PRELOAD_NOTICES)] = value
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) throw e
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun getUseNewUi(): Flow<Boolean> {
-        return preferences.data.map {
-            it[booleanPreferencesKey(USE_NEW_UI)] ?: false
-        }.flowOn(Dispatchers.IO)
-    }
-
-    suspend fun setUseNewUi(value: Boolean) {
-        return withContext(Dispatchers.IO) {
-            try {
-                preferences.edit {
-                    it[booleanPreferencesKey(USE_NEW_UI)] = value
                 }
             } catch (e: Exception) {
                 if (e is CancellationException) throw e

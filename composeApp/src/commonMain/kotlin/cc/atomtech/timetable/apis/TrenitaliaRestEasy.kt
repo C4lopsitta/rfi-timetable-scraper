@@ -1,38 +1,32 @@
 package cc.atomtech.timetable.apis
 
-import cc.atomtech.timetable.models.TrenitaliaTrainData
+import cc.atomtech.timetable.models.trenitalia.CercaTrenoData
+import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import kotlinx.serialization.json.Json
 
 object TrenitaliaRestEasy {
-    private const val trainSearchUrl = "http://www.viaggiatreno.it/infomobilitamobile/resteasy/viaggiatreno/cercaNumeroTrenoTrenoAutocomplete/"
+    private const val baseUrl = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/"
 
+    suspend fun searchTrainByNumber(trainNumber: String): CercaTrenoData? {
+        val response = HttpClient().get(baseUrl + "cercaNumeroTreno/" + trainNumber)
+        val json = Json { ignoreUnknownKeys = true }
 
-    suspend fun fetchTrainByNumber(trainNumber: String): List<TrenitaliaTrainData> {
-        val response = HttpClient().get(trainSearchUrl + trainNumber)
-        val tsv = response.bodyAsText()
-
-        val entries = arrayListOf<TrenitaliaTrainData>()
-
-        tsv.lines().forEach { line ->
-            val fields = line.split("|")
-            if(fields.size >= 2) {
-                entries.add(
-                    TrenitaliaTrainData(
-                        number = fields[0].split(" - ")[0],
-                        originStationId = fields[1].split("-")[1],
-                        departureTime = fields[1].split("-")[2]
-                    )
-                )
-            }
-        }
-
-        return entries.toList()
+        if(response.status != io.ktor.http.HttpStatusCode.OK) return null
+        if(response.bodyAsText().isEmpty()) return null
+        return json.decodeFromString<CercaTrenoData>(response.bodyAsText())
     }
 
 
-    suspend fun searchTrainByNumber() {
+    suspend fun fetchTrain(train: CercaTrenoData): RestEasyTrainData {
+        val response = HttpClient().get(baseUrl + "andamentoTreno/${train.originCode}/${train.number}/${train.departureTimestamp}")
 
+        val json = Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+        }
+        return json.decodeFromString<RestEasyTrainData>(response.bodyAsText())
     }
 }

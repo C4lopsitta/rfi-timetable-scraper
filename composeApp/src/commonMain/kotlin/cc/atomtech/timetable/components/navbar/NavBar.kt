@@ -174,11 +174,7 @@ fun NavBar(
                 text = StringRes.get("nav_schedule"),
                 isDisabled = true
             ) {
-                navController.navigate("schedule") {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                }
+                navController.navigate("schedule")
                 showOverflow = false
             }
             OverflowNavItem(
@@ -186,33 +182,21 @@ fun NavBar(
                 text = if(station != null) StringRes.format("nav_station_info", station.name) else StringRes.get("nav_station_info_nostation"),
                 isDisabled = true// station == null
             ) {
-                navController.navigate("station_info") {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                }
+                navController.navigate("station_info")
                 showOverflow = false
             }
             OverflowNavItem(
                 icon = { Icon(Icons.Rounded.Route, contentDescription = StringRes.get("nav_icon_cerca_treno")) },
                 text = StringRes.get("nav_cerca_treno"),
             ) {
-                navController.navigate("cerca_treno") {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                }
+                navController.navigate("cerca_treno")
                 showOverflow = false
             }
             OverflowNavItem(
                 icon = { Icon(Icons.Rounded.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
                 text = StringRes.get("nav_settings"),
             ) {
-                navController.navigate("settings") {
-                    popUpTo(navController.graph.id) {
-                        inclusive = true
-                    }
-                }
+                navController.navigate("settings")
                 showOverflow = false
             }
             Box( modifier = Modifier.height( 64.dp ) )

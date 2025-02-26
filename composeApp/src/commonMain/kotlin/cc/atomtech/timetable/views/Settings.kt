@@ -37,6 +37,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.AppPreferences
+import cc.atomtech.timetable.AppVersion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -264,6 +265,7 @@ fun Settings(
             ) {
                 Text("${StringRes.get("app_name")} - cc.atomtech.timetable")
                 Text("Application licensed under GNU GPLv3 License")
+                Text("App Version ${AppVersion.versionName} (${AppVersion.versionCode})")
                 Row {
                     val uriHandler = LocalUriHandler.current
 

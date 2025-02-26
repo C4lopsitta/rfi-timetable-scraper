@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
@@ -32,27 +32,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.apis.TrenitaliaRestEasy
-import cc.atomtech.timetable.models.TrenitaliaTrainData
+import cc.atomtech.timetable.components.train.TrainHeader
+import cc.atomtech.timetable.models.trenitalia.CercaTrenoData
+import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 
 @Composable
 fun CercaTreno() {
     var trainNumberQuery by remember { mutableStateOf("") }
     var trainNumberQueryIsError by remember { mutableStateOf(false) }
-    var queryResults by remember { mutableStateOf<List<TrenitaliaTrainData>>(emptyList()) }
+    var queryResult by remember { mutableStateOf<CercaTrenoData?>(null) }
+    var queryTrainData by remember { mutableStateOf<RestEasyTrainData?>(null) }
 
     LaunchedEffect(trainNumberQuery) {
+        trainNumberQuery.trim()
+
         if(!trainNumberQuery.matches(Regex("[0-9]+"))) {
-            queryResults = emptyList()
-            trainNumberQueryIsError = true
+            queryResult = null
+            queryTrainData = null
+            trainNumberQueryIsError = trainNumberQuery.isNotEmpty()
             return@LaunchedEffect
         }
 
         trainNumberQueryIsError = false
 
-        queryResults = if(trainNumberQuery.isNotEmpty()) {
-            TrenitaliaRestEasy.fetchTrainByNumber(trainNumberQuery)
+        queryResult = if(trainNumberQuery.isNotEmpty()) {
+            TrenitaliaRestEasy.searchTrainByNumber(trainNumberQuery)
         } else {
-            emptyList()
+            null
+        }
+
+        if(queryResult != null) {
+            queryTrainData = TrenitaliaRestEasy.fetchTrain(queryResult!!)
+        } else {
+            queryTrainData = null
         }
     }
 
@@ -68,7 +80,7 @@ fun CercaTreno() {
                 disabledContentColor = MaterialTheme.colorScheme.onBackground
             )
         ) {
-            Text("Beta Preview", modifier = Modifier.padding( horizontal = 8.dp ))
+            Text("Beta", modifier = Modifier.padding( horizontal = 8.dp ))
         }
         Text(
             StringRes.get("cerca_treno_title"),
@@ -85,17 +97,29 @@ fun CercaTreno() {
             isError = trainNumberQueryIsError,
             singleLine = true,
         )
+        if(trainNumberQueryIsError) Text(StringRes.get("error_train_number"), color = MaterialTheme.colorScheme.error, fontSize = 12.sp, modifier = Modifier.padding( top = 4.dp ))
         Row (
-            modifier = Modifier.height( 20.dp ).padding( vertical = 8.dp ),
+            modifier = Modifier.height( 32.dp ).padding( vertical = 8.dp ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Rounded.Info, contentDescription = StringRes.get("icon_notice"))
-//            Box( modifier = Modifier.padding( horizontal = 4.dp ) )
-            Text(StringRes.get("cerca_treno_notice"))
+            Icon(Icons.Rounded.Info, contentDescription = StringRes.get("icon_notice"), modifier = Modifier.width(24.dp).height(24.dp))
+            Box( modifier = Modifier.padding( horizontal = 2.dp ) )
+            Text(StringRes.get("cerca_treno_notice"), fontSize = 12.sp, lineHeight = 12.sp)
         }
-        LazyColumn {
-            items (queryResults) { result ->
-                Text("(${result.number}) ${result.originStationId}")
+//        if(queryResult != null)
+//            Text("(${queryResult!!.number}) ${queryResult!!.originName}")
+
+        if(queryTrainData != null) {
+            LazyColumn {
+                item {
+                    TrainHeader(queryTrainData!!)
+                }
+//                Text("Origin ${queryTrainData!!.origin}")
+//                Text("Destination ${queryTrainData!!.destination}")
+//                Text("Train number ${queryTrainData!!.trainNumber}")
+//                Text("Departure time ${queryTrainData!!.departureTime}")
+//                Text("Arrival time ${queryTrainData!!.arrivalTime}")
+//                Text("Delay ${queryTrainData!!.delayReason}")
             }
         }
     }

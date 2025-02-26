@@ -98,4 +98,5 @@
     <string name="cerca_treno_title">Cerca un Treno</string>
     <string name="cerca_treno_notice">Al momento solamente i treni di Trenitalia sono disponibili.</string>
     <string name="icon_notice">Avviso</string>
+    <string name="error_train_number">Il numero treno non può contenere caratteri oltre a numeri.</string>
 </resources>

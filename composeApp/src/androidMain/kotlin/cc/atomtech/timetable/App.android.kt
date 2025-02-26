@@ -1,7 +1,6 @@
 package cc.atomtech.timetable
 
 import android.icu.util.Calendar
-import android.util.Log
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
@@ -121,4 +120,11 @@ actual fun debugRunStrikesNotificationService() {
         )
         .build()
     WorkManager.getInstance(context).enqueue(workRequest)
+}
+
+actual object AppVersion {
+    actual val versionCode: Int
+        get() = BuildConfig.VERSION_CODE
+    actual val versionName: String
+        get() = BuildConfig.VERSION_NAME
 }

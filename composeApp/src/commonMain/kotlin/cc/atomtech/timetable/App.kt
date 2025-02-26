@@ -44,6 +44,12 @@ import kotlinx.coroutines.IO
 const val preferencesFile = "timetables-prefs.preferences_pb"
 
 expect val platform: Platform;
+
+expect object AppVersion {
+    val versionCode: Int
+    val versionName: String
+}
+
 expect fun toggleStrikesNotificationService(
     isEnabled: Boolean,
     runningHour: Int = 18

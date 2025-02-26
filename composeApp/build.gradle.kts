@@ -101,17 +101,22 @@ android {
     namespace = "cc.atomtech.timetable"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "cc.atomtech.timetable"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 18
-        versionName = "1.4.4"
-        versionNameSuffix = "-play"
+        versionCode = 19
+        versionName = "1.4.5"
+//        versionNameSuffix = "-play"
         resourceConfigurations.add("en")
         resourceConfigurations.add("it")
         multiDexEnabled = true
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1,MD,LICENSE.md,NOTICE.md}"
