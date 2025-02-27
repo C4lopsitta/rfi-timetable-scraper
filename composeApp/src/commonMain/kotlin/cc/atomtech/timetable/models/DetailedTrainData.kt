@@ -19,3 +19,4 @@ data class DetailedTrainData(
     val number: String,
     val delayMinutes: Int
 )
+

@@ -36,6 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import cc.atomtech.timetable.components.AppBar
 import cc.atomtech.timetable.components.InfoLavoriTabBar
 import cc.atomtech.timetable.enumerations.Platform
+import cc.atomtech.timetable.preferences.MutablePreference
 import cc.atomtech.timetable.scrapers.RfiScraper
 import cc.atomtech.timetable.scrapers.RssFeeds
 import kotlinx.coroutines.IO
@@ -72,8 +73,26 @@ fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
 fun Main(navController: NavHostController,
          isDesktop: Boolean = false,
          preferences: AppPreferences,
-         colorScheme: ColorScheme? = null) {
-    var stationId by remember { mutableStateOf(1728) }
+         colorScheme: ColorScheme? = null,
+         stationData: cc.atomtech.timetable.models.viewmodels.Station = cc.atomtech.timetable.models.viewmodels.Station(preferences)) {
+    val snackbarHostState = SnackbarHostState()
+
+
+    // region preferences
+    // TODO)) Use these setters in Settings
+
+    var autoReloadIntervalMinutes by remember {
+        MutablePreference<Int>(initialValue = 5, coroutineScope = CoroutineScope(Dispatchers.IO)) {
+            preferences.setReloadDelay(it)
+        }
+    }
+
+    // Load preferences
+    LaunchedEffect(Unit) {
+        autoReloadIntervalMinutes = preferences.getReloadDelay().first()
+    }
+    // endregion preferences
+
     var favouriteStations by remember { mutableStateOf<Stations>(Stations(arrayListOf())) }
 
     var error by remember { mutableStateOf<String?>(null) }
@@ -84,20 +103,18 @@ fun Main(navController: NavHostController,
     var reloadTrigger by remember { mutableStateOf(false) }
     var timetable by remember { mutableStateOf<TimetableState?>(null) }
 
-    var reloaderMinutes by remember { mutableStateOf(5) }
     var stationsLoadingRetryCount by remember { mutableStateOf(0) };
     var isNewStationSet by remember { mutableStateOf(true) }
     var timetableRefresher: Job? = null
 
     var tabIndex by remember { mutableStateOf(0) }
 
-    val snackbarHostState = SnackbarHostState()
+
 
     LaunchedEffect(Unit, stationsLoadingRetryCount) {
         if(stationsLoadingRetryCount > 5) return@LaunchedEffect
 
         try {
-            stationId = preferences.getStationId().first()
             val storeStations = preferences.getStoreStations().first()
             val stationCacheJson = preferences.getStationCache().first()
 
@@ -112,6 +129,8 @@ fun Main(navController: NavHostController,
             }
 
             favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stations)
+
+            stationsLoadingRetryCount = 0
         } catch (e: Exception) {
             println(e.printStackTrace())
             error = e.toString()
@@ -119,14 +138,15 @@ fun Main(navController: NavHostController,
         }
     }
 
-    LaunchedEffect(stationId, reloadTrigger) {
+    // TODO)) Absolutely destroy
+    LaunchedEffect(stationData.updateStationById.value, reloadTrigger) {
         try {
             loading = true
             if(isNewStationSet) {
                 timetable = null
-                timetable = RfiScraper.getStationTimetable(stationId)
+                timetable = RfiScraper.getStationTimetable(stationData.updateStationById.value)
             } else {
-                timetable?.setNewTimetable(RfiScraper.reloadStation(stationId))
+                timetable?.setNewTimetable(RfiScraper.reloadStation(stationData.updateStationById.value))
             }
             loading = false
             isNewStationSet = false
@@ -153,10 +173,10 @@ fun Main(navController: NavHostController,
         } finally {
             timetableRefresher?.cancel()
             // stores how many 5 minutes it has to wait, so multiply by 5 to get actual value, if 0 skip reload
-            reloaderMinutes = preferences.getReloadDelay().first() * 5
-            if(reloaderMinutes > 0) {
+            autoReloadIntervalMinutes = preferences.getReloadDelay().first() * 5
+            if(autoReloadIntervalMinutes > 0) {
                 timetableRefresher = CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-                    delay((reloaderMinutes * 60 * 1000).toLong())
+                    delay((autoReloadIntervalMinutes * 60 * 1000).toLong())
                     reloadTrigger = !reloadTrigger
                 }
             }
@@ -200,11 +220,16 @@ fun Main(navController: NavHostController,
             snackbarHost = {
                 SnackbarHost( snackbarHostState )
             },
-            bottomBar = { if(!isDesktop) NavBar(navController, station = stations.searchById(stationId)) },
+            bottomBar = { if(!isDesktop) NavBar(navController, station = stations.searchById(stationData.updateStationById.value)) },
             floatingActionButton = {
 
             }
         ) { paddingValues ->
+            // TODO))
+//            if( loaders.departures.value || loaders.arrivals.value ||
+//                loaders.notices.value || loaders.trenitaliaNotices.value ||
+//                loaders.trenitaliaSpecificData.value ) LinearProgressIndicator( modifier = Modifier.fillMaxWidth() )
+
             ScaffoldBody(isLoading = loading,
                 isDesktop = isDesktop,
                 paddingValues = paddingValues,
@@ -229,7 +254,7 @@ fun Main(navController: NavHostController,
                         searchSuggestions = searchSuggestions,
                         preferences = preferences,
                         setStationId = { newId ->
-                            stationId = newId
+                            stationData.updateStationById(newId)
                             isNewStationSet = true
                             CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
                                 preferences.setStationId(newId)

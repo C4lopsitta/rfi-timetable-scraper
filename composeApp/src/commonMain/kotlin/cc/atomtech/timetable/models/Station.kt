@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.*
 
 @Serializable
 data class Station(val name: String, val id: Int) {
@@ -58,3 +57,4 @@ data class Station(val name: String, val id: Int) {
         return "$id"
     }
 }
+

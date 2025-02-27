@@ -18,7 +18,6 @@
     <string name="undefined">Undefined</string>
     <string name="platform">Platform</string>
     <string name="open_in_browser">Open in Browser</string>
-    <string name="app_version" translatable="false">1.4.3-aw (17)</string>
     <string name="details_number">Train number %1$s to</string>
     <string name="details_arrives">Arrives at</string>
     <string name="details_departs">Departs at</string>
@@ -102,4 +101,6 @@
     <string name="cerca_treno_notice">Right now only train run by Trenitalia are available.</string>
     <string name="icon_notice">Notice</string>
     <string name="error_train_number">The train number cannot contain any letters or other characters.</string>
+    <string name="version">Version %1$s</string>
+    <string name="whatsnew">The app is still being reworked and optimised.\nEnjoy faster loading times thanks to a new parallel loading funciton that allows the app to load more data at the same time.</string>
 </resources>

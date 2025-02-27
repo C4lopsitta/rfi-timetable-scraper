@@ -99,4 +99,6 @@
     <string name="cerca_treno_notice">Al momento solamente i treni di Trenitalia sono disponibili.</string>
     <string name="icon_notice">Avviso</string>
     <string name="error_train_number">Il numero treno non può contenere caratteri oltre a numeri.</string>
+    <string name="version">Versione %1$s</string>
+    <string name="whatsnew">Sto ancora ottimizzando e modificando parti dell\'app.\nOra i tempi di caricamento sono stati drasticamente ridotti grazie ad una nuova funzione di caricamento parallelo che consente all\'app di caricare più dati allo stesso tempo.</string>
 </resources>
