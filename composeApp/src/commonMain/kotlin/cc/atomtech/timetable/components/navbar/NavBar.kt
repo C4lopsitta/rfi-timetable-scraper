@@ -26,6 +26,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.Station
+import cc.atomtech.timetable.models.rfi.StationBaseData
 
 @Composable
 private fun isCurrentRoute(navController: NavHostController, route: String): Boolean {
@@ -57,7 +59,7 @@ private fun HighlightedIcon(icon: @Composable () -> Unit, highlighed: @Composabl
 @Composable
 fun NavBar(
     navController: NavHostController,
-    station: Station? = null
+    station: State<StationBaseData?>
 ) {
     var showOverflow by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
@@ -179,7 +181,7 @@ fun NavBar(
             }
             OverflowNavItem(
                 icon = { Icon(Icons.Rounded.Train, contentDescription = StringRes.get("nav_icon_station_info")) },
-                text = if(station != null) StringRes.format("nav_station_info", station.name) else StringRes.get("nav_station_info_nostation"),
+                text = if(station.value != null) StringRes.format("nav_station_info", station.value!!.name) else StringRes.get("nav_station_info_nostation"),
                 isDisabled = true// station == null
             ) {
                 navController.navigate("station_info")

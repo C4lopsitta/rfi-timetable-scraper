@@ -3,21 +3,6 @@ package cc.atomtech.timetable.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.Announcement
-import androidx.compose.material.icons.rounded.Announcement
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.NorthEast
-import androidx.compose.material.icons.rounded.RailwayAlert
-import androidx.compose.material.icons.rounded.Schedule
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.SouthWest
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.Timer
-import androidx.compose.material.icons.rounded.Train
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,16 +15,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import cc.atomtech.timetable.models.Station
 import cc.atomtech.timetable.models.Stations
-import cc.atomtech.timetable.models.TimetableState
 import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.navigation
 import cc.atomtech.timetable.AppPreferences
-import cc.atomtech.timetable.Routes
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.DesktopSearch
 import cc.atomtech.timetable.views.FavouriteStations
@@ -50,6 +31,8 @@ import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.models.DetailedTrainData
 import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
+import cc.atomtech.timetable.models.rfi.StationBaseData
+import cc.atomtech.timetable.models.viewmodels.Station
 import cc.atomtech.timetable.views.CercaTreno
 import cc.atomtech.timetable.views.Settings
 import cc.atomtech.timetable.views.TrenitaliaRegionInfo
@@ -58,13 +41,11 @@ import cc.atomtech.timetable.views.TrenitaliaRegionInfo
 fun NavigationBodyHost(
     navController: NavHostController,
     isDesktop: Boolean,
-    isLoading: Boolean,
     tabIndex: Int,
-    timetable: TimetableState?,
-    stations: Stations,
+    stationData: Station,
     preferences: AppPreferences,
     favouriteStations: Stations,
-    searchSuggestions: List<Station>?,
+    searchSuggestions: List<StationBaseData>,
     setStationId: (Int) -> Unit,
     updateFavourites: (String) -> Unit
 ) {
@@ -72,7 +53,7 @@ fun NavigationBodyHost(
     var selectedRegionInfo by remember { mutableStateOf<TrenitaliaInfoLavori?>(null) }
 
     fun viewTrainDetails(pick: TrainData, pickedFromArrival: Boolean) {
-        if(timetable == null) return
+        if(stationData.currentStation.value == null) return
         val pickTwin = (if(!pickedFromArrival) timetable.arrivals else timetable.departures).find {
             it.number == pick.number
         }
@@ -122,7 +103,7 @@ fun NavigationBodyHost(
             Row (
                 modifier = Modifier.padding( vertical = 20.dp, horizontal = 16.dp ),
             ) {
-                Text(timetable?.stationName ?: StringRes.get("app_name"),
+                Text(stationData.currentStation.value?.name ?: StringRes.get("app_name"),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -135,20 +116,20 @@ fun NavigationBodyHost(
         ) {
             composable("departures") {
                 Timetable(
-                    trainList = timetable?.uiState?.value?.departures,
+                    trainList = stationData.departures.value,
                     onTrainSelected = { selectedTrain: TrainData -> viewTrainDetails(selectedTrain, false) },
-                    stationInfo = timetable?.uiState?.value?.stationInfo,
-                    lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
+                    stationInfo = stationData.info.value,
+                    lastUpdate = -1, // timetable?.uiState?.value?.lastUptade ?: 0,
                     isDesktop = isDesktop
                 )
             }
 
             composable("arrivals") {
                 Timetable(
-                    trainList = timetable?.uiState?.value?.arrivals,
+                    trainList = stationData.arrivals.value,
                     onTrainSelected = { selectedTrain: TrainData -> viewTrainDetails(selectedTrain, true) },
-                    stationInfo = timetable?.uiState?.value?.stationInfo,
-                    lastUpdate = timetable?.uiState?.value?.lastUptade ?: 0,
+                    stationInfo = stationData.info.value,
+                    lastUpdate = -1,// timetable?.uiState?.value?.lastUptade ?: 0,
                     isDesktop = isDesktop
                 )
             }
@@ -177,13 +158,14 @@ fun NavigationBodyHost(
             }
             composable("search") {
                 if (isDesktop) {
-                    DesktopSearch(
-                        navController = navController,
-                        stations = stations
-                    ) { setStationId(it) }
+                    // TODO)) Reimplement desktop search
+//                    DesktopSearch(
+//                        navController = navController,
+//                        stations = stations
+//                    ) { setStationId(it) }
                 } else {
                     MobileSearch(
-                        stations = stations,
+                        stationData = stationData,
                         searchSuggestions = searchSuggestions,
                         favouriteStations = favouriteStations,
                         navController = navController,

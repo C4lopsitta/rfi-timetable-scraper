@@ -20,23 +20,25 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.TimetableState
+import cc.atomtech.timetable.models.viewmodels.Station
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(navController: NavHostController,
            searchQuery: String,
-           timetable: TimetableState?,
+           stationData: Station,
            triggerReload: () -> Unit,
            updateSearchQuery: (String) -> Unit,
            resetSearchSuggestions: () -> Unit) {
     TopAppBar(
         title = {
             if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
-                Text(timetable?.stationName ?: StringRes.get("app_name"))
+                Text(stationData.currentStation.value?.name ?: StringRes.get("app_name"))
             } else if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains(
                     ""
                 ) == false

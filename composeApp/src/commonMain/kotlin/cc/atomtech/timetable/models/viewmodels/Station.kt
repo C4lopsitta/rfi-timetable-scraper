@@ -10,11 +10,15 @@ import cc.atomtech.timetable.models.rfi.StationBaseData
 import cc.atomtech.timetable.models.rfi.TrainData
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class Station( private val preferences: AppPreferences ) : ViewModel() {
     private val _currentStation = mutableStateOf<StationBaseData?>(null)
     val currentStation: State<StationBaseData?> = _currentStation
+
+    private val _allStationData = mutableStateOf<List<StationBaseData>>(emptyList())
+    val allStationData: State<List<StationBaseData>> = _allStationData
 
     private val _info = mutableStateOf("")
     val info: State<String> = _info
@@ -31,8 +35,13 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
     private val _loadingArrivals = mutableStateOf(false)
     val loadingArrivals: State<Boolean> = _loadingArrivals
 
-    private val _allStationData = mutableStateOf<List<StationBaseData>>(emptyList())
-    val allStationData: State<List<StationBaseData>> = _allStationData
+    private val _loadingStations = mutableStateOf(false)
+    val loadingStations: State<Boolean> = _loadingStations
+
+    // TODO)) Reimplement auto-reload
+    // TODO)) Handle Exceptions
+    // TODO)) Add error handling through SnackBarHost
+    // TODO)) Add Stations loading loader value
 
     init {
         viewModelScope.launch {
@@ -48,9 +57,8 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
         return this.firstOrNull { it.id == id }
     }
 
-    fun List<StationBaseData>.searchByName(query: String) : List<StationBaseData> {
+    private fun List<StationBaseData>.searchByName(query: String) : List<StationBaseData> {
         if(query.isEmpty()) return emptyList()
-
         return _allStationData.value.filter { it.name.contains(query, ignoreCase = true) }
     }
 
@@ -78,12 +86,28 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
     private suspend fun loadAllStations() {
         if(preferences.getStoreStations().first()) {
             val stationStore = preferences.getStationCache().first()
-            _allStationData.value = Json.decodeFromString<List<StationBaseData>>(stationStore)
+            if(stationStore.isNotEmpty()) {
+                _allStationData.value = Json.decodeFromString<List<StationBaseData>>(stationStore)
+            } else {
+                _allStationData.value = RfiPartenzeArrivi.getSearchableEntries()
+                preferences.setStationCache(Json.encodeToString<List<StationBaseData>>(_allStationData.value))
+            }
         } else {
             _allStationData.value = RfiPartenzeArrivi.getSearchableEntries()
         }
     }
 
+
+    fun searchStations(query: String) : List<StationBaseData> {
+        return _allStationData.value.searchByName(query)
+    }
+
+    fun update() {
+        viewModelScope.launch {
+            loadDepartures()
+            loadArrivals()
+        }
+    }
 
     fun updateStationById(newId: Int) {
         updateById(newId)

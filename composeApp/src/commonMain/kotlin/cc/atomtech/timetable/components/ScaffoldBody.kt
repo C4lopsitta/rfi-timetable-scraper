@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun ScaffoldBody(isLoading: Boolean,
-                 isDesktop: Boolean,
+fun ScaffoldBody(isDesktop: Boolean,
                  paddingValues: PaddingValues,
                  navRail: @Composable() (() -> Unit)? = null,
                  content: @Composable () -> Unit) {
@@ -24,8 +23,6 @@ fun ScaffoldBody(isLoading: Boolean,
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            if (isLoading)
-                LinearProgressIndicator( modifier = Modifier.fillMaxWidth() )
             Row {
                 if (navRail != null) navRail()
                 content()
@@ -38,11 +35,6 @@ fun ScaffoldBody(isLoading: Boolean,
                 bottom = paddingValues.calculateBottomPadding(),
             ).fillMaxWidth()
         ) {
-            if(isLoading)
-                LinearProgressIndicator(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary
-                )
             content()
         }
     }

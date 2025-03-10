@@ -1,7 +1,9 @@
 package cc.atomtech.timetable
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -11,6 +13,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -36,6 +39,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import cc.atomtech.timetable.components.AppBar
 import cc.atomtech.timetable.components.InfoLavoriTabBar
 import cc.atomtech.timetable.enumerations.Platform
+import cc.atomtech.timetable.models.rfi.StationBaseData
 import cc.atomtech.timetable.preferences.MutablePreference
 import cc.atomtech.timetable.scrapers.RfiScraper
 import cc.atomtech.timetable.scrapers.RssFeeds
@@ -94,41 +98,28 @@ fun Main(navController: NavHostController,
     // endregion preferences
 
     var favouriteStations by remember { mutableStateOf<Stations>(Stations(arrayListOf())) }
-
     var error by remember { mutableStateOf<String?>(null) }
-    var loading by remember { mutableStateOf(true) }
     var searchQuery by remember { mutableStateOf("") }
-    var searchSuggestions by remember { mutableStateOf<List<Station>?>(favouriteStations.stations) }
-    val stations by remember { mutableStateOf(Stations(arrayListOf())) }
-    var reloadTrigger by remember { mutableStateOf(false) }
-    var timetable by remember { mutableStateOf<TimetableState?>(null) }
+    var searchSuggestions by remember { mutableStateOf<List<StationBaseData>>(favouriteStations.stations) }
 
-    var stationsLoadingRetryCount by remember { mutableStateOf(0) };
-    var isNewStationSet by remember { mutableStateOf(true) }
-    var timetableRefresher: Job? = null
 
     var tabIndex by remember { mutableStateOf(0) }
 
+    // TODO)) Kill
+    // region toKill
+    
+    var stationsLoadingRetryCount by remember { mutableStateOf(0) };
+    var timetableRefresher: Job? = null
+    
+    // endregion toKill
 
 
+    // TODO)) Crucify function
     LaunchedEffect(Unit, stationsLoadingRetryCount) {
         if(stationsLoadingRetryCount > 5) return@LaunchedEffect
 
         try {
-            val storeStations = preferences.getStoreStations().first()
-            val stationCacheJson = preferences.getStationCache().first()
-
-            if(storeStations && stationCacheJson.isNotEmpty()) {
-                stations.stations = Stations.fromJson(stationCacheJson)
-            } else {
-                stations.stations = RfiScraper.getStations()
-
-                if(storeStations) {
-                    preferences.setStationCache(stations.toJson())
-                }
-            }
-
-            favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stations)
+            favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stationData.allStationData.value)
 
             stationsLoadingRetryCount = 0
         } catch (e: Exception) {
@@ -138,21 +129,10 @@ fun Main(navController: NavHostController,
         }
     }
 
-    // TODO)) Absolutely destroy
-    LaunchedEffect(stationData.updateStationById.value, reloadTrigger) {
+    // TODO)) Move RSS Feeds to their own ViewModel
+    LaunchedEffect(Unit) {
         try {
-            loading = true
-            if(isNewStationSet) {
-                timetable = null
-                timetable = RfiScraper.getStationTimetable(stationData.updateStationById.value)
-            } else {
-                timetable?.setNewTimetable(RfiScraper.reloadStation(stationData.updateStationById.value))
-            }
-            loading = false
-            isNewStationSet = false
-
             val feed = RssFeeds.fetchRss(RssFeeds.allRegionsLive)
-
         } catch (_: CancellationException) {
         } catch (e: Exception) {
             println(e.printStackTrace())
@@ -166,20 +146,22 @@ fun Main(navController: NavHostController,
                 ).run {
                     when (this) {
                         SnackbarResult.Dismissed -> return@let
-                        SnackbarResult.ActionPerformed -> { reloadTrigger = !reloadTrigger }
+                        SnackbarResult.ActionPerformed -> {
+                            stationData.update()
+                        }
                     }
                 }
             }
         } finally {
-            timetableRefresher?.cancel()
-            // stores how many 5 minutes it has to wait, so multiply by 5 to get actual value, if 0 skip reload
-            autoReloadIntervalMinutes = preferences.getReloadDelay().first() * 5
-            if(autoReloadIntervalMinutes > 0) {
-                timetableRefresher = CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-                    delay((autoReloadIntervalMinutes * 60 * 1000).toLong())
-                    reloadTrigger = !reloadTrigger
-                }
-            }
+//            timetableRefresher?.cancel()
+//            // stores how many 5 minutes it has to wait, so multiply by 5 to get actual value, if 0 skip reload
+//            autoReloadIntervalMinutes = preferences.getReloadDelay().first() * 5
+//            if(autoReloadIntervalMinutes > 0) {
+//                timetableRefresher = CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+//                    delay((autoReloadIntervalMinutes * 60 * 1000).toLong())
+//                    reloadTrigger = !reloadTrigger
+//                }
+//            }
         }
     }
 
@@ -201,12 +183,12 @@ fun Main(navController: NavHostController,
                         AppBar(
                             navController = navController,
                             searchQuery = searchQuery,
-                            timetable = timetable,
-                            triggerReload = { reloadTrigger = !reloadTrigger },
+                            stationData = stationData,
+                            triggerReload = { stationData.update() },
                             updateSearchQuery = { query: String ->
                                 searchQuery = query
-                                if (stations.stations.isNotEmpty())
-                                    searchSuggestions = stations.search(query, favouriteStations.stations)
+                                if (stationData.allStationData.value.isNotEmpty())
+                                    searchSuggestions = stationData.searchStations(query)
                             },
                             resetSearchSuggestions = {
                                 navController.popBackStack()
@@ -220,55 +202,45 @@ fun Main(navController: NavHostController,
             snackbarHost = {
                 SnackbarHost( snackbarHostState )
             },
-            bottomBar = { if(!isDesktop) NavBar(navController, station = stations.searchById(stationData.updateStationById.value)) },
+            bottomBar = { if(!isDesktop) NavBar(navController, station = stationData.currentStation) },
             floatingActionButton = {
 
             }
         ) { paddingValues ->
-            // TODO))
-//            if( loaders.departures.value || loaders.arrivals.value ||
-//                loaders.notices.value || loaders.trenitaliaNotices.value ||
-//                loaders.trenitaliaSpecificData.value ) LinearProgressIndicator( modifier = Modifier.fillMaxWidth() )
+            if( stationData.loadingArrivals.value || stationData.loadingDepartures.value || stationData.loadingStations.value )
+                LinearProgressIndicator( modifier = Modifier.fillMaxWidth() )
 
-            ScaffoldBody(isLoading = loading,
+            ScaffoldBody(
                 isDesktop = isDesktop,
                 paddingValues = paddingValues,
                 navRail = {
                     if (isDesktop) {
-                        NavRail(navController = navController) { reloadTrigger = !reloadTrigger }
+                        NavRail(navController = navController) { stationData.update() }
                     }
-                }) {
-//                if(isNetworkAvailable()) {
-//                    DeviceOffline {
-//                        reloadTrigger = !reloadTrigger
-//                    }
-//                } else {
-                    NavigationBodyHost(
-                        navController = navController,
-                        isDesktop = isDesktop,
-                        isLoading = loading,
-                        timetable = timetable,
-                        stations = stations,
-                        tabIndex = tabIndex,
-                        favouriteStations = favouriteStations,
-                        searchSuggestions = searchSuggestions,
-                        preferences = preferences,
-                        setStationId = { newId ->
-                            stationData.updateStationById(newId)
-                            isNewStationSet = true
-                            CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
-                                preferences.setStationId(newId)
-                                navController.navigate("departures")
-                            }
-                        },
-                        updateFavourites = { favourites: String ->
-                            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                                preferences.setFavouriteStations(favourites)
-                            }
-                        }
-                    )
                 }
-//            }
+            ) {
+                NavigationBodyHost(
+                    navController = navController,
+                    isDesktop = isDesktop,
+                    stationData = stationData,
+                    tabIndex = tabIndex,
+                    favouriteStations = favouriteStations,
+                    searchSuggestions = searchSuggestions,
+                    preferences = preferences,
+                    setStationId = { newId ->
+                        stationData.updateStationById(newId)
+                        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+                            preferences.setStationId(newId)
+                            navController.navigate("departures")
+                        }
+                    },
+                    updateFavourites = { favourites: String ->
+                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                            preferences.setFavouriteStations(favourites)
+                        }
+                    }
+                )
+            }
         }
     }
 }
