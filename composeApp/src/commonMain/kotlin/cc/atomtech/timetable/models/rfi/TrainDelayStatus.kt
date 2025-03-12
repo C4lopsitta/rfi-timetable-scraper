@@ -12,11 +12,11 @@ data class TrainDelayStatus(
     val delay: Int,
     val status: TrainStatus
 ) {
-    fun toString(padded: Boolean = true): String? {
+    fun toString(padded: Boolean = true): String {
         return when(status) {
             TrainStatus.RUNNING -> when(delay) {
-                0 -> "${if(padded) " " else ""}$delay ${StringRes.get("minutes")}"
-                else -> null
+                0 -> ""
+                else -> "${if(padded) " " else ""}+$delay ${StringRes.get("minutes")}"
             }
             TrainStatus.DELAYED -> StringRes.get("delayed")
             TrainStatus.CANCELLED -> StringRes.get("cancelled")

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
@@ -71,23 +72,25 @@ fun TrainCompactRow(
                 }
             }
 
-            Column {
+            Column (
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
                     trainData.station ?: StringRes.get("undefined"),
                     fontSize = 20.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     fontWeight = FontWeight.SemiBold )
-                var timeString: String? = null
-                timeString = "${trainData.time}"
+                var timeString = "${trainData.time}"
                 timeString += trainData.delay.toString( padded = true )
                 if(timeString.contains(StringRes.get("cancelled"))) timeString = StringRes.get("cancelled")
                 Text(timeString)
             }
-        }
-        Row {
+
             Column (
                 modifier = Modifier.width(80.dp)
             ) {
-                if(trainData.platform.isNullOrEmpty())
+                val platform = if(trainData.platform.isNullOrEmpty()) null else trainData.platform
                 Text(
                     StringRes.get("platform"),
                     fontSize = 12.sp,
