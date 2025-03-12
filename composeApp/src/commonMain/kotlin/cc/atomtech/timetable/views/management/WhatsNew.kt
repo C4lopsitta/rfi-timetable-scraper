@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,13 +34,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.AppVersion
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.models.utilities.WhatsNewParagraph
 import cc.atomtech.timetables.resources.Res
 import cc.atomtech.timetables.resources.appicon
 import cc.atomtech.timetables.resources.whatsnew
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun WhatsNew() {
+    val whatsNewContent = Json.decodeFromString<List<WhatsNewParagraph>>(StringRes.get("whatsnew"))
 
     LazyColumn {
         item {
@@ -103,7 +107,17 @@ fun WhatsNew() {
                     fontSize = 12.sp
                 )
             }
-            Text(StringRes.get("whatsnew"))
+        }
+        items(whatsNewContent) {
+            Text(
+                it.title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                it.content.joinToString("\n\n")
+            )
+            Spacer( modifier = Modifier.height(12.dp) )
         }
     }
 }
