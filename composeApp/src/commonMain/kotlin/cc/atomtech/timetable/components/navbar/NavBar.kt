@@ -8,10 +8,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.MenuOpen
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.rounded.Bookmarks
 import androidx.compose.material.icons.rounded.Engineering
 import androidx.compose.material.icons.rounded.Route
 import androidx.compose.material.icons.rounded.Schedule
@@ -103,12 +105,13 @@ fun NavBar(
                     }
                 }
             })
-        NavigationBarItem(label = { Text(StringRes.get("nav_favourites")) },
+        NavigationBarItem(
+            label = { Text(StringRes.get("nav_favourites")) },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "favourites")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.Star, contentDescription = StringRes.get("nav_favourites")) },
-                    { Icon(Icons.Filled.Star, contentDescription = StringRes.get("nav_favourites")) },
+                    { Icon(Icons.Rounded.Bookmarks, contentDescription = StringRes.get("nav_favourites")) },
+                    { Icon(Icons.Filled.Bookmarks, contentDescription = StringRes.get("nav_favourites")) },
                     isCurrentRoute
                 )
             },

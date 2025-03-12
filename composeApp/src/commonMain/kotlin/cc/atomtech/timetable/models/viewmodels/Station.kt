@@ -53,6 +53,7 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
         }
     }
 
+    // region Private
     private fun List<StationBaseData>.findById(id: Int) : StationBaseData? {
         return this.firstOrNull { it.id == id }
     }
@@ -96,6 +97,7 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
             _allStationData.value = RfiPartenzeArrivi.getSearchableEntries()
         }
     }
+    // endregion Private
 
 
     fun searchStations(query: String) : List<StationBaseData> {

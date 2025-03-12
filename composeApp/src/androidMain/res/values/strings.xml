@@ -65,7 +65,7 @@
     <string name="nav_search">Search</string>
     <string name="nav_arrivals">Arrivals</string>
     <string name="nav_departures">Departures</string>
-    <string name="nav_favourites">Favourites</string>
+    <string name="nav_favourites">Saved</string>
     <string name="nav_home">Home</string>
     <string name="nav_icon_home">Home Icon</string>
     <string name="setting_refresh">Refresh Time</string>
@@ -102,5 +102,5 @@
     <string name="icon_notice">Notice</string>
     <string name="error_train_number">The train number cannot contain any letters or other characters.</string>
     <string name="version">Version %1$s</string>
-    <string name="whatsnew">The app is still being reworked and optimised.\nEnjoy faster loading times thanks to a new parallel loading funciton that allows the app to load more data at the same time.</string>
+    <string name="whatsnew">This new 1.5.0 version improves the app\'s inner workings.\nEnjoy faster loading times, new Trenitalia Integrations to view more accurate train details and expect more features to come soon!\nThe whole app has been reworked and now performs faster, and the code is now more mantainable, which means faster updates.</string>
 </resources>

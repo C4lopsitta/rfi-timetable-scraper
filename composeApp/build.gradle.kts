@@ -109,8 +109,8 @@ android {
         applicationId = "cc.atomtech.timetable"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 19
-        versionName = "1.4.5"
+        versionCode = 20
+        versionName = "1.5.0"
 //        versionNameSuffix = "-play"
         resourceConfigurations.add("en")
         resourceConfigurations.add("it")
@@ -149,7 +149,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Pkg, TargetFormat.Rpm, TargetFormat.Exe)
             packageName = "Timetable"
-            packageVersion = "1.3.8"
+            packageVersion = "1.5.0"
             description = "Scraper app that uses RFI's Arrivi&Partenze website to visualize departures and arrivals for any RFI-Managed railway station"
             modules("jdk.unsupported")
         }
@@ -161,23 +161,3 @@ compose.desktop {
     }
 }
 
-
-val buildConfigGenerator by tasks.registering(Sync::class) {
-    from(
-        resources.text.fromString(
-            """
-        |package my.project
-        |
-        |object BuildConfig {
-        |  const val PROJECT_VERSION = "${version ?: "error"}"
-        |}
-        |
-      """.trimMargin()
-        )
-    ) {
-        rename { "BuildConfig.kt" } // set the file name
-        into("my/project/") // change the directory to match the package
-    }
-
-    into(layout.buildDirectory.dir("generated-src/kotlin/"))
-}

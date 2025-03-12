@@ -33,7 +33,6 @@
     <string name="no_trains_details">Nessun treno disponibile al momento.\nUltimo aggiornamento %1$s</string>
     <string name="station_info">Informazioni Stazione</string>
     <string name="last_update">Ultimo aggiornamento</string>
-    <string name="favourite_locaiton">Stazione Preferita</string>
     <string name="pick_station">Scegli %1$s come stazione</string>
     <string name="station_search_details">Cerca una qualsiasi stazione ferroviaria passeggeri RFI</string>
     <string name="favourites_details">Cerca ed aggiungi le tue stazioni preferite per raggiungerle in pochi secondi</string>
@@ -65,7 +64,7 @@
     <string name="nav_search">Cerca</string>
     <string name="nav_arrivals">Arrivi</string>
     <string name="nav_departures">Partenze</string>
-    <string name="nav_favourites">Preferiti</string>
+    <string name="nav_favourites">Salvati</string>
     <string name="nav_home">Home</string>
     <string name="nav_icon_home">Icona Home</string>
     <string name="setting_refresh">Aggiornamento dati automatico</string>
@@ -100,5 +99,5 @@
     <string name="icon_notice">Avviso</string>
     <string name="error_train_number">Il numero treno non può contenere caratteri oltre a numeri.</string>
     <string name="version">Versione %1$s</string>
-    <string name="whatsnew">Sto ancora ottimizzando e modificando parti dell\'app.\nOra i tempi di caricamento sono stati drasticamente ridotti grazie ad una nuova funzione di caricamento parallelo che consente all\'app di caricare più dati allo stesso tempo.</string>
+    <string name="whatsnew">La nuova versione 1.5.0 porta con se un\'ottimizzazione del codice che migliora il funzionamento dell\'app.\nOra i tempi di caricamento sono stati ridotti, i treni di Trenitalia avranno informazioni più dettagliate grazie ad una nuova integrazione.\nCon il codice ripulito e riscritto, oltre a miglioramenti di performance, la manutenzione diventa più facile quindi gli aggiornamenti futuri saranno più facilmente implementati.</string>
 </resources>

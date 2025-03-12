@@ -30,42 +30,14 @@ import cc.atomtech.timetable.models.viewmodels.Station
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(navController: NavHostController,
-           searchQuery: String,
            stationData: Station,
-           triggerReload: () -> Unit,
-           updateSearchQuery: (String) -> Unit,
-           resetSearchSuggestions: () -> Unit) {
+           triggerReload: () -> Unit) {
     TopAppBar(
         title = {
-            if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains("search") == false) {
-                Text(stationData.currentStation.value?.name ?: StringRes.get("app_name"))
-            } else if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains(
-                    ""
-                ) == false
-            ) {
-                Text(StringRes.get("top_strikes_maintenances"))
-            } else {
-                TextField(
-                    value = searchQuery,
-                    onValueChange = { updateSearchQuery(it) },
-                    placeholder = { Text(StringRes.get("station_search_placeholder")) },
-                    maxLines = 1,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                    shape = TextFieldDefaults.OutlinedTextFieldShape,
-                )
-            }
+            Text(stationData.currentStation.value?.name ?: StringRes.get("app_name"))
         },
         navigationIcon = {
-            Surface(
-                modifier = Modifier.padding(
-                    PaddingValues(
-                        if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains(
-                                "search"
-                            ) == false
-                        ) 12.dp else 0.dp
-                    )
-                )
-            ) {
+            Surface() {
                 if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains(
                         "details/"
                     ) == true
@@ -77,39 +49,32 @@ fun AppBar(navController: NavHostController,
                         )
                     },
                         onClick = { navController.popBackStack() })
-                } else if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains(
-                        "search"
-                    ) == false
-                ) {
+                } else  {
                     Icon(Icons.Rounded.Train, contentDescription = StringRes.get("app_name"))
-                } else {
-                    IconButton(content = {
-                        Icon(
-                            Icons.Rounded.Close,
-                            contentDescription = StringRes.get("close_search")
-                        )
-                    },
-                        onClick = { resetSearchSuggestions() })
                 }
             }
         },
         actions = {
-            IconButton(content = {
-                Icon(
-                    Icons.Rounded.Search,
-                    contentDescription = StringRes.get("search")
-                )
-            },
+            IconButton(
+                content = {
+                    Icon(
+                        Icons.Rounded.Search,
+                        contentDescription = StringRes.get("search")
+                    )
+                },
                 onClick = {
                     navController.navigate("search")
-                })
-            IconButton(content = {
-                Icon(
-                    Icons.Rounded.Refresh,
-                    contentDescription = StringRes.get("reload")
-                )
-            },
-                onClick = { triggerReload() })
+                }
+            )
+            IconButton(
+                content = {
+                    Icon(
+                        Icons.Rounded.Refresh,
+                        contentDescription = StringRes.get("reload")
+                    )
+                },
+                onClick = { triggerReload() }
+            )
         }
     )
 }

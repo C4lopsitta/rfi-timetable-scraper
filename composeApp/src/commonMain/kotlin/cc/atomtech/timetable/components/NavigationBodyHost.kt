@@ -15,43 +15,39 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import cc.atomtech.timetable.models.Stations
 import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
 import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.views.AppInfo
-import cc.atomtech.timetable.views.DesktopSearch
-import cc.atomtech.timetable.views.FavouriteStations
-import cc.atomtech.timetable.views.InfoLavori
+import cc.atomtech.timetable.views.BookmarkedStations
+import cc.atomtech.timetable.views.notices.InfoLavori
 import cc.atomtech.timetable.views.MobileSearch
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.models.DetailedTrainData
 import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
-import cc.atomtech.timetable.models.rfi.StationBaseData
 import cc.atomtech.timetable.models.viewmodels.Station
 import cc.atomtech.timetable.views.CercaTreno
 import cc.atomtech.timetable.views.Settings
-import cc.atomtech.timetable.views.TrenitaliaRegionInfo
+import cc.atomtech.timetable.views.StationSearch
+import cc.atomtech.timetable.views.notices.TrenitaliaRegionInfo
 
 @Composable
 fun NavigationBodyHost(
+    stationData: Station,
     navController: NavHostController,
     isDesktop: Boolean,
     tabIndex: Int,
-    stationData: Station,
     preferences: AppPreferences,
-    favouriteStations: Stations,
-    searchSuggestions: List<StationBaseData>,
     setStationId: (Int) -> Unit,
-    updateFavourites: (String) -> Unit
 ) {
     var detailViewSelectedTrain by remember { mutableStateOf<DetailedTrainData?>(null) }
     var selectedRegionInfo by remember { mutableStateOf<TrenitaliaInfoLavori?>(null) }
 
+    // todo)) Rework
     fun viewTrainDetails(pick: TrainData, pickedFromArrival: Boolean) {
         if(stationData.currentStation.value == null) return
         val pickTwin = (if(!pickedFromArrival) timetable.arrivals else timetable.departures).find {
@@ -134,8 +130,8 @@ fun NavigationBodyHost(
                 )
             }
             composable("favourites") {
-                FavouriteStations(
-                    favouriteStations,
+                BookmarkedStations(
+                    stationData,
                     setStation = {
                         setStationId(it)
                         navController.navigate("departures")
@@ -157,21 +153,9 @@ fun NavigationBodyHost(
                 )
             }
             composable("search") {
-                if (isDesktop) {
-                    // TODO)) Reimplement desktop search
-//                    DesktopSearch(
-//                        navController = navController,
-//                        stations = stations
-//                    ) { setStationId(it) }
-                } else {
-                    MobileSearch(
-                        stationData = stationData,
-                        searchSuggestions = searchSuggestions,
-                        favouriteStations = favouriteStations,
-                        navController = navController,
-                        updateFavourites = updateFavourites
-                    ) { setStationId(it) }
-                }
+                StationSearch(
+                    stationData = stationData
+                )
             }
 
             composable("settings") {

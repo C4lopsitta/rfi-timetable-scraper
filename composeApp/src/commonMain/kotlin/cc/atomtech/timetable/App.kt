@@ -97,37 +97,26 @@ fun Main(navController: NavHostController,
     }
     // endregion preferences
 
-    var favouriteStations by remember { mutableStateOf<Stations>(Stations(arrayListOf())) }
     var error by remember { mutableStateOf<String?>(null) }
-    var searchQuery by remember { mutableStateOf("") }
-    var searchSuggestions by remember { mutableStateOf<List<StationBaseData>>(favouriteStations.stations) }
-
-
     var tabIndex by remember { mutableStateOf(0) }
 
     // TODO)) Kill
     // region toKill
     
-    var stationsLoadingRetryCount by remember { mutableStateOf(0) };
     var timetableRefresher: Job? = null
     
     // endregion toKill
 
 
     // TODO)) Crucify function
-    LaunchedEffect(Unit, stationsLoadingRetryCount) {
-        if(stationsLoadingRetryCount > 5) return@LaunchedEffect
-
-        try {
-            favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stationData.allStationData.value)
-
-            stationsLoadingRetryCount = 0
-        } catch (e: Exception) {
-            println(e.printStackTrace())
-            error = e.toString()
-            stationsLoadingRetryCount++
-        }
-    }
+//    LaunchedEffect(Unit) {
+//        try {
+//            favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stationData.allStationData.value)
+//        } catch (e: Exception) {
+//            println(e.printStackTrace())
+//            error = e.toString()
+//        }
+//    }
 
     // TODO)) Move RSS Feeds to their own ViewModel
     LaunchedEffect(Unit) {
@@ -182,19 +171,8 @@ fun Main(navController: NavHostController,
                     } else {
                         AppBar(
                             navController = navController,
-                            searchQuery = searchQuery,
                             stationData = stationData,
-                            triggerReload = { stationData.update() },
-                            updateSearchQuery = { query: String ->
-                                searchQuery = query
-                                if (stationData.allStationData.value.isNotEmpty())
-                                    searchSuggestions = stationData.searchStations(query)
-                            },
-                            resetSearchSuggestions = {
-                                navController.popBackStack()
-                                searchQuery = ""
-                                searchSuggestions = listOf()
-                            },
+                            triggerReload = { stationData.update() }
                         )
                     }
                 }
@@ -224,19 +202,12 @@ fun Main(navController: NavHostController,
                     isDesktop = isDesktop,
                     stationData = stationData,
                     tabIndex = tabIndex,
-                    favouriteStations = favouriteStations,
-                    searchSuggestions = searchSuggestions,
                     preferences = preferences,
                     setStationId = { newId ->
                         stationData.updateStationById(newId)
                         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
                             preferences.setStationId(newId)
                             navController.navigate("departures")
-                        }
-                    },
-                    updateFavourites = { favourites: String ->
-                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                            preferences.setFavouriteStations(favourites)
                         }
                     }
                 )
