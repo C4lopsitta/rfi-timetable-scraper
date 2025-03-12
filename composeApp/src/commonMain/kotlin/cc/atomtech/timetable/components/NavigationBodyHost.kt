@@ -28,8 +28,9 @@ import cc.atomtech.timetable.models.DetailedTrainData
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import cc.atomtech.timetable.models.viewmodels.Station
 import cc.atomtech.timetable.views.CercaTreno
-import cc.atomtech.timetable.views.Settings
+import cc.atomtech.timetable.views.management.Settings
 import cc.atomtech.timetable.views.StationSearch
+import cc.atomtech.timetable.views.management.WhatsNew
 import cc.atomtech.timetable.views.notices.TrenitaliaRegionInfo
 
 @Composable
@@ -148,6 +149,10 @@ fun NavigationBodyHost(
 
             composable("settings") {
                 Settings(preferences = preferences)
+            }
+
+            composable("whatsnew") {
+                WhatsNew()
             }
 
             composable("cerca_treno") {

@@ -77,6 +77,7 @@ actual fun toggleStrikesNotificationService(
         workRequest
     )
 
+//    Log.i("STRIKES_WORKER", "Scheduled Worker for ${scheduledTime.time}")
 }
 
 actual fun debugRunStrikesNotificationService() {

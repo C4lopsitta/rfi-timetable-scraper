@@ -1,4 +1,4 @@
-package cc.atomtech.timetable.views
+package cc.atomtech.timetable.views.management
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable

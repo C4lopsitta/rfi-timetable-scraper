@@ -101,4 +101,6 @@
     <string name="version">Versione %1$s</string>
     <string name="whatsnew">La nuova versione 1.5.0 porta con se un\'ottimizzazione del codice che migliora il funzionamento dell\'app.\nOra i tempi di caricamento sono stati ridotti, i treni di Trenitalia avranno informazioni più dettagliate grazie ad una nuova integrazione.\nCon il codice ripulito e riscritto, oltre a miglioramenti di performance, la manutenzione diventa più facile quindi gli aggiornamenti futuri saranno più facilmente implementati.</string>
     <string name="search_title">Cerca una Stazione</string>
+    <string name="nav_whatsnew">Novità</string>
+    <string name="nav_icon_whatsnew">Icona Novità</string>
 </resources>

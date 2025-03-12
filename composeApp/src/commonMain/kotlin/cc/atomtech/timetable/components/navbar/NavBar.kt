@@ -13,12 +13,14 @@ import androidx.compose.material.icons.filled.Engineering
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Bookmarks
 import androidx.compose.material.icons.rounded.Engineering
 import androidx.compose.material.icons.rounded.Route
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Stars
 import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -202,6 +204,13 @@ fun NavBar(
                 text = StringRes.get("nav_settings"),
             ) {
                 navController.navigate("settings")
+                showOverflow = false
+            }
+            OverflowNavItem(
+                icon = { Icon(Icons.Rounded.AutoAwesome, contentDescription = StringRes.get("nav_icon_whatsnew")) },
+                text = StringRes.get("nav_whatsnew")
+            ) {
+                navController.navigate("whatsnew")
                 showOverflow = false
             }
             Box( modifier = Modifier.height( 64.dp ) )

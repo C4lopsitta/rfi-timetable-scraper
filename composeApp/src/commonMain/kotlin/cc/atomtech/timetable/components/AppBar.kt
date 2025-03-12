@@ -1,12 +1,8 @@
 package cc.atomtech.timetable.components
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Train
@@ -15,16 +11,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.models.TimetableState
 import cc.atomtech.timetable.models.viewmodels.Station
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +43,11 @@ fun AppBar(navController: NavHostController,
                     },
                         onClick = { navController.popBackStack() })
                 } else  {
-                    Icon(Icons.Rounded.Train, contentDescription = StringRes.get("app_name"))
+                    Icon(
+                        Icons.Rounded.Train,
+                        contentDescription = StringRes.get("app_name"),
+                        modifier = Modifier.padding( horizontal = 12.dp )
+                    )
                 }
             }
         },

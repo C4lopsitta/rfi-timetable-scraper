@@ -161,3 +161,9 @@ compose.desktop {
     }
 }
 
+compose.resources {
+    publicResClass = false
+    packageOfResClass = "cc.atomtech.timetables.resources"
+    generateResClass = auto
+}
+
