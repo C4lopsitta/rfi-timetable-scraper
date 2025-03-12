@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import cc.atomtech.timetable.enumerations.preferences.TrainRowDetailLevel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -25,8 +26,28 @@ class AppPreferences(
         private const val STATION_LIST_JSON = "STATION_LIST_JSON"
         private const val RELOAD_DELAY = "RELOAD_DELAY"
         private const val PRELOAD_NOTICES = "PRELOAD_NOTICES"
+        private const val TRAIN_ROW_DETAIL_LEVEL = "train_row_detail_level"
         private const val USE_STRIKES_NOTIFICATION_SERVICE = "use_strikes_notification_service"
         private const val STRIKES_NOTIFICATION_TIME = "time_strikes_notification_service"
+    }
+
+    fun getTrainRowDetailLevel(): Flow<TrainRowDetailLevel> {
+        return preferences.data.map {
+            TrainRowDetailLevel.fromValue((it[intPreferencesKey(TRAIN_ROW_DETAIL_LEVEL)] ?: 0))
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun setTrainRowDetailLevel(detailLevel: TrainRowDetailLevel) {
+        return withContext(Dispatchers.IO) {
+            try {
+                preferences.edit {
+                    it[intPreferencesKey(TRAIN_ROW_DETAIL_LEVEL)] = detailLevel.toValue()
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getLastAppVersion(): Flow<Int> {

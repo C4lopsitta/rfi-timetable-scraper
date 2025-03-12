@@ -103,4 +103,5 @@
     <string name="error_train_number">The train number cannot contain any letters or other characters.</string>
     <string name="version">Version %1$s</string>
     <string name="whatsnew">This new 1.5.0 version improves the app\'s inner workings.\nEnjoy faster loading times, new Trenitalia Integrations to view more accurate train details and expect more features to come soon!\nThe whole app has been reworked and now performs faster, and the code is now more mantainable, which means faster updates.</string>
+    <string name="search_title">Search a Station</string>
 </resources>

@@ -21,19 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cc.atomtech.timetable.models.TrainData
+import cc.atomtech.timetable.models.rfi.TrainData
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.models.viewmodels.Station
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @Composable
-fun Timetable(trainList: List<TrainData>?,
-              stationInfo: String?,
-              onTrainSelected: (TrainData) -> Unit,
-              lastUpdate: Long,
-              isDesktop: Boolean) {
+fun Timetable(
+    trainList: List<TrainData>?,
+    stationInfo: String?,
+    isDesktop: Boolean
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -62,11 +62,12 @@ fun Timetable(trainList: List<TrainData>?,
         } else {
             LazyColumn {
                 items(trainList ?: listOf()) { train ->
-                    if (isDesktop) {
-                        train.desktopRow(onTrainSelected)
-                    } else {
-                        train.mobileRow(onTrainSelected)
-                    }
+
+//                    if (isDesktop) {
+//                        train.desktopRow(onTrainSelected)
+//                    } else {
+//                        train.mobileRow(onTrainSelected)
+//                    }
                     HorizontalDivider()
                 }
                 if (stationInfo != null) {
@@ -87,12 +88,6 @@ fun Timetable(trainList: List<TrainData>?,
                                     else
                                         it.toString()
                                 }
-                        )
-                        Text(
-                            "${StringRes.get("last_update")}: ${
-                                Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                            }",
-                            modifier = Modifier.padding(vertical = 12.dp)
                         )
                     }
                 }

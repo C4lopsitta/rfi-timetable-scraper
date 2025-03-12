@@ -23,11 +23,8 @@ import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.BookmarkedStations
 import cc.atomtech.timetable.views.notices.InfoLavori
-import cc.atomtech.timetable.views.MobileSearch
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.models.DetailedTrainData
-import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import cc.atomtech.timetable.models.viewmodels.Station
 import cc.atomtech.timetable.views.CercaTreno
@@ -49,49 +46,50 @@ fun NavigationBodyHost(
 
     // todo)) Rework
     fun viewTrainDetails(pick: TrainData, pickedFromArrival: Boolean) {
-        if(stationData.currentStation.value == null) return
-        val pickTwin = (if(!pickedFromArrival) timetable.arrivals else timetable.departures).find {
-            it.number == pick.number
-        }
-
-        val arrivalData = if(pickTwin != null) (if(!pickedFromArrival) pickTwin else pick) else pick
-        val departureData = if(pickTwin != null) (if(pickedFromArrival) pickTwin else pick) else pick
-
-        val stops = arrayListOf<TrainStop>()
-
-        stops.add(
-            TrainStop(
-                name = timetable.stationName,
-                time = pick.time ?: StringRes.get("undefined"),
-                isCurrentStop = true
-            )
-        )
-
-        pick.stops.forEach { stop -> stops.add(stop) }
-
-        detailViewSelectedTrain = DetailedTrainData(
-            currentStationType = if(pickTwin != null) {
-                CurrentStationType.STOP
-            } else if(pickedFromArrival) {
-                CurrentStationType.LINE_END
-            } else {
-                CurrentStationType.LINE_START
-            },
-            departure = departureData.station ?: StringRes.get("undefined"),
-            arrival = arrivalData.station ?: StringRes.get("undefined"),
-            departsAt = departureData.time ?: "--:--",
-            arrivesAt = arrivalData.time ?: "--:--",
-            stops = stops.toList(),
-            delay = departureData.getDelayString(addSpace = false),
-            delayMinutes = departureData.delay,
-            operator = departureData.operator,
-            category = departureData.category,
-            platform = pick.platform,
-            details = pick.details,
-            number = pick.number ?: StringRes.get("undefined"),
-        )
-
-        navController.navigate("details/${if(pickedFromArrival) "true" else "false"}")
+        TODO()
+//        if(stationData.currentStation.value == null) return
+//        val pickTwin = (if(!pickedFromArrival) timetable.arrivals else timetable.departures).find {
+//            it.number == pick.number
+//        }
+//
+//        val arrivalData = if(pickTwin != null) (if(!pickedFromArrival) pickTwin else pick) else pick
+//        val departureData = if(pickTwin != null) (if(pickedFromArrival) pickTwin else pick) else pick
+//
+//        val stops = arrayListOf<TrainStop>()
+//
+//        stops.add(
+//            TrainStop(
+//                name = timetable.stationName,
+//                time = pick.time ?: StringRes.get("undefined"),
+//                isCurrentStop = true
+//            )
+//        )
+//
+//        pick.stops.forEach { stop -> stops.add(stop) }
+//
+//        detailViewSelectedTrain = DetailedTrainData(
+//            currentStationType = if(pickTwin != null) {
+//                CurrentStationType.STOP
+//            } else if(pickedFromArrival) {
+//                CurrentStationType.LINE_END
+//            } else {
+//                CurrentStationType.LINE_START
+//            },
+//            departure = departureData.station ?: StringRes.get("undefined"),
+//            arrival = arrivalData.station ?: StringRes.get("undefined"),
+//            departsAt = departureData.time ?: "--:--",
+//            arrivesAt = arrivalData.time ?: "--:--",
+//            stops = stops.toList(),
+//            delay = departureData.getDelayString(addSpace = false),
+//            delayMinutes = departureData.delay,
+//            operator = departureData.operator,
+//            category = departureData.category,
+//            platform = pick.platform,
+//            details = pick.details,
+//            number = pick.number ?: StringRes.get("undefined"),
+//        )
+//
+//        navController.navigate("details/${if(pickedFromArrival) "true" else "false"}")
     }
 
     Column {
@@ -113,9 +111,7 @@ fun NavigationBodyHost(
             composable("departures") {
                 Timetable(
                     trainList = stationData.departures.value,
-                    onTrainSelected = { selectedTrain: TrainData -> viewTrainDetails(selectedTrain, false) },
                     stationInfo = stationData.info.value,
-                    lastUpdate = -1, // timetable?.uiState?.value?.lastUptade ?: 0,
                     isDesktop = isDesktop
                 )
             }
@@ -123,20 +119,12 @@ fun NavigationBodyHost(
             composable("arrivals") {
                 Timetable(
                     trainList = stationData.arrivals.value,
-                    onTrainSelected = { selectedTrain: TrainData -> viewTrainDetails(selectedTrain, true) },
                     stationInfo = stationData.info.value,
-                    lastUpdate = -1,// timetable?.uiState?.value?.lastUptade ?: 0,
                     isDesktop = isDesktop
                 )
             }
             composable("favourites") {
-                BookmarkedStations(
-                    stationData,
-                    setStation = {
-                        setStationId(it)
-                        navController.navigate("departures")
-                    }
-                )
+                BookmarkedStations( stationData )
             }
             composable("infolavori") {
                 InfoLavori(

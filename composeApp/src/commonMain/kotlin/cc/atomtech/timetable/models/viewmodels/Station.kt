@@ -88,7 +88,13 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
         if(preferences.getStoreStations().first()) {
             val stationStore = preferences.getStationCache().first()
             if(stationStore.isNotEmpty()) {
-                _allStationData.value = Json.decodeFromString<List<StationBaseData>>(stationStore)
+                if(stationStore[0] == '[') {
+                    _allStationData.value =
+                        Json.decodeFromString<List<StationBaseData>>(stationStore)
+                } else {
+                    preferences.setStationCache("")
+                    loadAllStations()
+                }
             } else {
                 _allStationData.value = RfiPartenzeArrivi.getSearchableEntries()
                 preferences.setStationCache(Json.encodeToString<List<StationBaseData>>(_allStationData.value))
