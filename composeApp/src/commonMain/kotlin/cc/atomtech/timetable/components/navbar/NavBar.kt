@@ -33,7 +33,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.StringRes
@@ -69,7 +72,15 @@ fun NavBar(
 
     NavigationBar {
         // region oldRoutes
-        NavigationBarItem(label = { Text(StringRes.get("nav_departures")) },
+        NavigationBarItem(
+            label = {
+                Text(
+                    StringRes.get("nav_departures"),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "departures")
                 HighlightedIcon(
@@ -86,7 +97,15 @@ fun NavBar(
                     }
                 }
             })
-        NavigationBarItem(label = { Text(StringRes.get("nav_arrivals")) },
+        NavigationBarItem(
+            label = {
+                Text(
+                    StringRes.get("nav_arrivals"),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "arrivals")
                 HighlightedIcon(
@@ -104,7 +123,14 @@ fun NavBar(
                 }
             })
         NavigationBarItem(
-            label = { Text(StringRes.get("nav_favourites")) },
+            label = {
+                Text(
+                    StringRes.get("nav_favourites"),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "favourites")
                 HighlightedIcon(
@@ -121,7 +147,15 @@ fun NavBar(
                     }
                 }
             })
-        NavigationBarItem(label = { Text(StringRes.get("nav_notices")) },
+        NavigationBarItem(
+            label = {
+                Text(
+                    StringRes.get("nav_notices"),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            },
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "infolavori")
                 HighlightedIcon(
@@ -138,17 +172,16 @@ fun NavBar(
                     }
                 }
             })
-//        NavigationBarItem(
-//            label = { Text(StringRes.get("nav_settings")) },
-//            icon = { Icon(Icons.Rounded.Settings, contentDescription = StringRes.get("nav_icon_settings")) },
-//            selected = isCurrentRoute(navController, "settings"),
-//            onClick = {
-
-//            }
-//        )
 
         NavigationBarItem(
-            label = { Text(StringRes.get("nav_other")) },
+            label = {
+                Text(
+                    StringRes.get("nav_other"),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            },
             icon = {
                 Icon(
                     Icons.AutoMirrored.Rounded.MenuOpen,

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -33,7 +34,13 @@ fun OverflowNavItem(
         ) {
             icon()
         }
-        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Normal)
+        Text(
+            text,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
     HorizontalDivider()
 }

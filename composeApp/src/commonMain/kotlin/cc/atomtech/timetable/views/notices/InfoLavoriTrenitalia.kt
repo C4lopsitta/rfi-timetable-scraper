@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrenitaliaInfo
@@ -86,7 +87,9 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                 }
                 Text(
                     StringRes.get(if (info!!.isTrafficRegular) "traffic_regular" else "traffic_irregular"),
-                    fontSize = 32.sp,
+                    fontSize = 28.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding( start = 12.dp )
                 )
@@ -100,7 +103,6 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                                 chosenEvent = event
                                 showSheet = true
                             }
-                            HorizontalDivider(modifier = Modifier.padding(bottom = 12.dp))
                         }
                     }
                 }
@@ -142,7 +144,6 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
                             chosenEvent = it
                             showSheet = true
                         }
-                        HorizontalDivider( modifier = Modifier.padding( bottom = 12.dp ) )
                     }
                 }
             }

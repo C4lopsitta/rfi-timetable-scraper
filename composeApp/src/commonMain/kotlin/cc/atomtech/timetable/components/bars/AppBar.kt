@@ -1,4 +1,4 @@
-package cc.atomtech.timetable.components
+package cc.atomtech.timetable.components.bars
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -28,7 +29,11 @@ fun AppBar(
 ) {
     TopAppBar(
         title = {
-            Text(stationData.currentStation.value?.name ?: StringRes.get("app_name"))
+            Text(
+                stationData.currentStation.value?.name ?: StringRes.get("app_name"),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         },
         navigationIcon = {
             Surface() {
