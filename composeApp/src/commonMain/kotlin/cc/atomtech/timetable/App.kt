@@ -104,23 +104,6 @@ fun Main(navController: NavHostController,
     var error by remember { mutableStateOf<String?>(null) }
     var tabIndex by remember { mutableStateOf(0) }
 
-    // TODO)) Kill
-    // region toKill
-    
-    var timetableRefresher: Job? = null
-    
-    // endregion toKill
-
-
-    // TODO)) Crucify function
-//    LaunchedEffect(Unit) {
-//        try {
-//            favouriteStations = Stations.fromFavourites(preferences.getFavouriteStations().first(), stationData.allStationData.value)
-//        } catch (e: Exception) {
-//            println(e.printStackTrace())
-//            error = e.toString()
-//        }
-//    }
 
     // TODO)) Move RSS Feeds to their own ViewModel
     LaunchedEffect(Unit) {
@@ -173,11 +156,7 @@ fun Main(navController: NavHostController,
                         ?.contains("infolavori") == true ) {
                         InfoLavoriTabBar(tabIndex) { tabIndex = it }
                     } else {
-                        AppBar(
-                            navController = navController,
-                            stationData = stationData,
-                            triggerReload = { stationData.update() }
-                        )
+                        AppBar( navController = navController, stationData = stationData )
                     }
                 }
             },
@@ -189,12 +168,10 @@ fun Main(navController: NavHostController,
 
             }
         ) { paddingValues ->
-            if( stationData.loadingArrivals.value || stationData.loadingDepartures.value || stationData.loadingStations.value )
-                LinearProgressIndicator( modifier = Modifier.fillMaxWidth() )
-
             ScaffoldBody(
                 isDesktop = isDesktop,
                 paddingValues = paddingValues,
+                stationData = stationData,
                 navRail = {
                     if (isDesktop) {
                         NavRail(navController = navController) { stationData.update() }

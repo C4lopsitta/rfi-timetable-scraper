@@ -73,7 +73,6 @@ class TrainData(
                     onClick = { viewDetails(this@TrainData) }
                 )
         ) {
-            // TODO)) Add icons
             Row (
                 verticalAlignment = Alignment.CenterVertically,
             ) {

@@ -143,7 +143,8 @@ fun NavigationBodyHost(
             }
             composable("search") {
                 StationSearch(
-                    stationData = stationData
+                    stationData = stationData,
+                    navController = navController
                 )
             }
 

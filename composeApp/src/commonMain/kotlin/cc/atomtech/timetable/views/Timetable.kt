@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.rfi.TrainData
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.components.train.TrainCompactRow
 import cc.atomtech.timetable.models.viewmodels.Station
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -62,12 +63,7 @@ fun Timetable(
         } else {
             LazyColumn {
                 items(trainList ?: listOf()) { train ->
-
-//                    if (isDesktop) {
-//                        train.desktopRow(onTrainSelected)
-//                    } else {
-//                        train.mobileRow(onTrainSelected)
-//                    }
+                    TrainCompactRow(train)
                     HorizontalDivider()
                 }
                 if (stationInfo != null) {

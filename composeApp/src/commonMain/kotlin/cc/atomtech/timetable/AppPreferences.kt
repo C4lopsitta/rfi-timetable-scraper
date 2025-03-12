@@ -21,7 +21,6 @@ class AppPreferences(
     companion object {
         private const val LAST_APP_VERSION = "LAST_APP_VERSION"
         private const val STATION_ID = "STATION_ID"
-        private const val FAVOURITE_STATIONS = "FAVOURITE_STATIONS"
         private const val ALLOW_STORAGE_STATIONS = "ALLOW_STORAGE_STATIONS"
         private const val STATION_LIST_JSON = "STATION_LIST_JSON"
         private const val RELOAD_DELAY = "RELOAD_DELAY"
@@ -175,25 +174,6 @@ class AppPreferences(
             try {
                 preferences.edit {
                     it[intPreferencesKey(STATION_ID)] = stationId
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) throw e
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun getFavouriteStations(): Flow<String> {
-        return preferences.data.map {
-            it[stringPreferencesKey(FAVOURITE_STATIONS)] ?: ""
-        }.flowOn(Dispatchers.IO)
-    }
-
-    suspend fun setFavouriteStations(favourites: String) {
-        return withContext(Dispatchers.IO) {
-            try {
-                preferences.edit {
-                    it[stringPreferencesKey(FAVOURITE_STATIONS)] = favourites
                 }
             } catch (e: Exception) {
                 if (e is CancellationException) throw e

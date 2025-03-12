@@ -6,21 +6,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.MenuOpen
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Engineering
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.rounded.ArrowDownward
-import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.filled.NorthEast
+import androidx.compose.material.icons.filled.SouthEast
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Bookmarks
 import androidx.compose.material.icons.rounded.Engineering
+import androidx.compose.material.icons.rounded.NorthEast
 import androidx.compose.material.icons.rounded.Route
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.Stars
+import androidx.compose.material.icons.rounded.SouthEast
 import androidx.compose.material.icons.rounded.Train
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.models.Station
 import cc.atomtech.timetable.models.rfi.StationBaseData
 
 @Composable
@@ -77,8 +73,8 @@ fun NavBar(
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "departures")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
-                    { Icon(Icons.Filled.ArrowUpward, contentDescription = StringRes.get("nav_departures")) },
+                    { Icon(Icons.Rounded.NorthEast, contentDescription = StringRes.get("nav_departures")) },
+                    { Icon(Icons.Filled.NorthEast, contentDescription = StringRes.get("nav_departures")) },
                     isCurrentRoute
                 )
             },
@@ -94,8 +90,8 @@ fun NavBar(
             icon = {
                 val isCurrentRoute = isCurrentRoute(navController, "arrivals")
                 HighlightedIcon(
-                    { Icon(Icons.Rounded.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
-                    { Icon(Icons.Filled.ArrowDownward, contentDescription = StringRes.get("nav_arrivals")) },
+                    { Icon(Icons.Rounded.SouthEast, contentDescription = StringRes.get("nav_arrivals")) },
+                    { Icon(Icons.Filled.SouthEast, contentDescription = StringRes.get("nav_arrivals")) },
                     isCurrentRoute
                 )
             },

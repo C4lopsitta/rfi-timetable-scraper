@@ -105,4 +105,6 @@
     <string name="search_title">Search a Station</string>
     <string name="nav_whatsnew">What\'s New</string>
     <string name="nav_icon_whatsnew">What\'s new Icon</string>
+    <string name="version_name" translatable="false">Treno ad Alta Frequentazione</string>
+    <string name="version_name_info" translatable="false">https://it.wikipedia.org/wiki/Treno_Alta_Frequentazione</string>
 </resources>

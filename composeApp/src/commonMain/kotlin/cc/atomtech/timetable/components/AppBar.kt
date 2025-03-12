@@ -22,9 +22,10 @@ import cc.atomtech.timetable.models.viewmodels.Station
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(navController: NavHostController,
-           stationData: Station,
-           triggerReload: () -> Unit) {
+fun AppBar(
+    navController: NavHostController,
+    stationData: Station
+) {
     TopAppBar(
         title = {
             Text(stationData.currentStation.value?.name ?: StringRes.get("app_name"))
@@ -70,7 +71,9 @@ fun AppBar(navController: NavHostController,
                         contentDescription = StringRes.get("reload")
                     )
                 },
-                onClick = { triggerReload() }
+                onClick = {
+                    stationData.update()
+                }
             )
         }
     )
