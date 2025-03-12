@@ -155,7 +155,12 @@ fun NavBar(
                     contentDescription = StringRes.get("nav_icon_other")
                 )
             },
-            selected = showOverflow,
+            selected = showOverflow || (
+                    !isCurrentRoute(navController, "departures") &&
+                    !isCurrentRoute(navController, "arrivals") &&
+                    !isCurrentRoute(navController, "infolavori") &&
+                    !isCurrentRoute(navController, "favourites")
+            ),
             onClick = {
                 showOverflow = true
             }
