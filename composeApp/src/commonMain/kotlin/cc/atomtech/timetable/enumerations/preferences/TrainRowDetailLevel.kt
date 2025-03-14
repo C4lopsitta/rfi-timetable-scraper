@@ -2,12 +2,12 @@ package cc.atomtech.timetable.enumerations.preferences
 
 enum class TrainRowDetailLevel {
     COMPACT,
-    EXPANDED;
+    DETAILED;
 
     fun toValue(): Int {
         return when(this) {
             COMPACT -> 0
-            EXPANDED -> 1
+            DETAILED -> 1
         }
     }
 
@@ -15,7 +15,7 @@ enum class TrainRowDetailLevel {
         fun fromValue(value: Int): TrainRowDetailLevel {
             return when(value) {
                 0 -> COMPACT
-                1 -> EXPANDED
+                1 -> DETAILED
                 else -> COMPACT
             }
         }

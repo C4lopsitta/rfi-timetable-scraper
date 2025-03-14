@@ -9,16 +9,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
@@ -36,6 +39,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.AppVersion
 import kotlinx.coroutines.CoroutineScope
@@ -168,7 +173,8 @@ fun updateValue(lambda: suspend () -> Unit) {
 
 @Composable
 fun Settings(
-    preferences: AppPreferences
+    preferences: AppPreferences,
+    navController: NavHostController
 ) {
     var reloadDelayValue by remember { mutableStateOf(1f) }
     var allowStationCaching by remember { mutableStateOf(true) }
@@ -180,10 +186,45 @@ fun Settings(
         useStrikesNotificationService = preferences.getUseStrikesNotificationService().first()
     }
 
+    LaunchedEffect(allowStationCaching) {
+        preferences.setStoreStations(allowStationCaching)
+        if(!allowStationCaching) preferences.setStationCache("")
+    }
 
     LazyColumn (
-        modifier = Modifier.fillMaxSize().padding( end = 12.dp )
+        modifier = Modifier.fillMaxSize().padding( end = 12.dp, top = 12.dp )
     ) {
+        item {
+            ListItem (
+                headlineContent = { Text(StringRes.get("settings_train_row_layout")) },
+                supportingContent = { Text(StringRes.get("settings_train_row_layout_description")) },
+                trailingContent = {
+                    Icon(Icons.AutoMirrored.Rounded.ArrowForward, contentDescription = StringRes.get("open"))
+                },
+                modifier = Modifier.clickable(
+                    onClick = {
+                        navController.navigate("trainRowPreferences")
+                    }
+                )
+            )
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+        }
+
+        item {
+            ListItem(
+                headlineContent = { Text(StringRes.get("setting_cache_search_results")) },
+                supportingContent = { Text(StringRes.get("setting_cache_search_results_desc")) },
+                trailingContent = {
+                    Switch(
+                        checked = allowStationCaching,
+                        modifier = Modifier.width(40.dp).height(20.dp),
+                        onCheckedChange = { allowStationCaching = it },
+                    )
+                }
+            )
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+        }
+
         item {
             SettingSliderItem(
                 title = StringRes.get("setting_refresh"),
@@ -204,20 +245,6 @@ fun Settings(
                 reloadDelayValue = it
                 preferences.setReloadDelay(it.roundToInt())
             } }
-            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
-        }
-        item {
-            SettingToggleItem(
-                title = StringRes.get("setting_cache_search_results"),
-                subTitle = StringRes.get("setting_cache_search_results_desc"),
-                value = allowStationCaching
-            ) {
-                allowStationCaching = it
-                updateValue {
-                    preferences.setStoreStations(it)
-                    if(!allowStationCaching) preferences.setStationCache("")
-                }
-            }
             HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
         }
 

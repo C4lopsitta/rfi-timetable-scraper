@@ -19,62 +19,70 @@ object RfiPartenzeArrivi {
     }
 
     suspend fun getDepartures(stationId: Int) : List<TrainData> {
-        val state = RfiScraper.getStationTimetable(stationId)
-        return List(state.departures.size) {
-            val train = state.departures[it]
-            TrainData(
-                operator = train.operator,
-                operatorName = "",
-                category = train.category,
-                categoryName = "",
-                number = train.number,
-                platform = train.platform,
-                delay = TrainDelayStatus(
-                    delay = train.delay,
-                    status = TrainStatus.RUNNING
-                ),
-                station = train.station,
-                time = train.time,
-                stops = List(train.stops.size) { index ->
-                    TrainStopData(
-                        name = train.stops[index].name,
-                        time = train.stops[index].time,
-                        isCurrentStop = train.stops[index].isCurrentStop
-                    )
-                },
-                details = train.details,
-                trainType = TrainType.DEPARTURE
-            )
+        try {
+            val state = RfiScraper.getStationTimetable(stationId)
+            return List(state.departures.size) {
+                val train = state.departures[it]
+                TrainData(
+                    operator = train.operator,
+                    operatorName = "",
+                    category = train.category,
+                    categoryName = "",
+                    number = train.number,
+                    platform = train.platform,
+                    delay = TrainDelayStatus(
+                        delay = train.delay,
+                        status = TrainStatus.RUNNING
+                    ),
+                    station = train.station,
+                    time = train.time,
+                    stops = List(train.stops.size) { index ->
+                        TrainStopData(
+                            name = train.stops[index].name,
+                            time = train.stops[index].time,
+                            isCurrentStop = train.stops[index].isCurrentStop
+                        )
+                    },
+                    details = train.details,
+                    trainType = TrainType.DEPARTURE
+                )
+            }
+        } catch (_: Exception) {
+            return emptyList()
         }
     }
 
     suspend fun getArrivals(stationId: Int) : List<TrainData> {
-        val state = RfiScraper.getStationTimetable(stationId)
-        return List(state.arrivals.size) {
-            val train = state.arrivals[it]
-            TrainData(
-                operator = train.operator,
-                operatorName = "",
-                category = train.category,
-                categoryName = "",
-                number = train.number,
-                platform = train.platform,
-                delay = TrainDelayStatus(
-                    delay = train.delay,
-                    status = TrainStatus.RUNNING
-                ),
-                station = train.station,
-                time = train.time,
-                stops = List(train.stops.size) { index ->
-                    TrainStopData(
-                        name = train.stops[index].name,
-                        time = train.stops[index].time,
-                        isCurrentStop = train.stops[index].isCurrentStop
-                    )
-                },
-                details = train.details,
-                trainType = TrainType.ARRIVAL
-            )
+        try {
+            val state = RfiScraper.getStationTimetable(stationId)
+            return List(state.arrivals.size) {
+                val train = state.arrivals[it]
+                TrainData(
+                    operator = train.operator,
+                    operatorName = "",
+                    category = train.category,
+                    categoryName = "",
+                    number = train.number,
+                    platform = train.platform,
+                    delay = TrainDelayStatus(
+                        delay = train.delay,
+                        status = TrainStatus.RUNNING
+                    ),
+                    station = train.station,
+                    time = train.time,
+                    stops = List(train.stops.size) { index ->
+                        TrainStopData(
+                            name = train.stops[index].name,
+                            time = train.stops[index].time,
+                            isCurrentStop = train.stops[index].isCurrentStop
+                        )
+                    },
+                    details = train.details,
+                    trainType = TrainType.ARRIVAL
+                )
+            }
+        } catch (_: Exception) {
+            return emptyList()
         }
     }
 }

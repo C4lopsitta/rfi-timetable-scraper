@@ -19,6 +19,7 @@ import cc.atomtech.timetable.models.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.compose.navigation
 import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.BookmarkedStations
@@ -31,6 +32,7 @@ import cc.atomtech.timetable.views.CercaTreno
 import cc.atomtech.timetable.views.management.Settings
 import cc.atomtech.timetable.views.StationSearch
 import cc.atomtech.timetable.views.management.WhatsNew
+import cc.atomtech.timetable.views.management.settings.TrainRowPreferences
 import cc.atomtech.timetable.views.notices.TrenitaliaRegionInfo
 
 @Composable
@@ -149,7 +151,11 @@ fun NavigationBodyHost(
             }
 
             composable("settings") {
-                Settings(preferences = preferences)
+                Settings(preferences = preferences, navController = navController)
+            }
+
+            composable("trainRowPreferences") {
+                TrainRowPreferences(appPreferences = preferences)
             }
 
             composable("whatsnew") {

@@ -33,7 +33,8 @@ import cc.atomtech.timetable.models.rfi.TrainData
 // TODO)) fix various issues
 @Composable
 fun TrainCompactRow(
-    trainData: TrainData
+    trainData: TrainData,
+    inDummyMode: Boolean = false
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -46,6 +47,7 @@ fun TrainCompactRow(
                 role  = Role.Button,
                 onClickLabel = StringRes.get("click_for_details"),
                 onClick = {
+                    if(inDummyMode) return@clickable
                     TODO()
                 }
             )

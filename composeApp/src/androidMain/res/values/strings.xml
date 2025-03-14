@@ -107,4 +107,10 @@
     <string name="nav_icon_whatsnew">What\'s new Icon</string>
     <string name="version_name" translatable="false">Treno ad Alta Frequentazione</string>
     <string name="version_name_info" translatable="false">https://it.wikipedia.org/wiki/Treno_Alta_Frequentazione</string>
+    <string name="settings_train_row_layout">Train list display preferences</string>
+    <string name="settings_train_row_layout_description">Choose how you want your train list to look like for arrivals and departures</string>
+    <string name="settings_train_row_layout_compact">Compact View</string>
+    <string name="settings_train_row_layout_detailed">Detailed View</string>
+    <string name="settings_train_row_layout_compact_description">The classic look of the app. Compact and straightfoward, containing all the important information in a simple linear UI.</string>
+    <string name="settings_train_row_layout_detailed_description">A new UI that shows a bit more information in a more taller UI, that gives each element more space.</string>
 </resources>

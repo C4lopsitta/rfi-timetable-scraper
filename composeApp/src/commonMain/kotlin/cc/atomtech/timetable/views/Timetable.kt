@@ -38,7 +38,7 @@ fun Timetable(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(PaddingValues(0.dp, 12.dp, 12.dp, 12.dp))
+            .padding(PaddingValues( end = 12.dp ))
     ) {
         if(trainList?.isEmpty() == true) {
             Column (

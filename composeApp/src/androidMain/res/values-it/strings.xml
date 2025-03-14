@@ -103,4 +103,10 @@
     <string name="search_title">Cerca una Stazione</string>
     <string name="nav_whatsnew">Novità</string>
     <string name="nav_icon_whatsnew">Icona Novità</string>
+    <string name="settings_train_row_layout">Preferenze visualizzazione lista treni</string>
+    <string name="settings_train_row_layout_description">Scegli l\'aspetto della lista dei treni per partenze ed arrivi</string>
+    <string name="settings_train_row_layout_compact">Vista Compatta</string>
+    <string name="settings_train_row_layout_detailed">Vista Dettagliata</string>
+    <string name="settings_train_row_layout_compact_description">L\'aspetto classico dell\'app. Compatta e semplice, contiene tutte le informazioni necessarie in una semplice UI lineare.</string>
+    <string name="settings_train_row_layout_detailed_description">Una nuova UI che mostra qualche dettaglio in più tenendo più spazio verticale, dando più spazio ad ogni elemento.\n\n</string>
 </resources>

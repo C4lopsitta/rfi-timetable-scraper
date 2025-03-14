@@ -37,9 +37,10 @@ fun AppBar(
         },
         navigationIcon = {
             Surface() {
-                if (navController.currentBackStackEntryAsState().value?.destination?.route?.contains(
-                        "details/"
-                    ) == true
+                if (navController.currentBackStackEntryAsState().value?.destination?.route
+                        ?.contains( "details/" ) == true ||
+                    (navController.currentBackStackEntryAsState().value?.destination?.route
+                        ?: "") in listOf("settings", "trainRowPreferences", "whatsnew", "cerca_treno", "search", "infolavori/regionInfo")
                 ) {
                     IconButton(content = {
                         Icon(
