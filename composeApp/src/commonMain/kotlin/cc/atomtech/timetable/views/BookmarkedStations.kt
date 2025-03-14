@@ -19,6 +19,10 @@ import androidx.compose.ui.unit.dp
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.components.LargeIconText
 import cc.atomtech.timetable.models.viewmodels.Station
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
 
 @Composable
 fun BookmarkedStations(
@@ -44,6 +48,9 @@ fun BookmarkedStations(
                             content = { Icon(Icons.Rounded.BookmarkRemove, contentDescription = null) },
                             onClick = {
                                 stationData.allStationData.value.find { it.id == station.id }?.isBookmarked = false
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    stationData.updateBookmarkedStations()
+                                }
                             }
                         )
                     },

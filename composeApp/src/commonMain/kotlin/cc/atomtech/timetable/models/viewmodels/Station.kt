@@ -102,9 +102,28 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
             }
         } else {
             _allStationData.value = RfiPartenzeArrivi.getSearchableEntries()
+            val bookmarkedJson = preferences.getStationCache().first()
+            if(bookmarkedJson.isNotEmpty()) {
+                val bookmarked = Json.decodeFromString<List<StationBaseData>>(bookmarkedJson)
+
+                bookmarked.forEach { bookmark ->
+                    _allStationData.value.findById(bookmark.id)?.let {
+                        it.isBookmarked = true
+                    }
+                }
+            }
         }
     }
     // endregion Private
+
+    suspend fun updateBookmarkedStations() {
+        val data = if(preferences.getStoreStations().first()) {
+            _allStationData.value
+        } else {
+            _allStationData.value.filter { it.isBookmarked }
+        }
+        preferences.setStationCache(Json.encodeToString<List<StationBaseData>>(data))
+    }
 
 
     fun searchStations(query: String) : List<StationBaseData> {

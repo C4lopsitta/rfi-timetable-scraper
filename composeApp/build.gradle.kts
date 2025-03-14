@@ -139,6 +139,7 @@ android {
 dependencies {
     implementation(libs.androidx.databinding.compiler.common)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.animation.core.android)
     debugImplementation(compose.uiTooling)
 }
 

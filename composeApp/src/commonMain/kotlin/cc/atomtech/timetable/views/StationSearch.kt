@@ -17,6 +17,7 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,6 +80,12 @@ fun StationSearch(
                 supportingContent = { Text(result.stationCountry.toString()) },
                 trailingContent = {
                     var isBookmarked by remember { mutableStateOf( result.isBookmarked ) }
+
+                    LaunchedEffect(isBookmarked) {
+                        result.isBookmarked = isBookmarked
+                        stationData.updateBookmarkedStations()
+                    }
+
                     IconButton(
                         content = {
                             Icon(
@@ -88,7 +95,6 @@ fun StationSearch(
                         },
                         onClick = {
                             isBookmarked = !isBookmarked
-                            result.isBookmarked = isBookmarked
                         }
                     )
                 },
