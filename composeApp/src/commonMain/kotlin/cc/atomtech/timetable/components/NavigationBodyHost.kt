@@ -114,7 +114,7 @@ fun NavigationBodyHost(
             composable("departures") {
                 Timetable(
                     trainList = stationData.departures.value,
-                    stationInfo = stationData.info.value,
+                    stationData = stationData,
                     isDesktop = isDesktop
                 )
             }
@@ -122,7 +122,7 @@ fun NavigationBodyHost(
             composable("arrivals") {
                 Timetable(
                     trainList = stationData.arrivals.value,
-                    stationInfo = stationData.info.value,
+                    stationData = stationData,
                     isDesktop = isDesktop
                 )
             }
