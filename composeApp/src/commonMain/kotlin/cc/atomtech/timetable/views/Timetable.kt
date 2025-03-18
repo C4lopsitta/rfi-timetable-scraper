@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.rfi.TrainData
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.components.animated.ShimmerBox
+import cc.atomtech.timetable.components.animated.ShimmerLoading
 import cc.atomtech.timetable.components.train.TrainCompactRow
 import cc.atomtech.timetable.models.viewmodels.Station
 import kotlinx.datetime.Clock
@@ -74,16 +74,12 @@ fun Timetable(
             LazyColumn {
                 if (trainList?.isEmpty() == true && (stationData.loadingArrivals.value || stationData.loadingDepartures.value)) {
                     items( count = 5 ) {
-                        val modifier by remember {
-                            mutableStateOf(
-                                Modifier.fillMaxWidth()
-                                    .height(92.dp)
-                                    .padding(top = 12.dp)
-                                    .clip(RoundedCornerShape(12.dp))
-                            )
-                        }
-
-                        ShimmerBox(modifier)
+                        ShimmerLoading(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(64.dp),
+                            paddingValues = PaddingValues( vertical = 6.dp )
+                        )
                     }
                 }
                 items(trainList ?: listOf()) { train ->
