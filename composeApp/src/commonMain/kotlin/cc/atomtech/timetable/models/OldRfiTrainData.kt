@@ -28,8 +28,8 @@ import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.StringRes
 
-
-class TrainData(
+@Deprecated("Use cc.atomtech.timetable.models.rfi.TrainData instead")
+class OldRfiTrainData(
     val operator: Operator,
     private val operatorName: String?,
     val number: String?,
@@ -54,12 +54,12 @@ class TrainData(
     }
 
     @Composable
-    fun desktopRow(viewDetails: (TrainData) -> Unit) {
+    fun desktopRow(viewDetails: (OldRfiTrainData) -> Unit) {
         return this.mobileRow { viewDetails(it) }
     }
 
     @Composable
-    fun mobileRow(viewDetails: (TrainData) -> Unit)  {
+    fun mobileRow(viewDetails: (OldRfiTrainData) -> Unit)  {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -70,7 +70,7 @@ class TrainData(
                     indication = LocalIndication.current,
                     role  = Role.Button,
                     onClickLabel = StringRes.get("click_for_details"),
-                    onClick = { viewDetails(this@TrainData) }
+                    onClick = { viewDetails(this@OldRfiTrainData) }
                 )
         ) {
             Row (

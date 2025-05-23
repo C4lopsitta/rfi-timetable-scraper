@@ -15,17 +15,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import cc.atomtech.timetable.models.TrainData
+import cc.atomtech.timetable.models.rfi.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.compose.navigation
 import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.BookmarkedStations
 import cc.atomtech.timetable.views.notices.InfoLavori
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.models.DetailedTrainData
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
 import cc.atomtech.timetable.models.viewmodels.Station
 import cc.atomtech.timetable.views.CercaTreno
@@ -44,7 +42,7 @@ fun NavigationBodyHost(
     preferences: AppPreferences,
     setStationId: (Int) -> Unit,
 ) {
-    var detailViewSelectedTrain by remember { mutableStateOf<DetailedTrainData?>(null) }
+    var detailViewSelectedTrain by remember { mutableStateOf<TrainData?>(null) }
     var selectedRegionInfo by remember { mutableStateOf<TrenitaliaInfoLavori?>(null) }
 
     // todo)) Rework
@@ -116,7 +114,10 @@ fun NavigationBodyHost(
                     trainList = stationData.departures.value,
                     stationData = stationData,
                     isDesktop = isDesktop
-                )
+                ) {
+                    detailViewSelectedTrain = it
+                    navController.navigate("details/false")
+                }
             }
 
             composable("arrivals") {
@@ -124,7 +125,10 @@ fun NavigationBodyHost(
                     trainList = stationData.arrivals.value,
                     stationData = stationData,
                     isDesktop = isDesktop
-                )
+                ) {
+                    detailViewSelectedTrain = it
+                    navController.navigate("details/true")
+                }
             }
             composable("favourites") {
                 BookmarkedStations( stationData )
@@ -168,7 +172,7 @@ fun NavigationBodyHost(
 
             composable("details/{isArrival}") {
                 val isArrival = it.arguments?.getString("isArrival") == "true"
-                TrainDetails(detailViewSelectedTrain!!, isArrival)
+//                TrainDetails(detailViewSelectedTrain!!, isArrival)
             }
             composable("info") { AppInfo() }
         }

@@ -27,7 +27,7 @@ class StrikeNotificationWorker (
         val notificationManager: NotificationManager
 
         try {
-            trenitaliaNotices = TrenitaliaScraper.scrapePassengernInformation()
+            trenitaliaNotices = TrenitaliaScraper.scrapePassengerInformation()
             notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         } catch (ex: Exception) {
             println("Notification fetching has failed!\n${ex.printStackTrace()}")

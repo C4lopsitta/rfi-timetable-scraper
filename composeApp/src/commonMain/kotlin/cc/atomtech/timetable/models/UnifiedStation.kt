@@ -2,7 +2,9 @@ package cc.atomtech.timetable.models
 
 import kotlinx.serialization.Serializable
 
-
+/**
+ * This class, currently unused, relates to the *Matched Stations* between RFI and Trenitalia in the `json`.
+ */
 @Serializable
 data class UnifiedStation(
     val displayName: String?,

@@ -48,6 +48,7 @@ object TrenitaliaScraper {
             .replace("-", " - ")
     }
 
+    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia")
     private fun getInfoLavoriElement(element: Element): TrenitaliaInfoLavori {
         val regionName = element.getElementsByTag("a")[0].text().removePrefix("INFOLAVORI ").stationName()
 
@@ -111,6 +112,7 @@ object TrenitaliaScraper {
         )
     }
 
+    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia")
     private fun getExtraEvent(element: Element): TrenitaliaEventDetails {
         val date: String = element.getElementsByTag("h4")[0].text()
         val title: String = element.getElementsByTag("a")[0].text()
@@ -127,7 +129,8 @@ object TrenitaliaScraper {
         )
     }
 
-    suspend fun scrapePassengernInformation(): TrenitaliaInfo {
+    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia")
+    suspend fun scrapePassengerInformation(): TrenitaliaInfo {
         val page = Ksoup.parseGetRequest(baseUrl)
 
         val dataBody = page.getElementById("accordionGenericInfomob")

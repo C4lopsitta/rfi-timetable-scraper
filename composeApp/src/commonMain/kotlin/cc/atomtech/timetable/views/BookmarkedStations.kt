@@ -24,6 +24,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 
+/** Shows Station bookmarks from the ViewModel.
+ *
+ * @see [Station]
+ * @author Simone Robaldo
+ */
 @Composable
 fun BookmarkedStations(
     stationData: Station
@@ -42,7 +47,7 @@ fun BookmarkedStations(
             items(bookmarkedStations.value) { station ->
                 ListItem(
                     headlineContent = { Text(station.name) },
-                    supportingContent = { Text(station.stationCountry.toString()) },
+                    supportingContent = { Text(station.stationOperator.toString()) },
                     trailingContent = {
                         IconButton(
                             content = { Icon(Icons.Rounded.BookmarkRemove, contentDescription = null) },

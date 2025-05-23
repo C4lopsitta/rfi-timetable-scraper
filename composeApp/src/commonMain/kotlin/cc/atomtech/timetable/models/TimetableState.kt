@@ -8,15 +8,15 @@ import kotlinx.datetime.Clock
 
 data class TimetableData(
     val stationName: String,
-    val departures: List<TrainData>,
-    val arrivals: List<TrainData>,
+    val departures: List<OldRfiTrainData>,
+    val arrivals: List<OldRfiTrainData>,
     val stationInfo: String?,
     var lastUptade: Long = Clock.System.now().toEpochMilliseconds()
 )
 
 class TimetableState(val stationName: String,
-                     var departures: List<TrainData>,
-                     var arrivals: List<TrainData>,
+                     var departures: List<OldRfiTrainData>,
+                     var arrivals: List<OldRfiTrainData>,
                      val stationInfo: String? = null): ViewModel() {
     private val _uiState = MutableStateFlow(TimetableData(stationName, departures, arrivals, stationInfo))
     val uiState: StateFlow<TimetableData> = _uiState.asStateFlow()

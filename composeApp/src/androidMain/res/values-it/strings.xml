@@ -109,4 +109,5 @@
     <string name="settings_train_row_layout_detailed">Vista Dettagliata</string>
     <string name="settings_train_row_layout_compact_description">L\'aspetto classico dell\'app. Compatta e semplice, contiene tutte le informazioni necessarie in una semplice UI lineare.</string>
     <string name="settings_train_row_layout_detailed_description">Una nuova UI che mostra qualche dettaglio in più tenendo più spazio verticale, dando più spazio ad ogni elemento.\n\n</string>
+    <string name="bookmarked_station">Stazioni Salvate</string>
 </resources>

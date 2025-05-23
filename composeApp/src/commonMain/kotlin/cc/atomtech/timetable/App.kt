@@ -31,9 +31,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import cc.atomtech.timetable.components.bars.AppBar
 import cc.atomtech.timetable.components.bars.InfoLavoriTabBar
 import cc.atomtech.timetable.enumerations.Platform
+import cc.atomtech.timetable.models.flows.UiEvent
 import cc.atomtech.timetable.preferences.MutablePreference
 import cc.atomtech.timetable.scrapers.RssFeeds
+import io.ktor.client.network.sockets.ConnectTimeoutException
+import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.events.Events
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 
 const val preferencesFile = "timetables-prefs.preferences_pb"
@@ -68,7 +73,9 @@ fun Main(navController: NavHostController,
          isDesktop: Boolean = false,
          preferences: AppPreferences,
          colorScheme: ColorScheme? = null,
-         stationData: cc.atomtech.timetable.models.viewmodels.Station = cc.atomtech.timetable.models.viewmodels.Station(preferences)) {
+         uiEvents: MutableSharedFlow<UiEvent> = MutableSharedFlow(),
+         stationData: cc.atomtech.timetable.models.viewmodels.Station = cc.atomtech.timetable.models.viewmodels.Station(preferences, uiEvents),
+) {
     val snackbarHostState = SnackbarHostState()
 
 
@@ -78,6 +85,32 @@ fun Main(navController: NavHostController,
     var autoReloadIntervalMinutes by remember {
         MutablePreference<Int>(initialValue = 5, coroutineScope = CoroutineScope(Dispatchers.IO)) {
             preferences.setReloadDelay(it)
+        }
+    }
+
+    LaunchedEffect(uiEvents) {
+        uiEvents.collect { event ->
+            when(event) {
+                is UiEvent.RfiTimetableScrapingException -> {
+                    // Filter out timeouts as they happen when the MiR bot is disconnected
+                    if(event.ex is HttpRequestTimeoutException) return@collect
+                    if(event.ex is ConnectTimeoutException) return@collect
+//                    Log.e("App", "ApiError", event.ex)
+                    snackbarHostState.showSnackbar(
+                        message = event.ex.message ?: "Undefined Error",
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long,
+                        actionLabel = "Retry"
+                    ).run {
+                        when(this) {
+                            SnackbarResult.Dismissed -> return@collect
+                            SnackbarResult.ActionPerformed -> {
+                                stationData.update()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

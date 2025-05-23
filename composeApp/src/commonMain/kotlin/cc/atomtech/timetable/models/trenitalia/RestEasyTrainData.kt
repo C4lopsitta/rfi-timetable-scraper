@@ -4,7 +4,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
+/**
+ * @since 1.5.0
+ */
 @Serializable
 data class RestEasyTrainData @OptIn(ExperimentalSerializationApi::class) constructor(
     @SerialName("tipoTreno") val trainType: String?,
@@ -71,6 +73,9 @@ data class RestEasyTrainData @OptIn(ExperimentalSerializationApi::class) constru
     }
 }
 
+/**
+ * @since 1.5.0
+ */
 @Serializable
 data class TrenitaliaTrainDetailsStopItem @OptIn(ExperimentalSerializationApi::class) constructor(
     val orientamento: String?,

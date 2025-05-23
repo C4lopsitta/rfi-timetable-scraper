@@ -6,6 +6,9 @@ import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.json.Json
 
+/**
+ * @since 1.5.0
+ */
 object RfiSchedule {
     final val searchUrl = "https://prm.rfi.it/qo_prm/WebService.asmx/GetCompletionList"
 

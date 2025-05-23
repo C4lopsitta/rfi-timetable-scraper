@@ -1,5 +1,6 @@
 package cc.atomtech.timetable.enumerations
 
+
 enum class Category {
     UNDEFINED,
     REG_VEL,

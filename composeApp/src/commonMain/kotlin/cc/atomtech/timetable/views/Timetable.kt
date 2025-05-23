@@ -43,7 +43,8 @@ import kotlinx.datetime.toLocalDateTime
 fun Timetable(
     trainList: List<TrainData>?,
     stationData: Station,
-    isDesktop: Boolean
+    isDesktop: Boolean,
+    openDetails: (TrainData) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -83,7 +84,7 @@ fun Timetable(
                     }
                 }
                 items(trainList ?: listOf()) { train ->
-                    TrainCompactRow(train)
+                    TrainCompactRow(train, openDetails = openDetails)
                     HorizontalDivider()
                 }
                 item {

@@ -7,6 +7,9 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.json.Json
 
+/**
+ * @since 1.5.0
+ */
 object TrenitaliaRestEasy {
     private const val baseUrl = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/"
 

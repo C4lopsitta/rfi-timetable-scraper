@@ -1,5 +1,8 @@
 package cc.atomtech.timetable.enumerations.preferences
 
+/**
+ * @since 1.5.0
+ */
 enum class TrainRowDetailLevel {
     COMPACT,
     DETAILED;

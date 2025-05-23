@@ -7,6 +7,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 
+/** Information about the app's version.
+ */
+@Deprecated("Unused and will be removed soon")
 @Composable
 fun AppInfo() {
     val versionNumber = "1.3.0"

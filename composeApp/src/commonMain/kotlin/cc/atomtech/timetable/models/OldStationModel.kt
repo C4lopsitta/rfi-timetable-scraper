@@ -24,8 +24,9 @@ import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 import kotlinx.serialization.Serializable
 
+@Deprecated("Replaced by Station viewmodel in cc.atomtech.models.viewodels.Station")
 @Serializable
-data class Station(val name: String, val id: Int) {
+data class OldStationModel(val name: String, val id: Int) {
     @Composable
     fun toFavouritesRow(setAsStation: (Int) -> Unit) {
         Row (

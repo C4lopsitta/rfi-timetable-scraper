@@ -3,6 +3,9 @@ package cc.atomtech.timetable.models.trenitalia
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * @since 1.5.0
+ */
 @Serializable
 data class CercaTrenoData(
     @SerialName("numeroTreno") val number: String,

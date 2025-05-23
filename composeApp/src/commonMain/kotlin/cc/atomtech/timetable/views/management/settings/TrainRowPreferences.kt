@@ -97,7 +97,9 @@ fun TrainRowPreferences(
                     )
                 }
                 Text(StringRes.get("settings_train_row_layout_compact_description"))
-                TrainCompactRow( dummyTrainData, inDummyMode = true )
+                TrainCompactRow( dummyTrainData, inDummyMode = true ) {
+
+                }
             }
         }
 

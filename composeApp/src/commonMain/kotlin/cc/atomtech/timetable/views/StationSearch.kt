@@ -24,9 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.viewmodels.Station
@@ -77,7 +75,7 @@ fun StationSearch(
         items(resutls) { result ->
             ListItem(
                 headlineContent = { Text(result.name) },
-                supportingContent = { Text(result.stationCountry.toString()) },
+                supportingContent = { Text(result.stationOperator.toString()) },
                 trailingContent = {
                     var isBookmarked by remember { mutableStateOf( result.isBookmarked ) }
 

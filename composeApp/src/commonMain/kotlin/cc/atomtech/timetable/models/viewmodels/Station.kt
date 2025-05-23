@@ -1,20 +1,24 @@
 package cc.atomtech.timetable.models.viewmodels
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.apis.scrapers.RfiPartenzeArrivi
+import cc.atomtech.timetable.models.flows.UiEvent
 import cc.atomtech.timetable.models.rfi.StationBaseData
 import cc.atomtech.timetable.models.rfi.TrainData
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class Station( private val preferences: AppPreferences ) : ViewModel() {
+class Station(
+    private val preferences: AppPreferences,
+    private val uiEvents: MutableSharedFlow<UiEvent>
+) : ViewModel() {
     private val _currentStation = mutableStateOf<StationBaseData?>(null)
     val currentStation: State<StationBaseData?> = _currentStation
 
@@ -75,13 +79,21 @@ class Station( private val preferences: AppPreferences ) : ViewModel() {
 
     private suspend fun loadDepartures() {
         _loadingDepartures.value = true
-        _departures.value = RfiPartenzeArrivi.getDepartures( stationId = _currentStation.value?.id ?: 1728 )
+        try {
+            _departures.value = RfiPartenzeArrivi.getDepartures( stationId = _currentStation.value?.id ?: 1728 )
+        } catch (ex: Exception) {
+            uiEvents.emit(UiEvent.RfiTimetableScrapingException(ex))
+        }
         _loadingDepartures.value = false
     }
 
     private suspend fun loadArrivals() {
         _loadingArrivals.value = true
-        _arrivals.value = RfiPartenzeArrivi.getArrivals( stationId = _currentStation.value?.id ?: 1728 )
+        try {
+            _arrivals.value = RfiPartenzeArrivi.getArrivals(stationId = _currentStation.value?.id ?: 1728)
+        } catch (ex: Exception) {
+            uiEvents.emit(UiEvent.RfiTimetableScrapingException(ex))
+        }
         _loadingArrivals.value = false
     }
 

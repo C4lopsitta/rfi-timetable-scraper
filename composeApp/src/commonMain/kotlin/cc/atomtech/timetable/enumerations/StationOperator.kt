@@ -1,6 +1,9 @@
 package cc.atomtech.timetable.enumerations
 
-enum class StationCountry {
+/**
+ * @since 1.5.0
+ */
+enum class StationOperator {
     RFI_IT;
 
     override fun toString(): String {

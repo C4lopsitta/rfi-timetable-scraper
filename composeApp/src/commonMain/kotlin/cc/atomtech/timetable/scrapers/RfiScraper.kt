@@ -2,10 +2,10 @@ package cc.atomtech.timetable.scrapers
 
 import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
-import cc.atomtech.timetable.models.Station
+import cc.atomtech.timetable.models.OldStationModel
 import cc.atomtech.timetable.models.TimetableData
 import cc.atomtech.timetable.models.TimetableState
-import cc.atomtech.timetable.models.TrainData
+import cc.atomtech.timetable.models.OldRfiTrainData
 import cc.atomtech.timetable.models.TrainStop
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
@@ -28,6 +28,7 @@ object HtmlTagsIdNames {
     const val STATIONS_LIST = "ElencoLocalita"
 }
 
+@Deprecated("Deprecated since v.1.5.0", ReplaceWith("cc.atomtech.apis.scrapers.RfiPartenzeArrivi"))
 object RfiScraper {
     private const val stationsUrl = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Home"
     private const val baseUrl = "https://iechub.rfi.it/ArriviPartenze/ArrivalsDepartures/Monitor"
@@ -54,22 +55,22 @@ object RfiScraper {
             .replace("-", " - ")
     }
 
-    suspend fun getStations(): ArrayList<Station> {
+    suspend fun getStations(): ArrayList<OldStationModel> {
         val stations = Ksoup.parseGetRequest(url = stationsUrl)
 
         val stationList = stations.body().getElementById(HtmlTagsIdNames.STATIONS_LIST)
 
-        val stationsList: ArrayList<Station> = arrayListOf()
+        val stationsList: ArrayList<OldStationModel> = arrayListOf()
 
         stationList?.getElementsByTag("option")?.forEach { option ->
-            stationsList.add(Station(option.html().stationName(), option.value().toInt()))
+            stationsList.add(OldStationModel(option.html().stationName(), option.value().toInt()))
         }
 
         return stationsList
     }
 
-    private fun tableToTrainList(tableRows: Elements?): List<TrainData> {
-        val trains: ArrayList<TrainData> = arrayListOf()
+    private fun tableToTrainList(tableRows: Elements?): List<OldRfiTrainData> {
+        val trains: ArrayList<OldRfiTrainData> = arrayListOf()
         tableRows?.forEach { tr ->
             if (tr.children()[0].tagName() != "th") {
                 if (tr.id().isNotEmpty()) {
@@ -150,7 +151,7 @@ object RfiScraper {
                     }
 
                     trains.add(
-                        TrainData(
+                        OldRfiTrainData(
                             number = trainNumber,
                             operator = Operator.fromString(operator),
                             operatorName = operator,
@@ -188,8 +189,8 @@ object RfiScraper {
         val arrivalsTableBody = arrivals.body().getElementById(HtmlTagsIdNames.TABLE)
         val stationInfo = departures.body().getElementById(HtmlTagsIdNames.STATION_INFO)
 
-        val departingTrains: List<TrainData> = tableToTrainList(departuresTableBody?.getElementsByTag("tr"))
-        val arrivingTrains: List<TrainData> = tableToTrainList(arrivalsTableBody?.getElementsByTag("tr"))
+        val departingTrains: List<OldRfiTrainData> = tableToTrainList(departuresTableBody?.getElementsByTag("tr"))
+        val arrivingTrains: List<OldRfiTrainData> = tableToTrainList(arrivalsTableBody?.getElementsByTag("tr"))
 
         var stationInformation: String? = null
         if(stationInfo?.children() != null) {

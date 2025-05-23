@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -36,6 +37,13 @@ import cc.atomtech.timetable.components.train.TrainHeader
 import cc.atomtech.timetable.models.trenitalia.CercaTrenoData
 import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 
+/** Searches for a train by its number. Currently only supports *Trenitalia* trains.
+ *
+ * @since 1.5.0
+ * @see TrenitaliaRestEasy
+ * @see CercaTrenoData
+ * @author Simone Robaldo
+ */
 @Composable
 fun CercaTreno() {
     var trainNumberQuery by remember { mutableStateOf("") }
@@ -114,12 +122,23 @@ fun CercaTreno() {
                 item {
                     TrainHeader(queryTrainData!!)
                 }
-//                Text("Origin ${queryTrainData!!.origin}")
-//                Text("Destination ${queryTrainData!!.destination}")
-//                Text("Train number ${queryTrainData!!.trainNumber}")
-//                Text("Departure time ${queryTrainData!!.departureTime}")
-//                Text("Arrival time ${queryTrainData!!.arrivalTime}")
-//                Text("Delay ${queryTrainData!!.delayReason}")
+                item {
+                    Text("Origin ${queryTrainData?.origin}")
+                    Text("Destination ${queryTrainData?.destination}")
+                    Text("Departure time ${queryTrainData?.departureTime}")
+                    Text("Arrival time ${queryTrainData?.arrivalTime}")
+                    Text("Delay ${queryTrainData?.delayReason}")
+                    Text("Delay reason ${queryTrainData?.delayReason}")
+                    Text("Category ${queryTrainData?.category}")
+                    Text("Has Departed: ${queryTrainData?.hasYetToDepart}")
+                }
+                item {
+                    HorizontalDivider()
+                    Text("STOPS", fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                    queryTrainData?.stops?.forEachIndexed { index, stop ->
+                        Text("Stop #$index: ${stop.stationName}")
+                    }
+                }
             }
         }
     }
