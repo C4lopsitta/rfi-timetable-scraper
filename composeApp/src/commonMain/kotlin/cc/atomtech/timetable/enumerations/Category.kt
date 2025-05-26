@@ -46,8 +46,11 @@ enum class Category {
                 return REG_VEL
             if(category.contains("REGIONALE"))
                 return REG
-            if(category.contains("Servizio Ferroviario Metropolitano")) {
-                val lineNumber = category.last()
+            if(category.contains("Servizio Ferroviario Metropolitano", ignoreCase = true) || category.startsWith("Categoria SFM linea", ignoreCase = true)) {
+                val lineNumber = category
+                    .trimEnd { it.isWhitespace() }
+                    .last()
+
                 return when(lineNumber) {
                     '1' -> SFM_TO_1
                     '2' -> SFM_TO_2
