@@ -92,7 +92,6 @@ fun Main(navController: NavHostController,
         uiEvents.collect { event ->
             when(event) {
                 is UiEvent.RfiTimetableScrapingException -> {
-                    // Filter out timeouts as they happen when the MiR bot is disconnected
                     if(event.ex is HttpRequestTimeoutException) return@collect
                     if(event.ex is ConnectTimeoutException) return@collect
 //                    Log.e("App", "ApiError", event.ex)
@@ -205,10 +204,7 @@ fun Main(navController: NavHostController,
                     preferences = preferences,
                     setStationId = { newId ->
                         stationData.updateStationById(newId)
-                        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
-                            preferences.setStationId(newId)
-                            navController.navigate("departures")
-                        }
+                        navController.navigate("departures")
                     }
                 )
             }

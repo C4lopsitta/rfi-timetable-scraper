@@ -9,9 +9,17 @@ import cc.atomtech.timetable.apis.scrapers.RfiPartenzeArrivi
 import cc.atomtech.timetable.models.flows.UiEvent
 import cc.atomtech.timetable.models.rfi.StationBaseData
 import cc.atomtech.timetable.models.rfi.TrainData
+import io.ktor.utils.io.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -43,19 +51,19 @@ class Station(
     private val _loadingStations = mutableStateOf(false)
     val loadingStations: State<Boolean> = _loadingStations
 
+    private val IecHubJobSupervisor = SupervisorJob()
+    private val IecHubCoroutineScope = CoroutineScope(Dispatchers.IO + IecHubJobSupervisor)
+
     // TODO)) Reimplement auto-reload
-    // TODO)) Handle Exceptions
-    // TODO)) Add error handling through SnackBarHost
-    // TODO)) Add Stations loading loader value
 
     init {
-        viewModelScope.launch {
-            loadAllStations()
+        IecHubCoroutineScope.launch {
+            async { loadAllStations() }.await()
             getLastId()
-
-            loadDepartures()
-            loadArrivals()
         }
+
+        loadDepartures()
+        loadArrivals()
     }
 
     // region Private
@@ -63,13 +71,18 @@ class Station(
         return this.firstOrNull { it.id == id }
     }
 
-    private fun List<StationBaseData>.searchByName(query: String) : List<StationBaseData> {
+    private fun searchByName(query: String) : List<StationBaseData> {
         if(query.isEmpty()) return emptyList()
         return _allStationData.value.filter { it.name.contains(query, ignoreCase = true) }
     }
 
     private fun updateById(id: Int) {
         _currentStation.value = _allStationData.value.findById(id)
+        println("[INFO] APP SUCKS DICKS!!!!!\n       BITCH COULDNT GET STATION OF ID $id!!!")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            preferences.setStationId(id)
+        }
     }
 
     private suspend fun getLastId() {
@@ -77,27 +90,33 @@ class Station(
         updateById(lastId)
     }
 
-    private suspend fun loadDepartures() {
-        _loadingDepartures.value = true
-        try {
-            _departures.value = RfiPartenzeArrivi.getDepartures( stationId = _currentStation.value?.id ?: 1728 )
-        } catch (ex: Exception) {
-            uiEvents.emit(UiEvent.RfiTimetableScrapingException(ex))
+    private fun loadDepartures() {
+        viewModelScope.launch {
+            _loadingDepartures.value = true
+            try {
+                _departures.value =
+                    RfiPartenzeArrivi.getDepartures(stationId = _currentStation.value?.id ?: 1728)
+            } catch (ex: Exception) {
+                uiEvents.emit(UiEvent.RfiTimetableScrapingException(ex))
+            }
+            _loadingDepartures.value = false
         }
-        _loadingDepartures.value = false
     }
 
-    private suspend fun loadArrivals() {
-        _loadingArrivals.value = true
-        try {
-            _arrivals.value = RfiPartenzeArrivi.getArrivals(stationId = _currentStation.value?.id ?: 1728)
-        } catch (ex: Exception) {
-            uiEvents.emit(UiEvent.RfiTimetableScrapingException(ex))
+    private fun loadArrivals() {
+        viewModelScope.launch {
+            _loadingArrivals.value = true
+            try {
+                _arrivals.value =
+                    RfiPartenzeArrivi.getArrivals(stationId = _currentStation.value?.id ?: 1728)
+            } catch (ex: Exception) {
+                uiEvents.emit(UiEvent.RfiTimetableScrapingException(ex))
+            }
+            _loadingArrivals.value = false
         }
-        _loadingArrivals.value = false
     }
 
-    private suspend fun loadAllStations() {
+    private suspend fun loadAllStations(): Unit {
         if(preferences.getStoreStations().first()) {
             val stationStore = preferences.getStationCache().first()
             if(stationStore.isNotEmpty()) {
@@ -139,30 +158,30 @@ class Station(
 
 
     fun searchStations(query: String) : List<StationBaseData> {
-        return _allStationData.value.searchByName(query)
+        return searchByName(query)
     }
 
     fun update() {
-        viewModelScope.launch {
-            loadDepartures()
-            loadArrivals()
-        }
+        viewModelScope.cancel(CancellationException("New loading action launched"))
+        loadDepartures()
+        loadArrivals()
     }
 
     fun updateStationById(newId: Int) {
         updateById(newId)
-        viewModelScope.launch {
-            loadDepartures()
-            loadArrivals()
-        }
+        try {
+            viewModelScope.cancel(CancellationException("New loading action launched"))
+        } catch (_: Exception) {}
+
+        loadDepartures()
+        loadArrivals()
     }
 
     fun updateStation(stationData: StationBaseData) {
         _currentStation.value = stationData
 
-        viewModelScope.launch {
-            loadDepartures()
-            loadArrivals()
-        }
+        viewModelScope.cancel(CancellationException("New loading action launched"))
+        loadDepartures()
+        loadArrivals()
     }
 }

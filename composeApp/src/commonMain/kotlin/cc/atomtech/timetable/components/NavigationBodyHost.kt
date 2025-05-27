@@ -19,6 +19,7 @@ import cc.atomtech.timetable.models.rfi.TrainData
 import cc.atomtech.timetable.views.Timetable
 import cc.atomtech.timetable.views.TrainDetails
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.compose.navigation
 import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.views.AppInfo
 import cc.atomtech.timetable.views.BookmarkedStations
@@ -104,11 +105,64 @@ fun NavigationBodyHost(
                 )
             }
         }
+
         NavHost(
             navController = navController,
             startDestination = "departures",
             modifier = Modifier.padding(start = 12.dp)
         ) {
+            navigation("station", "station/departures") {
+                composable("station/departures") {
+
+                }
+                composable("station/arrivals") {
+
+                }
+                composable("station/train/{trainNumber}") {
+                    val trainNumber = it.arguments?.getString("trainNumber")
+
+                }
+
+                composable("station/train/search") {
+
+                }
+
+                composable("station/search") {
+
+                }
+
+                composable("station/bookmarked") {
+
+                }
+            }
+
+            navigation("railworks", "railworks/trenitalia") {
+                composable("railworks/trenitalia") {
+
+                }
+
+                composable("railworks/rfi/live") {
+
+                }
+
+                composable("railworks/rfi/notices") {
+
+                }
+            }
+
+            navigation("settings", "settings/home") {
+                composable("settings/home") {
+
+                }
+
+                composable("settings/whatsnew") {
+                    WhatsNew()
+                }
+            }
+
+
+
+            // DEPRECATED - TO BE REMOVED AND UPDATED
             composable("departures") {
                 Timetable(
                     trainList = stationData.departures.value,
@@ -174,6 +228,7 @@ fun NavigationBodyHost(
                 val isArrival = it.arguments?.getString("isArrival") == "true"
 //                TrainDetails(detailViewSelectedTrain!!, isArrival)
             }
+
             composable("info") { AppInfo() }
         }
     }

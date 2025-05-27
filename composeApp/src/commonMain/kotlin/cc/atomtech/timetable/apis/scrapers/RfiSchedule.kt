@@ -6,11 +6,13 @@ import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.json.Json
 
-/**
+/** Pulls from the `PRM` endpoints the static planned timetable of a station.
+ *
+ *
  * @since 1.5.0
  */
-object RfiSchedule {
-    final val searchUrl = "https://prm.rfi.it/qo_prm/WebService.asmx/GetCompletionList"
+final object RfiSchedule {
+    private const val searchUrl = "https://prm.rfi.it/qo_prm/WebService.asmx/GetCompletionList"
 
     suspend fun searchString(station: String) {
         val response = HttpClient(CIO).post(
