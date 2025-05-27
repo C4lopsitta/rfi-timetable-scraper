@@ -9,30 +9,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
-import cc.atomtech.timetable.enumerations.CurrentStationType
+import cc.atomtech.timetable.enumerations.ui.TrainHeaderDisplayOrder
 import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 
 @Composable
 fun TrainHeader(
     number: String,
     origin: String?,
-    arrival: String
+    arrival: String,
+    displayOrder: TrainHeaderDisplayOrder = TrainHeaderDisplayOrder.ARRIVAL_FIRST
 ) {
     BaseHeader(
         number = number,
         origin = origin,
-        arrival = arrival
+        arrival = arrival,
+        displayOrder = displayOrder
     )
 }
 
 @Composable
 fun TrainHeader(
-    trainData: RestEasyTrainData
+    trainData: RestEasyTrainData,
+    displayOrder: TrainHeaderDisplayOrder = TrainHeaderDisplayOrder.ARRIVAL_FIRST
 ) {
     BaseHeader(
         number = "${trainData.trainNumber}",
         origin = trainData.origin,
-        arrival = trainData.destination ?: "Undefined"
+        arrival = trainData.destination ?: "Undefined",
+        displayOrder = displayOrder
     )
 }
 
@@ -40,11 +44,15 @@ fun TrainHeader(
 private fun BaseHeader(
     number: String,
     origin: String?,
-    arrival: String
+    arrival: String,
+    displayOrder: TrainHeaderDisplayOrder = TrainHeaderDisplayOrder.ARRIVAL_FIRST
 ) {
-    Text(StringRes.format("details_number", number))
+    if(displayOrder == TrainHeaderDisplayOrder.ORIGIN_FIRST && origin == null)
+        throw Exception("Origin cannot be null if order is ORIGIN_FIRST")
+
+    Text(StringRes.format("train_header_number_${if(displayOrder == TrainHeaderDisplayOrder.ARRIVAL_FIRST) "to" else "from"}", number))
     Text(
-        arrival,
+        if(displayOrder == TrainHeaderDisplayOrder.ARRIVAL_FIRST) arrival else origin!!,
         fontSize = 32.sp,
         fontWeight = FontWeight.SemiBold,
         lineHeight = 38.sp
@@ -53,12 +61,14 @@ private fun BaseHeader(
     // "from" text if not line start
     if(origin != null) {
         Text(
-            StringRes.get("from"),
+            StringRes.get(
+                if(displayOrder == TrainHeaderDisplayOrder.ARRIVAL_FIRST) "from" else "to"
+            ),
             modifier = Modifier.padding( top = 4.dp ).fillMaxWidth(),
 //                textAlign = TextAlign.End
         )
         Text(
-            origin,
+            if(displayOrder == TrainHeaderDisplayOrder.ARRIVAL_FIRST) origin else arrival,
             fontSize = 32.sp,
             fontWeight = FontWeight.SemiBold,
             lineHeight = 38.sp,

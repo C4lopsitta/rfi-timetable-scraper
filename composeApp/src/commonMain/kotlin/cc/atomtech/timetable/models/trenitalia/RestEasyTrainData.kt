@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * @since 1.5.0
  */
 @Serializable
-data class RestEasyTrainData @OptIn(ExperimentalSerializationApi::class) constructor(
+data class RestEasyTrainData constructor(
     @SerialName("tipoTreno") val trainType: String?,
     @SerialName("fermate") val stops: List<TrenitaliaTrainDetailsStopItem>?,
     @SerialName("codiceCliente") val userCode: Long?,

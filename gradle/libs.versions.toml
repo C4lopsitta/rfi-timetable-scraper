@@ -27,6 +27,7 @@ lifecycleViewmodelCompose = "2.8.2"
 material3 = "1.7.0"
 composeMaterial3 = "1.0.0-alpha28"
 navigationComposeVersion = "2.8.0-alpha10"
+resources = "1.8.1"
 uiUnitAndroid = "1.7.0"
 uiUnitDesktop = "1.7.0"
 navigationCompose = "2.8.3"
@@ -75,6 +76,7 @@ datastore-preferences = { module = "androidx.datastore:datastore-preferences", v
 androidx-ui-desktop = { group = "androidx.compose.ui", name = "ui-desktop", version.ref = "uiDesktop" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-animation-core-android = { group = "androidx.compose.animation", name = "animation-core-android", version.ref = "animationCoreAndroid" }
+resources = { module = "org.jetbrains.compose.resources:resources", version.ref = "resources" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -109,6 +109,12 @@ fun Main(navController: NavHostController,
                         }
                     }
                 }
+
+                is UiEvent.GenericException -> TODO()
+                is UiEvent.RfiFeedException -> TODO()
+                is UiEvent.StationLoadingException -> TODO()
+                is UiEvent.TrenitaliaCercatrenoException -> TODO()
+                is UiEvent.TrenitaliaInfolavoriException -> TODO()
             }
         }
     }

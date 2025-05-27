@@ -33,9 +33,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.apis.TrenitaliaRestEasy
+import cc.atomtech.timetable.components.TrainStopList
 import cc.atomtech.timetable.components.train.TrainHeader
+import cc.atomtech.timetable.enumerations.CurrentStationType
+import cc.atomtech.timetable.enumerations.ui.TrainHeaderDisplayOrder
+import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.models.trenitalia.CercaTrenoData
 import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 /** Searches for a train by its number. Currently only supports *Trenitalia* trains.
  *
@@ -120,24 +127,37 @@ fun CercaTreno() {
         if(queryTrainData != null) {
             LazyColumn {
                 item {
-                    TrainHeader(queryTrainData!!)
+                    TrainHeader(queryTrainData!!, displayOrder = TrainHeaderDisplayOrder.ORIGIN_FIRST)
                 }
-                item {
-                    Text("Origin ${queryTrainData?.origin}")
-                    Text("Destination ${queryTrainData?.destination}")
-                    Text("Departure time ${queryTrainData?.departureTime}")
-                    Text("Arrival time ${queryTrainData?.arrivalTime}")
-                    Text("Delay ${queryTrainData?.delayReason}")
-                    Text("Delay reason ${queryTrainData?.delayReason}")
-                    Text("Category ${queryTrainData?.category}")
-                    Text("Has Departed: ${queryTrainData?.hasYetToDepart}")
-                }
+//                item {
+//                    Text("Departure time ${queryTrainData?.departureTime}")
+//                    Text("Arrival time ${queryTrainData?.arrivalTime}")
+//                    Text("Delay ${queryTrainData?.delayReason}")
+//                    Text("Delay reason ${queryTrainData?.delayReason}")
+//                    Text("Category ${queryTrainData?.category}")
+//                    Text("Has Departed: ${queryTrainData?.hasYetToDepart}")
+//                }
                 item {
                     HorizontalDivider()
-                    Text("STOPS", fontWeight = FontWeight.Bold, fontSize = 24.sp)
-                    queryTrainData?.stops?.forEachIndexed { index, stop ->
-                        Text("Stop #$index: ${stop.stationName}")
-                    }
+                    TrainStopList(
+                        stationType = CurrentStationType.LINE_START,
+                        delay = 0,
+                        stops = List(queryTrainData?.stops?.size ?: 0) { index ->
+                            val timeZone = TimeZone.currentSystemDefault()
+                            val localTime = Instant
+                                .fromEpochMilliseconds(
+                                    queryTrainData?.stops?.get(index)?.actualTime ?:
+                                    queryTrainData?.stops?.get(index)?.scheduledTime ?: 0L
+                                )
+                                .toLocalDateTime(timeZone)
+
+                            TrainStop(
+                                name = queryTrainData?.stops?.get(index)?.stationName ?: "",
+                                time = "${localTime.hour}:${localTime.minute.toString().padStart(2, '0')}",
+                                isCurrentStop = index == 0
+                            )
+                        }
+                    )
                 }
             }
         }

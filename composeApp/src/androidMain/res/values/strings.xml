@@ -114,4 +114,7 @@
     <string name="settings_train_row_layout_compact_description">The classic look of the app. Compact and straightfoward, containing all the important information in a simple linear UI.</string>
     <string name="settings_train_row_layout_detailed_description">A new UI that shows a bit more information in a more taller UI, that gives each element more space.</string>
     <string name="bookmarked_station">Bookmarked Stations</string>
+    <string name="train_header_number_to">Train number %1$s to</string>
+    <string name="train_header_number_from">Train number %1$s from</string>
+    <string name="to">to</string>
 </resources>

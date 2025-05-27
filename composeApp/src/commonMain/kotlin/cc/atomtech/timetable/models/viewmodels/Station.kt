@@ -57,13 +57,12 @@ class Station(
     // TODO)) Reimplement auto-reload
 
     init {
-        IecHubCoroutineScope.launch {
-            async { loadAllStations() }.await()
+        viewModelScope.launch {
+            loadAllStations()
             getLastId()
+            loadDepartures()
+            loadArrivals()
         }
-
-        loadDepartures()
-        loadArrivals()
     }
 
     // region Private
@@ -116,7 +115,7 @@ class Station(
         }
     }
 
-    private suspend fun loadAllStations(): Unit {
+    private suspend fun loadAllStations() {
         if(preferences.getStoreStations().first()) {
             val stationStore = preferences.getStationCache().first()
             if(stationStore.isNotEmpty()) {
@@ -162,7 +161,7 @@ class Station(
     }
 
     fun update() {
-        viewModelScope.cancel(CancellationException("New loading action launched"))
+//        viewModelScope.cancel(CancellationException("New loading action launched"))
         loadDepartures()
         loadArrivals()
     }
@@ -170,7 +169,7 @@ class Station(
     fun updateStationById(newId: Int) {
         updateById(newId)
         try {
-            viewModelScope.cancel(CancellationException("New loading action launched"))
+//            viewModelScope.cancel(CancellationException("New loading action launched"))
         } catch (_: Exception) {}
 
         loadDepartures()
@@ -180,7 +179,7 @@ class Station(
     fun updateStation(stationData: StationBaseData) {
         _currentStation.value = stationData
 
-        viewModelScope.cancel(CancellationException("New loading action launched"))
+//        viewModelScope.cancel(CancellationException("New loading action launched"))
         loadDepartures()
         loadArrivals()
     }

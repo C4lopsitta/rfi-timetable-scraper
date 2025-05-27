@@ -111,54 +111,54 @@ fun NavigationBodyHost(
             startDestination = "departures",
             modifier = Modifier.padding(start = 12.dp)
         ) {
-            navigation("station", "station/departures") {
-                composable("station/departures") {
-
-                }
-                composable("station/arrivals") {
-
-                }
-                composable("station/train/{trainNumber}") {
-                    val trainNumber = it.arguments?.getString("trainNumber")
-
-                }
-
-                composable("station/train/search") {
-
-                }
-
-                composable("station/search") {
-
-                }
-
-                composable("station/bookmarked") {
-
-                }
-            }
-
-            navigation("railworks", "railworks/trenitalia") {
-                composable("railworks/trenitalia") {
-
-                }
-
-                composable("railworks/rfi/live") {
-
-                }
-
-                composable("railworks/rfi/notices") {
-
-                }
-            }
-
-            navigation("settings", "settings/home") {
-                composable("settings/home") {
-
-                }
-
-                composable("settings/whatsnew") {
-                    WhatsNew()
-                }
-            }
+//            navigation("station", "station/departures") {
+//                composable("station/departures") {
+//
+//                }
+//                composable("station/arrivals") {
+//
+//                }
+//                composable("station/train/{trainNumber}") {
+//                    val trainNumber = it.arguments?.getString("trainNumber")
+//
+//                }
+//
+//                composable("station/train/search") {
+//
+//                }
+//
+//                composable("station/search") {
+//
+//                }
+//
+//                composable("station/bookmarked") {
+//
+//                }
+//            }
+//
+//            navigation("railworks", "railworks/trenitalia") {
+//                composable("railworks/trenitalia") {
+//
+//                }
+//
+//                composable("railworks/rfi/live") {
+//
+//                }
+//
+//                composable("railworks/rfi/notices") {
+//
+//                }
+//            }
+//
+//            navigation("settings", "settings/home") {
+//                composable("settings/home") {
+//
+//                }
+//
+//                composable("settings/whatsnew") {
+//                    WhatsNew()
+//                }
+//            }
 
 
 
