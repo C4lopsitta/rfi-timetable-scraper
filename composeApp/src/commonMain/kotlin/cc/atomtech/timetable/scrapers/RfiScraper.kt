@@ -15,70 +15,9 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.select.Elements
 
-object HtmlTagsIdNames {
-    const val STATION_NAME = "nomeStazioneId"
-    const val TABLE = "bodyTabId"
-    const val STATION_INFO = "Informazioni di stazione"
-
-    const val OPERATOR_FIELD = "RVettore"
-    const val CATEGORY_FIELD = "RCategoria"
-    const val NUMBER_FIELD = "RTreno"
-    const val STATION_FIELD = "RStazione"
-    const val TIME_FIELD = "ROrario"
-    const val DELAY_FIELD = "RRitardo"
-    const val PLATFORM_FIELD = "RBinario"
-    const val DETAILS_BUTTON_FIELD = "RDettagli"
-    const val DETAILS_POPUP_ELEMENT_CLASS = "FermateSuccessivePopupStyle"
-    const val STATIONS_LIST = "ElencoLocalita"
-}
 
 @Deprecated("Deprecated since v.1.5.0", ReplaceWith("cc.atomtech.apis.scrapers.RfiPartenzeArrivi"), DeprecationLevel.ERROR)
 object RfiScraper {
-    private const val stationsUrl = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Home"
-    private const val baseUrl = "https://iechub.rfi.it/ArriviPartenze/ArrivalsDepartures/Monitor"
-    private const val baseQueryDepartures = "?Arrivals=False&PlaceId="
-    private const val baseQueryArrivals = "?Arrivals=True&PlaceId="
-
-    private fun String.stationName(): String {
-        return this.lowercase()
-            .replace("''''", "'")
-            .split(" ")
-            .joinToString(" ") { word ->
-                word.split(".")
-                    .joinToString(".") { part ->
-                        part.replaceFirstChar { it.uppercaseChar() }
-                    }
-            }
-            .split(" ")
-            .joinToString(" ") { word ->
-                word.split("-")
-                    .joinToString("-") { part ->
-                        part.replaceFirstChar { it.uppercaseChar() }
-                    }
-            }
-            .replace("-", " - ")
-    }
-
-    suspend fun getStations(): ArrayList<StationBaseData> {
-        val stations = Ksoup.parseGetRequest(url = stationsUrl)
-
-        val stationList = stations.body().getElementById(HtmlTagsIdNames.STATIONS_LIST)
-
-        val stationsList: ArrayList<StationBaseData> = arrayListOf()
-
-        stationList?.getElementsByTag("option")?.forEach { option ->
-            stationsList.add(
-                StationBaseData(
-                    name = option.html().stationName(),
-                    id = option.value().toInt(),
-                    stationOperator = StationOperator.RFI_IT
-                )
-            )
-        }
-
-        return stationsList
-    }
-
     private fun tableToTrainList(tableRows: Elements?, isDepartures: Boolean): List<TrainData> {
         val trains: ArrayList<TrainData> = arrayListOf()
         tableRows?.forEach { tr ->
