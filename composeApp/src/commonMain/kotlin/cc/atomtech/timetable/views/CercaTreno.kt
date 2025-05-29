@@ -37,7 +37,7 @@ import cc.atomtech.timetable.components.TrainStopList
 import cc.atomtech.timetable.components.train.TrainHeader
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.enumerations.ui.TrainHeaderDisplayOrder
-import cc.atomtech.timetable.models.TrainStop
+import cc.atomtech.timetable.models.rfi.TrainStopData
 import cc.atomtech.timetable.models.trenitalia.CercaTrenoData
 import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 import kotlinx.datetime.Instant
@@ -160,7 +160,7 @@ fun CercaTreno() {
                                 )
                                 .toLocalDateTime(timeZone)
 
-                            TrainStop(
+                            TrainStopData(
                                 name = queryTrainData?.stops?.get(index)?.stationName ?: "",
                                 time = "${localTime.hour}:${localTime.minute.toString().padStart(2, '0')}",
                                 isCurrentStop = index == 0

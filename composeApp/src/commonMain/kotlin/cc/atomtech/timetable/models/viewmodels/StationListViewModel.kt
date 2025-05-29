@@ -6,12 +6,14 @@ import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.models.flows.UiEvent
 import cc.atomtech.timetable.models.utilities.MatchedStation
 import cc.atomtech.timetable.models.rfi.StationBaseData
+import cc.atomtech.timetable.apis.scrapers.RfiPartenzeArrivi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import cc.atomtech.timetables.resources.Res
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -36,15 +38,51 @@ class StationListViewModel(
     init {
         viewModelScope.launch {
             loadFile()
+            loadRfiStations()
         }
     }
 
 
+    /**
+     * Loads the matched stations from the file.
+     *
+     * @see [Res]
+     */
     @OptIn(ExperimentalResourceApi::class)
-    suspend fun loadFile() {
+    private suspend fun loadFile() {
         val jsonContent = Res.readBytes("files/$MATCHED_STATIONS_FILE").decodeToString()
 
         val stations = json.decodeFromString<List<MatchedStation>>(jsonContent)
         _stationsFromFile.value = stations
+    }
+
+    /**
+     * Loads stations from the Cache or, when unavailable, from the Scraper.
+     *
+     * @see [AppPreferences]
+     * @see [RfiPartenzeArrivi.getSearchableEntries]
+     */
+    private suspend fun loadRfiStations() {
+        var stations = emptyList<StationBaseData>()
+        appPreferences.getStationCache().collect {
+            if(it.isNotEmpty()) {
+                try {
+                    stations = json.decodeFromString<List<StationBaseData>>(it)
+                    _rfiStations.value = stations
+                } catch (_: Exception) {}
+            }
+
+            stations.ifEmpty {
+                try {
+                    stations = RfiPartenzeArrivi.getSearchableEntries()
+                    _rfiStations.value = stations
+                    appPreferences.setStationCache(json.encodeToString(stations))
+                } catch (ex: Exception) {
+                    uiEvents.emit(UiEvent.StationLoadingException(ex))
+                }
+            }
+
+            _rfiStations.value = stations
+        }
     }
 }

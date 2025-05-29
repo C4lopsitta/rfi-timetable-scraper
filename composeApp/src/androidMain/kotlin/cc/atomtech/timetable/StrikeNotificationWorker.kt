@@ -5,13 +5,13 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
 import cc.atomtech.timetable.models.TrenitaliaInfo
 import cc.atomtech.timetable.scrapers.TrenitaliaScraper
+import androidx.core.net.toUri
 
 class StrikeNotificationWorker (
     context: Context,
@@ -78,7 +78,7 @@ class StrikeNotificationWorker (
             .setSilent(true)
 
         eventDetail.link?.let {
-            val openLinkIntent = Intent(Intent.ACTION_VIEW, Uri.parse(eventDetail.link))
+            val openLinkIntent = Intent(Intent.ACTION_VIEW, eventDetail.link.toUri())
             val openLinkPendingIntent = PendingIntent.getActivity(
                 applicationContext,
                 0,

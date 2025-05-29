@@ -20,8 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.enumerations.CurrentStationType
-import cc.atomtech.timetable.models.TrainStop
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.models.rfi.TrainStopData
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -43,7 +43,7 @@ import kotlin.time.Duration
 @OptIn(FormatStringsInDatetimeFormats::class)
 @Composable
 private fun TrainStopEntry(
-    stop: TrainStop,
+    stop: TrainStopData,
     isLineStart: Boolean,
     isFirst: Boolean,
     isLast: Boolean,
@@ -164,7 +164,7 @@ private fun TrainStopEntry(
 @Composable
 fun TrainStopList(
     stationType: CurrentStationType,
-    stops: List<TrainStop>,
+    stops: List<TrainStopData>,
     delay: Int
 ) {
     Box(

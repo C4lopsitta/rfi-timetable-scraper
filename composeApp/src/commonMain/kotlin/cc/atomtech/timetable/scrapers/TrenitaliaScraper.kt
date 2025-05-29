@@ -6,7 +6,6 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
-import cc.atomtech.timetable.models.TrenitaliaTrainData
 
 private object ElementIds {
     const val REGULAR_TRAFFIC = "CIRCOLAZIONE_REGOLARE"
@@ -15,7 +14,7 @@ private object ElementIds {
     const val FR_INFO = "INFOTRENI_FRECCE_"
 }
 
-@Deprecated("")
+@Deprecated("Replaced by newer object.", ReplaceWith("cc.atomtech.timetable.apis.TrenitaliaRestEasy"), DeprecationLevel.ERROR)
 object TrenitaliaScraper {
     private const val baseUrl = "https://www.trenitalia.com/it/informazioni/Infomobilita/notizie-infomobilita.html"
     private const val cercaTrenoFinderUrl = "http://www.viaggiatreno.it/infomobilitamobile/resteasy/viaggiatreno/cercaNumeroTrenoTrenoAutocomplete/"

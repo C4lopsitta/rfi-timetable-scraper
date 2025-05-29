@@ -6,7 +6,7 @@ import cc.atomtech.timetable.models.OldStationModel
 import cc.atomtech.timetable.models.TimetableData
 import cc.atomtech.timetable.models.TimetableState
 import cc.atomtech.timetable.models.OldRfiTrainData
-import cc.atomtech.timetable.models.TrainStop
+import cc.atomtech.timetable.models.rfi.TrainStopData
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.select.Elements
@@ -28,7 +28,7 @@ object HtmlTagsIdNames {
     const val STATIONS_LIST = "ElencoLocalita"
 }
 
-@Deprecated("Deprecated since v.1.5.0", ReplaceWith("cc.atomtech.apis.scrapers.RfiPartenzeArrivi"))
+@Deprecated("Deprecated since v.1.5.0", ReplaceWith("cc.atomtech.apis.scrapers.RfiPartenzeArrivi"), DeprecationLevel.ERROR)
 object RfiScraper {
     private const val stationsUrl = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Home"
     private const val baseUrl = "https://iechub.rfi.it/ArriviPartenze/ArrivalsDepartures/Monitor"
@@ -108,7 +108,7 @@ object RfiScraper {
                     val delay =
                         tr.getElementById(HtmlTagsIdNames.DELAY_FIELD)!!.html()
 
-                    val stops = arrayListOf<TrainStop>()
+                    val stops = arrayListOf<TrainStopData>()
                     var moreInformationString = ""
 
                     if(tr.getElementById(HtmlTagsIdNames.DETAILS_BUTTON_FIELD)?.children()?.size != 0) {
@@ -131,7 +131,7 @@ object RfiScraper {
                                     .replace(".", ":")
                                 if(time.split(":").size == 1) time = "0$time"
                                 stops.add(
-                                    TrainStop(
+                                    TrainStopData(
                                         name = stop.split(" (")[0].removePrefix("FERMA A: ").stationName(),
                                         time = time,
                                         isCurrentStop = false

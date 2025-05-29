@@ -37,7 +37,6 @@ import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.models.DetailedTrainData
-import cc.atomtech.timetable.models.TrenitaliaTrainData
 import cc.atomtech.timetable.models.trenitalia.CercaTrenoData
 import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
 import cc.atomtech.timetable.scrapers.TrenitaliaScraper

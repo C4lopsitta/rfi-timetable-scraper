@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.StringRes
+import cc.atomtech.timetable.models.rfi.TrainStopData
 
 @Deprecated("Use cc.atomtech.timetable.models.rfi.TrainData instead")
 class OldRfiTrainData(
@@ -38,7 +39,7 @@ class OldRfiTrainData(
     val delay: Int,
     val station: String? = null,
     val time: String? = null,
-    val stops: List<TrainStop>,
+    val stops: List<TrainStopData>,
     val details: String? = null) {
 
     fun getDelayString(addSpace: Boolean = true): String? {
