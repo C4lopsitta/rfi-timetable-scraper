@@ -1,5 +1,8 @@
 package cc.atomtech.timetable.enumerations
 
+/**
+ * Enumeration of any (known) Rail Operator.
+ */
 enum class Operator {
     UNDEFINED,
     TRENITALIA,

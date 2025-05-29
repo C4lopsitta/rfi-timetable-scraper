@@ -1,6 +1,10 @@
 package cc.atomtech.timetable.enumerations
 
-
+/** Enumeration of any (known) train Category.
+ *
+ * Contains any category, from Regional, to Freccie, including SFM, EC, IC and others.
+ *
+ */
 enum class Category {
     UNDEFINED,
     REG_VEL,
@@ -112,6 +116,11 @@ enum class Category {
         }
     }
 
+    /**
+     * Returns an human readable [String] to display to the User. If a complete name is needed, check [toString]
+     *
+     * @see [toString]
+     */
     fun toShortString(): String {
         return when(this) {
             REG -> "REG"
@@ -153,6 +162,11 @@ enum class Category {
         }
     }
 
+    /**
+     * Returns the complete Category name instead of a shortened string
+     *
+     * @see [toShortString]
+     */
     override fun toString(): String {
         return when(this) {
             REG -> "Regionale"

@@ -7,11 +7,6 @@ import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
 import cc.atomtech.timetable.models.TrenitaliaTrainData
-import cc.atomtech.timetable.models.trenitalia.RestEasyTrainData
-import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
-import kotlinx.serialization.json.Json
 
 private object ElementIds {
     const val REGULAR_TRAFFIC = "CIRCOLAZIONE_REGOLARE"
@@ -20,6 +15,7 @@ private object ElementIds {
     const val FR_INFO = "INFOTRENI_FRECCE_"
 }
 
+@Deprecated("")
 object TrenitaliaScraper {
     private const val baseUrl = "https://www.trenitalia.com/it/informazioni/Infomobilita/notizie-infomobilita.html"
     private const val cercaTrenoFinderUrl = "http://www.viaggiatreno.it/infomobilitamobile/resteasy/viaggiatreno/cercaNumeroTrenoTrenoAutocomplete/"
@@ -48,7 +44,7 @@ object TrenitaliaScraper {
             .replace("-", " - ")
     }
 
-    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia")
+    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia", level = DeprecationLevel.WARNING)
     private fun getInfoLavoriElement(element: Element): TrenitaliaInfoLavori {
         val regionName = element.getElementsByTag("a")[0].text().removePrefix("INFOLAVORI ").stationName()
 
@@ -112,7 +108,7 @@ object TrenitaliaScraper {
         )
     }
 
-    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia")
+    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia", level = DeprecationLevel.WARNING)
     private fun getExtraEvent(element: Element): TrenitaliaEventDetails {
         val date: String = element.getElementsByTag("h4")[0].text()
         val title: String = element.getElementsByTag("a")[0].text()
@@ -129,7 +125,7 @@ object TrenitaliaScraper {
         )
     }
 
-    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia")
+    @Deprecated("Deprecated since v.1.5.0 due to HTML changes by Trenitalia", level = DeprecationLevel.WARNING)
     suspend fun scrapePassengerInformation(): TrenitaliaInfo {
         val page = Ksoup.parseGetRequest(baseUrl)
 
@@ -192,37 +188,5 @@ object TrenitaliaScraper {
             extraEvents = extraEvents.toList(),
             infoLavori = infoLavori.toList()
         )
-    }
-
-    suspend fun fetchTrainByNumber(trainNumber: String): List<TrenitaliaTrainData> {
-        val response = HttpClient().get(cercaTrenoFinderUrl + trainNumber)
-        val tsv = response.bodyAsText()
-
-        val entries = arrayListOf<TrenitaliaTrainData>()
-
-        tsv.lines().forEach { line ->
-            val fields = line.split("|")
-            if(fields.size >= 2) {
-                entries.add(TrenitaliaTrainData(
-                    number = fields[0].split(" - ")[0],
-                    originStationId = fields[1].split("-")[1],
-                    departureTime = fields[1].split("-")[2]
-            ))
-            }
-        }
-
-        return entries.toList()
-    }
-
-    fun getViaggiaTrenoUrl(train: TrenitaliaTrainData): String {
-        return "http://www.viaggiatreno.it/infomobilitamobile/pages/cercaTreno/cercaTreno.jsp?treno=${train.number}&origine=${train.originStationId}&datapartenza=${train.departureTime}"
-    }
-
-    suspend fun getAndamentoTreno(train: TrenitaliaTrainData): RestEasyTrainData {
-        val trenitaliaWebResponse = HttpClient().get(getAndamentoTrenoUrl(train))
-        val jsonBody = trenitaliaWebResponse.bodyAsText()
-
-        val json = Json { ignoreUnknownKeys =  true }
-        return json.decodeFromString<RestEasyTrainData>(jsonBody)
     }
 }

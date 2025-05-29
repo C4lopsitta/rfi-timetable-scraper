@@ -1,6 +1,7 @@
-package cc.atomtech.timetable.enumerations.preferences
+package cc.atomtech.timetable.enumerations.ui
 
-/**
+/** Handles the UI state of the TrainRow in the Arrivals/Departures section.
+ *
  * @since 1.5.0
  */
 enum class TrainRowDetailLevel {

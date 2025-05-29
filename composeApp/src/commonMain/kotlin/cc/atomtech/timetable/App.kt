@@ -152,23 +152,10 @@ fun Main(navController: NavHostController,
                     }
                 }
             }
-        } finally {
-//            timetableRefresher?.cancel()
-//            // stores how many 5 minutes it has to wait, so multiply by 5 to get actual value, if 0 skip reload
-//            autoReloadIntervalMinutes = preferences.getReloadDelay().first() * 5
-//            if(autoReloadIntervalMinutes > 0) {
-//                timetableRefresher = CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-//                    delay((autoReloadIntervalMinutes * 60 * 1000).toLong())
-//                    reloadTrigger = !reloadTrigger
-//                }
-//            }
         }
     }
 
-    val actualColorScheme = if(colorScheme == null) {
-        if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
-    } else colorScheme
-
+    val actualColorScheme = colorScheme ?: if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
 
     MaterialTheme (
         colorScheme = actualColorScheme,
@@ -184,13 +171,9 @@ fun Main(navController: NavHostController,
                     }
                 }
             },
-            snackbarHost = {
-                SnackbarHost( snackbarHostState )
-            },
+            snackbarHost = { SnackbarHost( snackbarHostState ) },
             bottomBar = { if(!isDesktop) NavBar(navController, station = stationData.currentStation) },
-            floatingActionButton = {
-
-            }
+            floatingActionButton = {  }
         ) { paddingValues ->
             ScaffoldBody(
                 isDesktop = isDesktop,

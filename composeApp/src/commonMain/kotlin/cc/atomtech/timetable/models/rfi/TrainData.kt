@@ -3,7 +3,14 @@ package cc.atomtech.timetable.models.rfi
 import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.enumerations.TrainType
+import cc.atomtech.timetable.apis.scrapers.RfiPartenzeArrivi
 
+/**
+ * Data Class used by [RfiPartenzeArrivi] to return trains scraped from the IecHub Web Interface.
+ *
+ * @see [TrainStopData]
+ * @see [TrainDelayStatus]
+ */
 data class TrainData(
     val operator: Operator,
     val operatorName: String? = null,

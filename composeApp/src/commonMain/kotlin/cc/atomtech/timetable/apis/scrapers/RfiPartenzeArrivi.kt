@@ -18,7 +18,7 @@ import cc.atomtech.timetable.scrapers.RfiScraper
  * @author Simone Robaldo
  * @since 1.5.0
  */
-final object RfiPartenzeArrivi {
+object RfiPartenzeArrivi {
 
     /** Fetches and returns a list of all stations as a list of [StationBaseData].
      *

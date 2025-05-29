@@ -1,7 +1,12 @@
 # Timetables
-An application made to view Arrivals and Departures for every RFI managed passenger railway station.
+An application made to view Arrivals and Departures for every RFI managed passenger railway station.<br>
 
-It supports multiple platforms as it's a Kotlin Multiplatform Compose application but currently only Android APKs are available to be downloaded in the release.
+It supports multiple platforms as it's a Kotlin Multiplatform Compose application but currently only 
+Android APKs are available to be downloaded in the release.<br>
+
+The application is currently going through a major rework of pretty much the entire codebase, this means 
+that building the project right now will result in an incomplete experience. Furthermore, Trenitalia has 
+changed the HTML of their InfoLavori section, so that will have to be reworked too.
 
 ## Thanks to
 - [mrjafari-dev](https://github.com/mrjafari-dev) for the [Skeleton Loading Effect](https://github.com/mrjafari-dev/skeleton-loading-effect)

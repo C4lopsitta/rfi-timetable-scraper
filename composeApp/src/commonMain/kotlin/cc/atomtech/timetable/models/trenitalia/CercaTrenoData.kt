@@ -3,7 +3,9 @@ package cc.atomtech.timetable.models.trenitalia
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
+/** Data class for containing deserialized data from a Train Query by Number to the CercaTreno API.
+ *
+ * @see cc.atomtech.timetable.apis.TrenitaliaRestEasy
  * @since 1.5.0
  */
 @Serializable

@@ -68,19 +68,28 @@ fun CercaTreno() {
             return@LaunchedEffect
         }
 
-        trainNumberQueryIsError = false
-
         queryResult = if(trainNumberQuery.isNotEmpty()) {
             TrenitaliaRestEasy.searchTrainByNumber(trainNumberQuery)
         } else {
+            trainNumberQueryIsError = true
+            println("Failed fetching train")
             null
         }
 
         if(queryResult != null) {
-            queryTrainData = TrenitaliaRestEasy.fetchTrain(queryResult!!)
+            try {
+                queryTrainData = TrenitaliaRestEasy.fetchTrain(queryResult!!)
+            } catch(ex: Exception) {
+                queryResult = null
+                trainNumberQueryIsError = true
+                println(ex)
+            }
         } else {
             queryTrainData = null
+            trainNumberQueryIsError = true
         }
+
+        trainNumberQueryIsError = false
     }
 
     Column (
@@ -158,6 +167,9 @@ fun CercaTreno() {
                             )
                         }
                     )
+                }
+                item {
+                    Text(queryTrainData.toString())
                 }
             }
         }

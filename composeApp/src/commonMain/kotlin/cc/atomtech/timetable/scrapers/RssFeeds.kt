@@ -1,12 +1,12 @@
 package cc.atomtech.timetable.scrapers
 
-import androidx.compose.ui.text.capitalize
 import cc.atomtech.timetable.models.FeedItem
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.parser.Parser
 
+@Deprecated("Will be moved new RfiNoticesFeeds object", ReplaceWith("cc.atomtech.timetable.apis.RfiNoticesFeeds"), DeprecationLevel.WARNING)
 object RssFeeds {
     const val allRegionsLive = "https://www.rfi.it/it/news-e-media/infomobilita.rss.updates."
     const val allRegionsNotices = "https://www.rfi.it/it/news-e-media/infomobilita.rss.notices."

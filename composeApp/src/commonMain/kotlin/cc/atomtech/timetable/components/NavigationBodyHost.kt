@@ -3,6 +3,7 @@ package cc.atomtech.timetable.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,13 +27,17 @@ import cc.atomtech.timetable.views.BookmarkedStations
 import cc.atomtech.timetable.views.notices.InfoLavori
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.TrenitaliaInfoLavori
+import cc.atomtech.timetable.models.flows.UiEvent
 import cc.atomtech.timetable.models.viewmodels.Station
+import cc.atomtech.timetable.models.viewmodels.StationListViewModel
 import cc.atomtech.timetable.views.CercaTreno
 import cc.atomtech.timetable.views.management.Settings
 import cc.atomtech.timetable.views.StationSearch
 import cc.atomtech.timetable.views.management.WhatsNew
 import cc.atomtech.timetable.views.management.settings.TrainRowPreferences
 import cc.atomtech.timetable.views.notices.TrenitaliaRegionInfo
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun NavigationBodyHost(
@@ -108,7 +113,7 @@ fun NavigationBodyHost(
 
         NavHost(
             navController = navController,
-            startDestination = "departures",
+            startDestination = "debug",
             modifier = Modifier.padding(start = 12.dp)
         ) {
 //            navigation("station", "station/departures") {

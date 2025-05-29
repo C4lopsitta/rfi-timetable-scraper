@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -27,7 +26,7 @@ import cc.atomtech.timetable.components.train.TrainDetailedRow
 import cc.atomtech.timetable.enumerations.Category
 import cc.atomtech.timetable.enumerations.Operator
 import cc.atomtech.timetable.enumerations.TrainType
-import cc.atomtech.timetable.enumerations.preferences.TrainRowDetailLevel
+import cc.atomtech.timetable.enumerations.ui.TrainRowDetailLevel
 import cc.atomtech.timetable.models.rfi.TrainData
 import cc.atomtech.timetable.models.rfi.TrainDelayStatus
 import cc.atomtech.timetable.models.rfi.TrainStatus

@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cc.atomtech.timetable.AppPreferences
 import cc.atomtech.timetable.models.flows.UiEvent
-import cc.atomtech.timetable.models.resources.MatchedStation
+import cc.atomtech.timetable.models.utilities.MatchedStation
 import cc.atomtech.timetable.models.rfi.StationBaseData
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import cc.atomtech.timetables.resources.Res
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -28,6 +30,8 @@ class StationListViewModel(
 
     private val _stationsFromFile = MutableStateFlow<List<MatchedStation>>(emptyList())
     private val _rfiStations = MutableStateFlow<List<StationBaseData>>(emptyList())
+
+    val fileStations: StateFlow<List<MatchedStation>> = _stationsFromFile.asStateFlow()
 
     init {
         viewModelScope.launch {
