@@ -6,6 +6,7 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Element
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
+import cc.atomtech.timetable.models.trenitalia.CercaTrenoData
 
 private object ElementIds {
     const val REGULAR_TRAFFIC = "CIRCOLAZIONE_REGOLARE"
@@ -19,8 +20,8 @@ object TrenitaliaScraper {
     private const val baseUrl = "https://www.trenitalia.com/it/informazioni/Infomobilita/notizie-infomobilita.html"
     private const val cercaTrenoFinderUrl = "http://www.viaggiatreno.it/infomobilitamobile/resteasy/viaggiatreno/cercaNumeroTrenoTrenoAutocomplete/"
 
-    private fun getAndamentoTrenoUrl(trainData: TrenitaliaTrainData): String {
-        return "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/andamentoTreno/${trainData.originStationId}/${trainData.number}/${trainData.departureTime}"
+    private fun getAndamentoTrenoUrl(trainData: CercaTrenoData): String {
+        return "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/andamentoTreno/${trainData.originCode}/${trainData.number}/${trainData.departureTimestamp}"
     }
 
     private fun String.stationName(): String {

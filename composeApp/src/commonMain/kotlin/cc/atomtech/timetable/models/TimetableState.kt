@@ -1,6 +1,7 @@
 package cc.atomtech.timetable.models
 
 import androidx.lifecycle.ViewModel
+import cc.atomtech.timetable.models.rfi.TrainData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -8,15 +9,15 @@ import kotlinx.datetime.Clock
 
 data class TimetableData(
     val stationName: String,
-    val departures: List<OldRfiTrainData>,
-    val arrivals: List<OldRfiTrainData>,
+    val departures: List<TrainData>,
+    val arrivals: List<TrainData>,
     val stationInfo: String?,
     var lastUptade: Long = Clock.System.now().toEpochMilliseconds()
 )
 
 class TimetableState(val stationName: String,
-                     var departures: List<OldRfiTrainData>,
-                     var arrivals: List<OldRfiTrainData>,
+                     var departures: List<TrainData>,
+                     var arrivals: List<TrainData>,
                      val stationInfo: String? = null): ViewModel() {
     private val _uiState = MutableStateFlow(TimetableData(stationName, departures, arrivals, stationInfo))
     val uiState: StateFlow<TimetableData> = _uiState.asStateFlow()
