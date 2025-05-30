@@ -113,7 +113,7 @@ fun NavigationBodyHost(
 
         NavHost(
             navController = navController,
-            startDestination = "debug",
+            startDestination = "departures",
             modifier = Modifier.padding(start = 12.dp)
         ) {
 //            navigation("station", "station/departures") {

@@ -32,10 +32,4 @@ data class TrainDelayStatus(
             TrainStatus.CANCELLED -> StringRes.get("cancelled")
         }
     }
-
-    companion object {
-        fun fromScraper(): TrainDelayStatus {
-            throw NotImplementedError()
-        }
-    }
 }

@@ -90,6 +90,7 @@ fun Main(navController: NavHostController,
 
     LaunchedEffect(uiEvents) {
         uiEvents.collect { event ->
+            println(event.ex)
             when(event) {
                 is UiEvent.RfiTimetableScrapingException -> {
                     if(event.ex is HttpRequestTimeoutException) return@collect

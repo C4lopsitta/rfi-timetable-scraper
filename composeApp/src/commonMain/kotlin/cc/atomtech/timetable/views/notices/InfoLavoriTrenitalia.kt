@@ -35,7 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.models.TrenitaliaInfo
-import cc.atomtech.timetable.scrapers.TrenitaliaScraper
+//import cc.atomtech.timetable.scrapers.TrenitaliaScraper
 import io.ktor.utils.io.CancellationException
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
@@ -53,7 +53,7 @@ fun InfoLavoriTrenitalia(navigateToRegionDetails: (TrenitaliaInfoLavori) -> Unit
 
     LaunchedEffect(Unit) {
         try {
-            info = TrenitaliaScraper.scrapePassengerInformation()
+//            info = TrenitaliaScraper.scrapePassengerInformation()
         } catch (_: CancellationException) {
         } catch (e: Exception) {
             println(e.printStackTrace())

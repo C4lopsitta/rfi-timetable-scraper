@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.enumerations.Category
+import cc.atomtech.timetable.extenions.toStationName
 import cc.atomtech.timetable.models.rfi.TrainData
 
 
@@ -79,7 +80,7 @@ fun TrainCompactRow(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    trainData.station ?: StringRes.get("undefined"),
+                    trainData.station?.toStationName() ?: StringRes.get("undefined"),
                     fontSize = 20.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

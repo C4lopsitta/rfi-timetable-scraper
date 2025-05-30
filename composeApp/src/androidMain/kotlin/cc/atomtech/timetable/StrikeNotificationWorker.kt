@@ -10,7 +10,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import cc.atomtech.timetable.models.TrenitaliaEventDetails
 import cc.atomtech.timetable.models.TrenitaliaInfo
-import cc.atomtech.timetable.scrapers.TrenitaliaScraper
+//import cc.atomtech.timetable.scrapers.TrenitaliaScraper
 import androidx.core.net.toUri
 
 class StrikeNotificationWorker (
@@ -27,7 +27,12 @@ class StrikeNotificationWorker (
         val notificationManager: NotificationManager
 
         try {
-            trenitaliaNotices = TrenitaliaScraper.scrapePassengerInformation()
+            trenitaliaNotices = TrenitaliaInfo(
+                isTrafficRegular = true,
+                extraEvents = emptyList(),
+                irregularTrafficEvents = emptyList(),
+                infoLavori = emptyList()
+            ) // TrenitaliaScraper.scrapePassengerInformation()
             notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         } catch (ex: Exception) {
             println("Notification fetching has failed!\n${ex.printStackTrace()}")

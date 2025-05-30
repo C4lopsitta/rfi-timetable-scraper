@@ -22,7 +22,6 @@ private object IecHubHtmlTagsIds {
 
     const val OPERATOR_FIELD = "RVettore"
     const val CATEGORY_FIELD = "RCategoria"
-    const val NUMBER_FIELD = "RTreno"
     const val STATION_FIELD = "RStazione"
     const val TIME_FIELD = "ROrario"
     const val DELAY_FIELD = "RRitardo"
@@ -57,10 +56,11 @@ private object IecHubUrls {
 object RfiPartenzeArrivi {
     // region Ksoup Extensions
 
-    fun Document.getTimetable(): Element? = this.body().getElementById(IecHubHtmlTagsIds.TABLE)
+    private fun Document.getTimetable(): Element? = this.body().getElementById(IecHubHtmlTagsIds.TABLE)
 
-    fun Element.getHtmlOfFirstChildrenById(id: String) = this.getElementById(id)
+    private fun Element.getHtmlOfFirstChildrenById(id: String) = this.getElementById(id)
         ?.children()?.first()?.html()
+    private fun Element.getInnerHtmlOfElement(id: String) = this.getElementById(id)?.text()
 
     // endregion Ksoup Extensions
 
@@ -91,12 +91,27 @@ object RfiPartenzeArrivi {
 
     // TODO)) Find way to fetch `stationInfo` without separate scrape
 
+
+    /**
+     * Fetches the station's departures and returns a list of [TrainData]
+     *
+     * @see [TrainData]
+     * @since 1.5.0
+     * @author Simone Robaldo
+     */
     suspend fun getDepartures(stationId: Int) : List<TrainData> {
         val departures = Ksoup.parseGetRequest(url="${IecHubUrls.monitorUrl}${IecHubUrls.baseQueryDepartures}${stationId}")
 
         return timetableToTrainList(departures.getTimetable())
     }
 
+    /**
+     * Fetches the station's arrivals and returns a list of [TrainData]
+     *
+     * @see [TrainData]
+     * @since 1.5.0
+     * @author Simone Robaldo
+     */
     suspend fun getArrivals(stationId: Int) : List<TrainData> {
         val arrivals = Ksoup.parseGetRequest(url="${IecHubUrls.monitorUrl}${IecHubUrls.baseQueryArrivals}${stationId}")
 
@@ -160,10 +175,10 @@ object RfiPartenzeArrivi {
                 ?.children()?.first()?.attribute("alt")?.value ?: "UNDEFINED"
         } catch (_: Exception) { "UNDEFINED" }
 
-        val platform = row.getHtmlOfFirstChildrenById(IecHubHtmlTagsIds.PLATFORM_FIELD) ?: "UNDEFINED"
+        val platform = row.getHtmlOfFirstChildrenById(IecHubHtmlTagsIds.PLATFORM_FIELD)
         val station = row.getHtmlOfFirstChildrenById(IecHubHtmlTagsIds.STATION_FIELD) ?: "UNDEFINED"
-        val time = row.getHtmlOfFirstChildrenById(IecHubHtmlTagsIds.TIME_FIELD) ?: "UNDEFINED"
-        val delay = row.getHtmlOfFirstChildrenById(IecHubHtmlTagsIds.DELAY_FIELD) ?: "UNDEFINED"
+        val time = row.getInnerHtmlOfElement(IecHubHtmlTagsIds.TIME_FIELD)
+        val delay = row.getInnerHtmlOfElement(IecHubHtmlTagsIds.DELAY_FIELD) ?: "0"
 
         var trainDetails = ""
         var nextStationsString = ""
@@ -197,6 +212,13 @@ object RfiPartenzeArrivi {
         )
     }
 
+    /**
+     * Given a string built from the train row details dialog, it'll return a list of [TrainStopData]
+     *
+     * @see [TrainStopData]
+     * @since 1.5.0
+     * @author Simone Robaldo
+     */
     private fun getStopsFromDetails(stationsString: String): List<TrainStopData> {
         val stops = arrayListOf<TrainStopData>()
 
@@ -220,13 +242,25 @@ object RfiPartenzeArrivi {
         return stops.toList()
     }
 
+    /**
+     * Given a delay string, it will return a [TrainDelayStatus] object
+     *
+     * @return [TrainDelayStatus]
+     * @see [TrainDelayStatus]
+     * @since 1.5.0
+     * @author Simone Robaldo
+     */
     private fun getDelay(delay: String): TrainDelayStatus {
+        val delayMinutes = try {
+            delay.toInt()
+        } catch (_: Exception) { 0 }
+
         return TrainDelayStatus(
-            delay = delay.toInt(),
-            status = when(delay) {
-                "RITARDO" -> TrainStatus.DELAYED
-                "Cancellato" -> TrainStatus.CANCELLED
-                else -> if(delay.toInt() > 0) TrainStatus.DELAYED else TrainStatus.RUNNING
+            delay = delayMinutes,
+            status = when(delay.lowercase()) {
+                "ritardo" -> TrainStatus.DELAYED
+                "cancellato" -> TrainStatus.CANCELLED
+                else -> TrainStatus.RUNNING
             }
         )
     }

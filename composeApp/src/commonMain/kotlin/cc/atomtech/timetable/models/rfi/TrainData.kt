@@ -26,6 +26,6 @@ data class TrainData(
     val trainType: TrainType
 ) {
     override fun toString(): String {
-        return "[rfi.TrainData] #$number ($operator $category) at Platform $platform"
+        return "[rfi.TrainData] #$number ($operator $category) at Platform $platform Time $time ?+ $delay"
     }
 }
