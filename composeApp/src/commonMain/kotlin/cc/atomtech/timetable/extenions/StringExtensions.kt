@@ -1,5 +1,6 @@
 package cc.atomtech.timetable.extenions
 
+
 /** Extension function that converts a shittily formatted RFI/Trenitalia Station name into a well formatted one.
  *
  * @return [String] A well-formatted station name
