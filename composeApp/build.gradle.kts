@@ -24,27 +24,27 @@ kotlin {
 
     val xcf = XCFramework()
 
-    iosArm64(){
-        binaries.framework (
+//    iosArm64(){
+//        binaries.framework (
+//
+//        ) {
+//            baseName = "ComposeApp"
+//            isStatic = true
+//            embedBitcode("bitcode")
+//            xcf.add(this)
+//        }
+//    }
 
-        ) {
-            baseName = "ComposeApp"
-            isStatic = true
-            embedBitcode("bitcode")
-            xcf.add(this)
-        }
-    }
-
-    iosSimulatorArm64 {
-        binaries.framework (
-
-        ) {
-            baseName = "ComposeApp"
-            isStatic = true
-            embedBitcode("bitcode")
-            xcf.add(this)
-        }
-    }
+//    iosSimulatorArm64 {
+//        binaries.framework (
+//
+//        ) {
+//            baseName = "ComposeApp"
+//            isStatic = true
+//            embedBitcode("bitcode")
+//            xcf.add(this)
+//        }
+//    }
 
     sourceSets {
         val desktopMain by getting
