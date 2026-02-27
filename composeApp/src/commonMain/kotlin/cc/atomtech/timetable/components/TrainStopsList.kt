@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import cc.atomtech.timetable.enumerations.CurrentStationType
 import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.models.rfi.TrainStopData
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -147,7 +146,7 @@ private fun TrainStopEntry(
 
                     val newTime = LocalTime
                         .parse(stop.time, format = LocalTime.Format { byUnicodePattern("H:mm") })
-                        .atDate(Clock.System.todayIn(TimeZone.currentSystemDefault()))
+                        .atDate(kotlin.time.Clock.System.todayIn(TimeZone.currentSystemDefault()))
                         .toInstant(TimeZone.currentSystemDefault())
                         .plus(Duration.parse(delayHM))
                         .toLocalDateTime(TimeZone.currentSystemDefault())

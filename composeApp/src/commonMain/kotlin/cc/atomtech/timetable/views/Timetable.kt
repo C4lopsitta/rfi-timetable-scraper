@@ -35,7 +35,6 @@ import cc.atomtech.timetable.StringRes
 import cc.atomtech.timetable.components.animated.ShimmerLoading
 import cc.atomtech.timetable.components.train.TrainCompactRow
 import cc.atomtech.timetable.models.viewmodels.Station
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -64,7 +63,7 @@ fun Timetable(
                     modifier = Modifier.width(92.dp).height(92.dp)
                 )
                 Text(
-                    StringRes.format("no_trains_details", Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())),
+                    StringRes.format("no_trains_details", kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding( horizontal = 32.dp, vertical = 12.dp ),
                     fontSize = 18.sp,

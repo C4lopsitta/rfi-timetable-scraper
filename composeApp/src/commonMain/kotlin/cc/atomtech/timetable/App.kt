@@ -68,7 +68,7 @@ fun instantiatePreferences(createPath: () -> String): DataStore<Preferences> =
     )
 
 @Composable
-@Preview
+//@Preview
 fun Main(navController: NavHostController,
          isDesktop: Boolean = false,
          preferences: AppPreferences,
