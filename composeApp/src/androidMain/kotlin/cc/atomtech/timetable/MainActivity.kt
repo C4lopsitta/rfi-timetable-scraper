@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.compose.rememberNavController
+import cc.atomtech.timetable.preferences.SetPreferences
 import kotlinx.coroutines.flow.first
 
 
@@ -91,7 +92,9 @@ class MainActivity : ComponentActivity() {
                 dynamicDarkColorScheme(context)
             } else dynamicLightColorScheme(context)
 
-            val preferences = AppPreferences(storePreferences())
+            val prefs = storePreferences()
+            val preferences = AppPreferences(prefs)
+            SetPreferences(prefs)
 
             Main(
                 navController = navController,

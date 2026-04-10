@@ -226,6 +226,23 @@ fun Settings(
         }
 
         item {
+            ListItem (
+                headlineContent = { Text(StringRes.get("settings_train_data_provider")) },
+                supportingContent = { Text(StringRes.get("settings_train_data_provider_description")) },
+                trailingContent = {
+                    Icon(Icons.AutoMirrored.Rounded.ArrowForward, contentDescription = StringRes.get("open"))
+                },
+                modifier = Modifier.clickable(
+                    onClick = {
+                        navController.navigate("trainDataProviderPreferences")
+                    }
+                )
+            )
+
+            HorizontalDivider( modifier = Modifier.padding( vertical = 12.dp ) )
+        }
+
+        item {
             SettingSliderItem(
                 title = StringRes.get("setting_refresh"),
                 subTitle = StringRes.get("setting_refresh_desc"),

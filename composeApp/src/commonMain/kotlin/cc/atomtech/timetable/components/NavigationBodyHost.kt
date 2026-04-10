@@ -34,6 +34,7 @@ import cc.atomtech.timetable.views.CercaTreno
 import cc.atomtech.timetable.views.management.Settings
 import cc.atomtech.timetable.views.StationSearch
 import cc.atomtech.timetable.views.management.WhatsNew
+import cc.atomtech.timetable.views.management.settings.TrainDataProviderPreferences
 import cc.atomtech.timetable.views.management.settings.TrainRowPreferences
 import cc.atomtech.timetable.views.notices.TrenitaliaRegionInfo
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -219,6 +220,10 @@ fun NavigationBodyHost(
 
             composable("trainRowPreferences") {
                 TrainRowPreferences(appPreferences = preferences)
+            }
+
+            composable("trainDataProviderPreferences") {
+                TrainDataProviderPreferences( appPreferences = preferences )
             }
 
             composable("whatsnew") {

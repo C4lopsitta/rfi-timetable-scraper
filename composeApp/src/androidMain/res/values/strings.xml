@@ -117,4 +117,6 @@
     <string name="train_header_number_to">Train number %1$s to</string>
     <string name="train_header_number_from">Train number %1$s from</string>
     <string name="to">to</string>
+    <string name="settings_train_data_provider">Train Data Provider</string>
+    <string name="settings_train_data_provider_description">Choose what provider you want to have priority when displaying data for a given train.</string>
 </resources>
