@@ -1,4 +1,9 @@
 # Timetables
+
+> [!NOTE]
+> This application is being rewritten to remove a lot of trash i left over and to allow for an easier dependency upgrade.
+> This repository is just an archive of the older codebase, [the new app is available here](https://github.com/c4lopsitta/timetables)
+
 An application made to view Arrivals and Departures for every RFI managed passenger railway station.<br>
 
 It supports multiple platforms as it's a Kotlin Multiplatform Compose application but currently only 
